@@ -1,0 +1,28 @@
+$(document).ready(function(){
+    $("#first_screen_bottom_button_1").click(function(){
+    	$("#black_bar").show();
+    	$("#second_screen").show();
+    	$("#second_screen_background_pic").animate(
+  			{left:"0%"},
+  			"slow",
+  			function(){
+  				$("#first_screen").hide();		
+  				$("#second_screen_drop").show();
+  				$("#second_screen_drop_1").animate(
+ 		 			{top:"25%"},
+  					"slow"
+  				);
+  				$("#second_screen_drop_2").animate(
+  					{top:"5%"},
+  					"slow",
+  					function(){
+  						$(".second_screen_click_type").css("visibility","visible");
+  				});		
+  		});
+ 	 	$(".second_screen_button").animate(
+  			{left:"4%"},
+  			"slow"
+  		);
+    });
+});
+

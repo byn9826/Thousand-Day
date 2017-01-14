@@ -1,0 +1,124 @@
+#main{
+  display: inline-block;
+  clear: both;
+  width: 80%;
+  margin: 30px 10%;
+}
+
+#main h1{
+  float: left;
+  width: 100%;
+  margin-bottom: 15px;
+  text-decoration: underline;
+  color: red;
+  background-color: white;
+}
+
+#main-describe{
+  float: left;
+  width: 45%;
+}
+
+#main-describe h3{
+  display: inline-block;
+  width: 100%;
+  line-height: 20px;
+  margin-bottom: 15px;
+}
+
+#main-describe-install{
+  padding: 5px 2%;
+  background-color: #dae2ef;
+  color: black;
+}
+
+#main-components{
+  float: left;
+  width: 50%;
+  margin-left: 5%;
+}
+
+#main-components>div{
+  float: left;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.main-components{
+  float: left;
+  width: 20%;
+  margin-left: 5%;
+  text-decoration: none;
+}
+
+.components{
+  display: inline-block;
+  clear: both;
+  width: 80%;
+  margin: 15px 10%;
+}
+
+.components-title{
+  display: inline-block;
+  clear: both;
+  width: 100%;
+  background-color: #b9d17f;
+  color: black;
+  height: 40px;
+}
+
+.components-title h2{
+  margin-left: 5%;
+  line-height: 40px;
+  vertical-align: middle;
+}
+
+.components h3{
+  float: left;
+  width: 45%;
+  margin-top: 20px;
+  line-height: 25px;
+}
+
+.components-display{
+  float: left;
+  margin-left: 5%;
+  width: 50%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.components-display h4{
+  display: inline-block;
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#inputbox-display{
+  width: 95%;
+  border: 1px solid black;
+  border-radius: 5px;
+  text-align: left;
+  float: left;
+}
+
+#inputbox-display>:first-child{
+  float: left;
+  width: 80%;
+  margin-left: 10%;
+  padding:20px 0;
+}
+
+#random-content div{
+  float: left;
+  width: 50%;
+}
+
+#progress-content>:first-child{
+  float: left;
+}
+
+#progress-content>:nth-child(2){
+  float: right;
+}

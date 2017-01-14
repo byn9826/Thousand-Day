@@ -1,0 +1,81 @@
+.div-container{
+	float: left;
+	border-radius:5px;
+	background-color: #ff7b00;
+	text-align: center;
+}
+.div-container>:first-child{
+	float:left;
+	width:94%;
+	margin: 5px 3%;
+	text-decoration: none;
+	background-color: inherit;
+	color: white;
+}
+
+.div-dashed{
+    float: left;
+    text-align: center;
+    border: 1px dashed #1f427a;
+    margin-top:10px;
+	width:80%;
+    border-radius: 5px;
+}
+.div-dashed>:first-child{
+	float:left;
+	width:94%;
+	margin: 5px 3%;
+}
+
+.button-container{
+	color:white;
+	background-color:#ff7b00;
+	border: 0;
+	text-align: center;
+	transition-duration: 0.4s;
+	cursor:pointer;
+    outline:none;
+}
+.button-container:hover{
+	color: black;
+	background-color:white;
+	border: 0;
+}
+.button-container>:first-child{
+	float:left;
+	width: 90%;
+	margin:5px 5%;
+}
+
+.button-nborder{
+	border: 0;
+	background-color: white;
+	color:black;
+	cursor: pointer;
+    outline: none;
+}
+.button-nborder:hover{
+    color: orange;
+}
+
+.pop-container{
+	position: fixed;
+	left:0;
+	top:0;
+	z-index:999;
+	width: 100%;
+	height: 100%;
+	background:rgba(249,250,252,0.9);
+	color:inherit;
+}
+.pop-container>:first-child{
+	border-radius: 5px;
+	background-color: white;
+	color:inherit;
+	border: 2px solid #b9d17f;
+	position: absolute;
+	left: 30%;
+	top: 15%;
+	width: 350px;
+	padding: 40px;
+}
