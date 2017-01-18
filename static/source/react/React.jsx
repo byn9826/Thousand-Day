@@ -53,7 +53,9 @@ class Reactui extends Component{
 					<section>
 						<h3 className="main-list">Display</h3>
 						<h4 className="orange-box"><a href="#random">Random</a></h4>
-						<h4 className="orange-box"><a href="#rate">Rating Stars</a></h4>
+						<h3 className="main-list">Attitude</h3>
+						<h4 className="orange-box"><a href="#rate">Rate</a></h4>
+						<h3 className="main-list">Under Rewrting</h3>
 						<h4 className="orange-box"><a href="#upvote">Upvote it</a></h4>
 						<h4 className="orange-box"><a href="#inputbox">Inputbox</a></h4>
 						<h4 className="orange-box"><a href="#imagebox">Imagebox</a></h4>
