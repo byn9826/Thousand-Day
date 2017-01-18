@@ -52,16 +52,11 @@ body{
 	padding: 0;
 }
 
-#container{
-	display: inline-block;
-	width: 100%;
+a{
+	text-decoration: none;
 }
 
-#header-slogan{
-	float: left;
-	margin-left: 5%;
-	line-height: 50px;
-	vertical-align: middle;
-	font-style: italic;
-}
-			
+#container{
+	display: block;
+	width: 100%;
+}	

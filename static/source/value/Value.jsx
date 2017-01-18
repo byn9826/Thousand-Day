@@ -43,13 +43,14 @@ class Value extends Component{
 		};
 	}
     //if current user change the rate
-	changeRate(rateNum){
-		let prevState=this.state.uRate;
-		if(this.state.uRate==0){//check if it is a totally new rate
-			this.setState({newRate:true});
+	changeRate(rateNum) {
+		let prevState = this.state.uRate;
+		//check if it is a totally new rate
+		if(this.state.uRate == 0) {
+			this.setState({newRate: true});
 		}
-		this.setState({uRate:rateNum});//update current user rate
-		this.setState({totalStars:this.state.totalStars-prevState+rateNum});//change total stars
+		this.setState({uRate: rateNum});//update current user rate
+		this.setState({totalStars: this.state.totalStars - prevState + rateNum});//change total stars
 	}
 	//if user subit comment from interact component
 	submitComment(newTitle,newContent){
@@ -59,14 +60,14 @@ class Value extends Component{
 	render(){
 		return(
 			<div id="container">
-				<title>{this.state.data.title}</title>
+				<title>{this.props.data.title}</title>
 				<Header />
 				<main id="main">
-					<h1>{this.state.data.title}</h1>
-                    <About data={this.state.data} totalStars={this.state.totalStars} newRate={this.state.newRate} />
+					<h1>{this.props.data.title}</h1>
+                    <About data={this.props.data} totalStars={this.state.totalStars} newRate={this.state.newRate} />
                     <Subject data={this.state.data} />
                     <Interact user={userId} data={this.state.data} uRate={this.state.uRate} uContent={this.state.uContent} uTitle={this.state.uTitle} changeRate={this.changeRate.bind(this)} submitComment={this.submitComment.bind(this)}/>
-                    <Comment data={this.state.data} userId={userId} uRate={this.state.uRate}/>
+				    <Comment data={this.state.data} userId={userId} uRate={this.state.uRate}/>
                 </main>
 				<Footer />
 			</div>

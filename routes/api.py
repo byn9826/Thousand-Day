@@ -4,11 +4,9 @@ from pymongo import MongoClient
 from lib import database
 from bson import json_util
 
-
 api_pages = Blueprint('api_pages', __name__)
 conn = database.mongo()
 db = MongoClient(conn).baozier
-
 
 @api_pages.route('/api/value', methods=['GET', 'POST'])
 def showvalue():
@@ -21,8 +19,7 @@ def showvalue():
     else:
         abort(404)
 
-
-@api_pages.route('/api/getplans', methods=['GET', 'POST'])
+@api_pages.route('/api/valuePlans', methods=['GET', 'POST'])
 def getplans():
     if request.method == 'POST':
         user = request.form['user']
@@ -33,7 +30,6 @@ def getplans():
         return json_util.dumps(titles)
     else:
         abort(404)
-
 
 @api_pages.route('/api/plan', methods=['GET', 'POST'])
 def showplan():
@@ -46,8 +42,7 @@ def showplan():
     else:
         abort(404)
 
-
-@api_pages.route('/api/getvalues', methods=['GET', 'POST'])
+@api_pages.route('/api/planValues', methods=['GET', 'POST'])
 def getvalues():
     if request.method == 'POST':
         ids = [int(s) for s in request.form['ids'].split(',')]

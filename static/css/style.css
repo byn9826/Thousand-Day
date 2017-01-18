@@ -1,17 +1,13 @@
-.div-container{
-	float: left;
+.orange-box{
+	display: inline-block;
 	border-radius:5px;
 	background-color: #ff7b00;
-	text-align: center;
-}
-.div-container>:first-child{
-	float:left;
-	width:94%;
-	margin: 5px 3%;
-	text-decoration: none;
-	background-color: inherit;
 	color: white;
+	text-align: center;
+	padding: 5px 3%;
+	text-decoration: none;
 }
+
 
 .div-dashed{
     float: left;

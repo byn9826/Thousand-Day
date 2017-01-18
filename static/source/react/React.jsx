@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
+import {Rate, Upvote, Inputbox, Inputarea, Imagebox,  Droplist, Upsertlist,Progress, Editit} from 'thousanday-react';
 import Header from '../general/Header';
-import {Rate, Upvote, Inputbox, Inputarea, Imagebox, Random, Droplist, Upsertlist,Progress, Editit} from 'thousanday-react';
 import Footer from '../general/Footer';
+import RandomEG from './RandomEG';
+import RateEG from './RateEG';
 class Reactui extends Component{
 	constructor(){
 		super();
@@ -34,85 +36,38 @@ class Reactui extends Component{
 			["img/react/2.jpg","alt2"],
 			["img/react/3.jpg","alt3"]
 		];
-		//content for random
-		let randomContent = ["This is the first random","This is the 2nd random","This is the 3rd random","This is the 4th random"];
 		//options for droplist
 		let dropOption = ["option1","option2","option3","option4","option5"];
 		//options for upsertlist
 		let planslist = ["plan A","plan B", "plan C", "plan D"];
-		return(
+		return (
 			<div id="container">
 				<Header />
 				<main id="main">
 					<h1>Thousanday-React</h1>
-					<div id="main-describe">
-						<h3>
-							Thousanday-React is a list of UI components used in thousanday.com<br/>
-							Examples for these components are displayed here.<br/>
-							This project is not finished yet, it will be updated weekly.
-						</h3>
-						<h3 id="main-describe-install">
-							<b>install</b><br />
-							npm install thousanday-react --save
-						</h3>
-					</div>
-					<div id="main-components">
-						<div>
-							<div className="main-components div-container">
-								<a href="#rate"><h4>Rating Stars</h4></a>
-							</div>
-							<div className="main-components div-container">
-								<a href="#upvote"><h4>Upvote it</h4></a>
-							</div>
-							<div className="main-components div-container">
-								<a href="#inputbox"><h4>Inputbox</h4></a>
-							</div>
-							<div className="main-components div-container">
-								<a href="#imagebox"><h4>Imagebox</h4></a>
-							</div>
-						</div>
-					</div>
-					<div id="main-components">
-						<div>
-							<div className="main-components div-container">
-								<a href="#random"><h4>Random</h4></a>
-							</div>
-							<div className="main-components div-container">
-								<a href="#droplist"><h4>Droplist</h4></a>
-							</div>
-							<div className="main-components div-container">
-								<a href="#upsertlist"><h4>Upsertlist</h4></a>
-							</div>
-							<div className="main-components div-container">
-								<a href="#progress"><h4>Progress</h4></a>
-							</div>
-						</div>
-					</div>
-					<div id="main-components">
-						<div>
-							<div className="main-components div-container">
-								<a href="#editit"><h4>Edit it</h4></a>
-							</div>
-						</div>
-					</div>
-				</main>
-				<section id="rate" className="components">
-					<div className="components-title">
-						<h2>Rating Stars</h2>
-					</div>
+					<h2>A list of React UI components</h2>
 					<h3>
-						Component used to display and receive ratings from users<br/>
-						<a href="https://github.com/byn9826/Thousanday-React#rate">How to use it</a>
+						<b>install:</b><br />
+						npm install thousanday-react --save
 					</h3>
-					<div className="components-display">
-						<h4>Please rate this website</h4>
-						<Rate rate={this.state.defaultRate} length="5" change="yes" rateChange={this.rateChange.bind(this)}/>
-						<h4>Your rate would also show here.</h4>
-						<Rate rate={this.state.defaultRate} length="5"/>
-						<h4>This is another rate.</h4>
-						<Rate rate="2" length="5" font="20px" color="red" className="exampleRate"/>
-					</div>
-				</section>
+					<section>
+						<h3 className="main-list">Display</h3>
+						<h4 className="orange-box"><a href="#random">Random</a></h4>
+						<h4 className="orange-box"><a href="#rate">Rating Stars</a></h4>
+						<h4 className="orange-box"><a href="#upvote">Upvote it</a></h4>
+						<h4 className="orange-box"><a href="#inputbox">Inputbox</a></h4>
+						<h4 className="orange-box"><a href="#imagebox">Imagebox</a></h4>
+						<h4 className="orange-box"><a href="#droplist">Droplist</a></h4>
+						<h4 className="orange-box"><a href="#upsertlist">Upsertlist</a></h4>
+						<h4 className="orange-box"><a href="#progress">Progress</a></h4>
+						<h4 className="orange-box"><a href="#editit">Edit it</a></h4>
+					</section>
+				</main>
+				<RandomEG />
+				<RateEG />
+				
+				{/*
+				
 				<section id="upvote" className="components">
 					<div className="components-title">
 						<h2>Upvote it</h2>
@@ -159,25 +114,6 @@ class Reactui extends Component{
 					</h3>
 					<div className="components-display">
 						<Imagebox slides={img} width="100%" timer="5000"/>
-					</div>
-				</section>
-				<section id="random" className="components">
-					<div className="components-title">
-						<h2>Random</h2>
-					</div>
-					<h3>
-						Component used to show random contents<br/>
-						<a href="https://github.com/byn9826/Thousanday-React#random">How to use it</a>
-					</h3>
-					<div id="random-content" className="components-display">
-						<div>
-							Random once:<br/>
-							<Random random={randomContent} font="h3" id="header-slogan"/>
-						</div>
-						<div>
-							Random again:<br/>
-							<Random random={randomContent} font="h3" id="header-slogan"/>
-						</div>
 					</div>
 				</section>
 				<section id="droplist" className="components">
@@ -229,6 +165,7 @@ class Reactui extends Component{
 						<Editit content="It is a good component" front="Note: " max="30" />
 					</div>
 				</section>
+				*/}
 				<Footer />
 			</div>
 		)

@@ -17,7 +17,7 @@ reqwest({
 		let Data = JSON.parse(result);
 		let value = Data.value.toString();
 		reqwest({
-			url:'/api/getvalues',
+			url:'/api/planValues',
 			method:'post',
 			data:{"ids":value},
 			success:function(result1){

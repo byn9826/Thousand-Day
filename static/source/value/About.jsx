@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Rate from '../ui/rate/Rate';
+import Rate from '../snippet/attitude/Rate';
 class About extends Component {
     constructor(props){
         super(props);
@@ -13,12 +13,12 @@ class About extends Component {
         this.setState({newRate:nextProps.newRate});//show users add a new rate
     }
     render(){
-        let avgStars,totalDone;
-        if (this.state.newRate==true){//if user add a new rate
+        let avgStars, totalDone;
+        if (this.state.newRate==true) {//if user add a new rate
             avgStars = this.state.totalStars/(this.props.data.comment.length+1);//get average stars
             totalDone = this.props.data.comment.length+1;//get people finish total
         }
-        else{//if user didn't add a new rate
+        else {//if user didn't add a new rate
             avgStars = this.state.totalStars/this.props.data.comment.length;
             totalDone = this.props.data.comment.length;
         }
@@ -27,8 +27,11 @@ class About extends Component {
             <section id="main-about">
                 <img alt={this.props.data.title} src={"/img/value/" + this.props.data.id + ".jpg"} />
                 <section id="main-about-desc">
-                    <h4><b>Study Days: {this.props.data.days}</b></h4>
-                    <h4><b>Rate: <Rate rate={avgRate} length="5"/></b></h4>
+                    <h4><b>{this.props.data.days} learning days</b></h4>
+                    <h4>
+                        <b>Rate: </b>
+                        <Rate rate={avgRate} max="5" />
+                    </h4>
                     <h4><b>{totalDone} people finished it.</b></h4>
                     <h4><b>Be chosen by {this.props.data.list} study plans.</b></h4>
                     <h4>Type: {this.props.data.type}</h4>

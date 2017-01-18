@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Rate from '../ui/rate/Rate';
+import Rate from '../snippet/attitude/Rate';
 import Upvote from '../ui/upvote/Upvote';
 class CommentEach extends Component {
 	constructor(props){

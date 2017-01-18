@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import reqwest from 'reqwest';
-import Rate from '../ui/rate/Rate';
+import Rate from '../snippet/attitude/Rate';
 import Inputbox from '../ui/inputbox/Inputbox';
 import Inputarea from '../ui/inputbox/Inputarea';
 import Upsertlist from '../ui/upsertlist/Upsertlist';
 class Interact extends Component {
-    constructor(props){
+    constructor(props) {
 	    super(props);
-		this.state={
+		this.state = {
             uRate:this.props.uRate,//rate from current user
             clickComment:false,//if the comment popup box open
             clickPlan:false,//if the plan popup box open
@@ -15,19 +15,19 @@ class Interact extends Component {
             title:this.props.uTitle,//comment title from current user
             plan:[]//plans from current user
 		};
-	}
+	};
     //get new rate from current user
     componentWillReceiveProps(nextProps){
         this.setState({uRate:nextProps.uRate});
-    }
+    };
     //show popup box if users click comment it
 	clickComment(){
 		this.setState({clickComment:true});
-	}
+	};
     //show popup box if users click add to plan
     clickPlan(){
         reqwest({
-            url:'/api/getplans',
+            url:'/api/valuePlans',
             method:'post',
             data:{"user":this.props.user},
             success:function(result){
@@ -35,7 +35,7 @@ class Interact extends Component {
                 this.setState({plan:result,clickPlan:true});
             }.bind(this)
         });
-    }
+    };
     //if user click submit comment
 	submitComment(){
         let changedTitle = this.refs.commentTitle.state.content,//get new title value
@@ -93,7 +93,7 @@ class Interact extends Component {
             <section id="main-interact">
                 <div>
                     <h4>Your Rate:</h4>
-                    <Rate rate={this.state.uRate} length="5" change="yes" rateChange={this.props.changeRate}/>
+                    <Rate rate={this.state.uRate} max="5" interact="true" rateChange={this.props.changeRate}/>
                 </div>
                 <button className="button-container" onClick={this.clickComment.bind(this)} >
                     <h4>Comment it</h4>
