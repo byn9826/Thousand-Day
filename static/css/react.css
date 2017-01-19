@@ -23,13 +23,14 @@
 	width: 94%;
 	background-color: #dae2ef;
 	color: black;
-	margin-bottom: 20px;
+	margin-bottom: 10px;
 }
 
 #main section {
 	display: block;
 	padding: 5px 0;
 	width: 100%;
+	margin-top: 20px;
 }
 
 .main-list{

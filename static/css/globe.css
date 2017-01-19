@@ -1,4 +1,4 @@
-h1{
+h1 {
 	font-family: "Times New Roman", Georgia, Serif;
 	font-size: 22px;
 	font-weight: bold;
@@ -6,7 +6,7 @@ h1{
 	padding: 0;
 }
 
-h2{
+h2 {
 	font-family: "Times New Roman", Georgia, Serif;
 	font-size: 18px;
 	font-weight: normal;
@@ -14,46 +14,51 @@ h2{
 	padding: 0;
 }
 
-h3{
+h3 {
 	font-family: "Times New Roman", Georgia, Serif;
 	font-size: 16px;
-	font-weight:normal;
+	font-weight: normal;
 	margin: 0;
 	padding: 0;
 }
 
-h4{
+h4 {
 	font-family: "Times New Roman", Georgia, Serif;
 	font-size: 14px;
-	font-weight:normal;
+	font-weight: normal;
 	margin: 0;
 	padding: 0;
 }
 
-h5{
+h5 {
 	font-family: "Times New Roman", Georgia, Serif;
 	font-size: 12px;
-	font-weight:normal;
+	font-weight: normal;
 	margin: 0;
 	padding: 0;
 }
 
 
-h6{
+h6 {
 	font-family: "Times New Roman", Georgia, Serif;
 	font-size: 10px;
-	font-weight:normal;
+	font-weight: normal;
 	margin: 0;
 	padding: 0;
 }
 
-body{
+body {
 	margin: 0;
 	padding: 0;
 }
 
-a{
+a {
 	text-decoration: none;
+}
+
+button {
+	cursor: pointer;
+
 }
 
 #container{

@@ -12,34 +12,46 @@ let userId = 1;
 //get defaultdata
 let valueId = window.location.pathname.split('/').pop();
 reqwest({
-	url:'/api/value',
-	method:'post',
-	data:{"id":valueId},
-	success:function(result){
+	url: '/api/value',
+	method: 'post',
+	data: {"id": valueId},
+	success: function(result) {
 		let Data = JSON.parse(result);
 		//get current user's rate, comment content, comment title
-		let userRate = 0,userComment="",userTitle="";
-		for (var i=0;i<Data.comment.length;i++){
-			if(userId===Data.comment[i].id){
-				userRate=Data.comment[i].rate;
-				userComment=Data.comment[i].content;
-				userTitle = Data.comment[i].title;
+		let userVote;
+		for (var i = 0; i < Data.agree.length; i++) {
+			if (Data.agree[i] == userId) {
+				userVote = 1;
 				break;
 			}
 		}
-		ReactDOM.render(<Value data={Data} uRate={userRate} uComment={userComment} uTitle={userTitle} />, document.getElementById('root'));
+		for (var j = 0; j < Data.disagree.length; j++) {
+			if (Data.disagree[j] == userId) {
+				userVote = 0;
+				break;
+			}
+		}
+		let userRate = 0, userComment;
+		for (var k = 0; k < Data.note.length; k++) {
+			if (Data.note[k].id == userId) {
+				userRate = Data.note[k].rate;
+				userComment = Data.note[k].comment;
+				break;
+			}
+		}
+		ReactDOM.render(<Value data = {Data} userVote = {userVote} userRate = {userRate} userComment = {userComment} />, document.getElementById('root'));
 	}
 });
-class Value extends Component{
-	constructor(props){
+class Value extends Component {
+	constructor(props) {
 		super(props);
-		this.state={
-			data:this.props.data,//all the material information
-            totalStars:this.props.data.stars,//total stars of this material
-            newRate:false,//if the users add a new rate
-            uRate:this.props.uRate,//rate from current user
-			uContent : this.props.uComment,//comment content from current user
-			uTitle : this.props.uTitle//comment title from current user
+		this.state = {
+			data: this.props.data,//all the material information
+			userVote: this.props.userVote,//current user's vote for this material
+			agree: this.props.data.agree,
+			disagree: this.props.data.disagree,
+			userRate: this.props.userRate,
+			userComment: this.props.userComment
 		};
 	}
     //if current user change the rate
@@ -56,17 +68,19 @@ class Value extends Component{
 	submitComment(newTitle,newContent){
 		this.setState({uTitle:newTitle});
         this.setState({uContent:newContent});
-	}
-	render(){
+	};
+	render() {
+
+
 		return(
 			<div id="container">
 				<title>{this.props.data.title}</title>
 				<Header />
 				<main id="main">
 					<h1>{this.props.data.title}</h1>
-                    <About data={this.props.data} totalStars={this.state.totalStars} newRate={this.state.newRate} />
-                    <Subject data={this.state.data} />
-                    <Interact user={userId} data={this.state.data} uRate={this.state.uRate} uContent={this.state.uContent} uTitle={this.state.uTitle} changeRate={this.changeRate.bind(this)} submitComment={this.submitComment.bind(this)}/>
+                    <About data = {this.props.data} />
+                    <Subject data = {this.state.data} />
+                    <Interact userVote = {this.state.userVote} agree = {this.state.agree} disagree = {this.state.disagree} userRate = {this.state.userRate} userComment = {this.props.userComment} changeRate={this.changeRate.bind(this)} submitComment={this.submitComment.bind(this)} />
 				    <Comment data={this.state.data} userId={userId} uRate={this.state.uRate}/>
                 </main>
 				<Footer />

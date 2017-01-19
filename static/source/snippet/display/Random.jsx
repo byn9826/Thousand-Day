@@ -4,13 +4,13 @@ class Random extends Component {
         let content = this.props.content;
         let randomNumber = Math.floor(Math.random() * content.length);
         let randomContent = content[randomNumber];
-		return(
+		return (
             React.createElement(
                 this.props.font, 
                 {style: this.props.style}, 
                 randomContent
             )
 		);
-	};
+	}
 };
 export default Random;

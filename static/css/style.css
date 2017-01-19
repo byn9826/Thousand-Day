@@ -1,4 +1,4 @@
-.orange-box{
+.orange-box {
 	display: inline-block;
 	border-radius:5px;
 	background-color: #ff7b00;
@@ -7,6 +7,41 @@
 	padding: 5px 3%;
 	text-decoration: none;
 }
+
+.button-container {
+	background-color: #f9c39f;
+	border-radius: 5px;
+	cursor: pointer;
+	padding: 5px 3%;
+}
+
+.button-container:hover {
+	background-color: white;
+}
+
+.pop-container {
+	position: fixed;
+	left: 0;
+	top: 0;
+	z-index: 999;
+	width: 100%;
+	height: 100%;
+	background: rgba(249,250,252,0.9);
+	color: inherit;
+}
+.pop-container> :first-child{
+	border-radius: 5px;
+	background-color: white;
+	color: inherit;
+	border: 2px solid #b9d17f;
+	position: absolute;
+	left: 30%;
+	top: 15%;
+	width: 350px;
+	padding: 40px;
+}
+
+
 
 
 .div-dashed{
@@ -23,26 +58,6 @@
 	margin: 5px 3%;
 }
 
-.button-container{
-	color:white;
-	background-color:#ff7b00;
-	border: 0;
-	text-align: center;
-	transition-duration: 0.4s;
-	cursor:pointer;
-    outline:none;
-}
-.button-container:hover{
-	color: black;
-	background-color:white;
-	border: 0;
-}
-.button-container>:first-child{
-	float:left;
-	width: 90%;
-	margin:5px 5%;
-}
-
 .button-nborder{
 	border: 0;
 	background-color: white;
@@ -54,24 +69,3 @@
     color: orange;
 }
 
-.pop-container{
-	position: fixed;
-	left:0;
-	top:0;
-	z-index:999;
-	width: 100%;
-	height: 100%;
-	background:rgba(249,250,252,0.9);
-	color:inherit;
-}
-.pop-container>:first-child{
-	border-radius: 5px;
-	background-color: white;
-	color:inherit;
-	border: 2px solid #b9d17f;
-	position: absolute;
-	left: 30%;
-	top: 15%;
-	width: 350px;
-	padding: 40px;
-}
