@@ -9,7 +9,7 @@
 }
 
 .button-container {
-	background-color: #f9c39f;
+	border: 2px solid #f9c39f;
 	border-radius: 5px;
 	cursor: pointer;
 	padding: 5px 3%;
@@ -29,7 +29,7 @@
 	background: rgba(249,250,252,0.9);
 	color: inherit;
 }
-.pop-container> :first-child{
+.pop-container>:first-child {
 	border-radius: 5px;
 	background-color: white;
 	color: inherit;
@@ -41,7 +41,16 @@
 	padding: 40px;
 }
 
-
+.button-nborder {
+	border: 0;
+	background-color: white;
+	color:black;
+	cursor: pointer;
+    outline: none;
+}
+.button-nborder:hover {
+    color: orange;
+}
 
 
 .div-dashed{
@@ -58,14 +67,5 @@
 	margin: 5px 3%;
 }
 
-.button-nborder{
-	border: 0;
-	background-color: white;
-	color:black;
-	cursor: pointer;
-    outline: none;
-}
-.button-nborder:hover{
-    color: orange;
-}
+
 

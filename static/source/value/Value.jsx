@@ -70,9 +70,7 @@ class Value extends Component {
         this.setState({uContent:newContent});
 	};
 	render() {
-
-
-		return(
+		return (
 			<div id="container">
 				<title>{this.props.data.title}</title>
 				<Header />
@@ -85,6 +83,6 @@ class Value extends Component {
                 </main>
 				<Footer />
 			</div>
-		)
+		);
 	}
 };

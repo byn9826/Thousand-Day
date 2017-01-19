@@ -22,7 +22,7 @@ class About extends Component {
                 <section id="main-about-desc">
                     <h4><b>{this.props.data.days} learning days</b></h4>
                     <h4><b>People's opinion: </b></h4>
-                    <Vote left = "Valuable: " right = "Less value: " agree = {agreeTotal} disagree = {disagreeTotal} />
+                    <Vote left = "Valuable" right = "Less value" agree = {agreeTotal} disagree = {disagreeTotal} />
                     <h4><b>Listed in {this.props.data.plan} plans.</b></h4>
                     <h4>Type: {this.props.data.type}</h4>
                     <h4>Author: {this.props.data.author}</h4>

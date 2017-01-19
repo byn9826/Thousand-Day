@@ -65,26 +65,8 @@
 	margin-bottom: 5px;
 }
 
-
-
-#main-interact> button{
-    float: left;
-	margin-top: 18px;
-	margin-left: 4%;
-	width: 17%;
-}
-
-.main-interact-comment-label{
-    float: left;
-	width: 100%;
-	margin: 10px 0;
-}
-
-.main-interact-comment-button{
-	float: left;
-	width: 30%;
-	margin-left: 10%;
-	margin-top:10px;
+#main-interact-note>:nth-child(6) {
+	margin-bottom: 20px;
 }
 
 #main-interact-plan-first{

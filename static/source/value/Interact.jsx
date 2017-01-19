@@ -33,19 +33,20 @@ class Interact extends Component {
         //rateNum is the new rate from current user
         this.setState({userRate: rateNum});
     }
+    newChoice(newNum) {
+        this.setState({userVote: newNum});
+    }
     //if user click submit comment
-	submitComment() {
-        let changedContent = this.refs.commentContent.state.content;//get new content value
-        let changedContent1 = this.refs.comment1.state.content;
-        console.log(changedContent);
-        console.log(changedContent1);
+	submitNote() {
+        let changedComment = this.refs.commentContent.state.content;//get new content value
+        console.log(changedComment);
         //this.setState({title: changedTitle});
         //this.setState({content: changedContent});
         //this.props.submitComment(changedTitle, changedContent);//pass to root
         //this.setState({clickComment:false});//close popup box
 	}
     //show popup box if users click add to plan
-    clickPlan(){
+    clickPlan() {
         reqwest({
             url:'/api/valuePlans',
             method:'post',
@@ -58,8 +59,8 @@ class Interact extends Component {
     };
     
     //if user click cancel comment
-    cancelComment(){
-        this.setState({clickComment:false});//close popup box
+    cancelNote() {
+        this.setState({clickNote: false});//close popup box
 	}
     //if user click cancel plan
     cancelPlan(){
@@ -80,15 +81,13 @@ class Interact extends Component {
                 <div className="pop-container">
                     <span id = "main-interact-note">
                         <h4>Your opinion about this Material:</h4>
-                        <Vote left = "Valuable: " right = "Less value: " agree = {this.state.agreeTotal} disagree = {this.state.disagreeTotal} />
+                        <Vote left = "Valuable" right = "Less value" agree = {this.state.agreeTotal} disagree = {this.state.disagreeTotal} interact = "true" choice = {this.state.userVote} newChoice = {this.newChoice.bind(this)} />
                         <h4>Please Rate it:</h4>
                         <Rate rate = {this.state.userRate} max = "5" interact = "true" rateChange = {this.rateChange.bind(this)} />
-                        <h4>Write a title:</h4>
-                        <Inputbox ref = "comment1" content = "" max = "20" hint = "input something" />
                         <h4>Leave a short comment:</h4>
-                        <Inputarea ref = "commentContent" content = "" max = "140" />
-                        <button className="main-interact-comment-button button-nborder" onClick={this.submitComment.bind(this)}>submit</button>
-                        <button className="main-interact-comment-button button-nborder" onClick={this.cancelComment.bind(this)}>cancel</button>
+                        <Inputarea ref = "commentContent" content = {this.state.userComment} max = "140" />
+                        <button className="button-nborder" onClick={this.submitNote.bind(this)}>Submit</button>
+                        <button className="button-nborder" onClick={this.cancelNote.bind(this)}>Cancel</button>
                     </span>
                 </div>
             )
