@@ -38,11 +38,11 @@ class Inputbox extends Component {
 			width: "100%"
 		};
 		return(
-			<span style = {spanStyle}>
-				<input style = {inputStyle} value = {this.state.content} placeholder = {this.props.hint} onChange = {this.editInput.bind(this)} />
-				<span style = {countStyle}>{this.state.count} / {this.state.length}</span>
+			<span style={spanStyle}>
+				<input style={inputStyle} value={this.state.content} placeholder={this.props.hint} onChange={this.editInput.bind(this)} />
+				<span style={countStyle}>{this.state.count}/{this.state.length}</span>
 			</span>
 		);
 	}
-};
+}
 export default Inputbox;

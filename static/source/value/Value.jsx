@@ -65,9 +65,11 @@ class Value extends Component {
 		this.setState({totalStars: this.state.totalStars - prevState + rateNum});//change total stars
 	}
 	//if user subit comment from interact component
-	submitComment(newTitle,newContent){
-		this.setState({uTitle:newTitle});
-        this.setState({uContent:newContent});
+	submitNote(newVote, newRate, newComment) {
+		console.log("newVote: " + newVote + " newRate: " + newRate + " newComment: " + newComment);
+		this.setState({userVote: newVote});
+        this.setState({userRate: newRate});
+		this.setState({userComment: newComment});
 	};
 	render() {
 		return (
@@ -78,7 +80,7 @@ class Value extends Component {
 					<h1>{this.props.data.title}</h1>
                     <About data = {this.props.data} />
                     <Subject data = {this.state.data} />
-                    <Interact userVote = {this.state.userVote} agree = {this.state.agree} disagree = {this.state.disagree} userRate = {this.state.userRate} userComment = {this.props.userComment} changeRate={this.changeRate.bind(this)} submitComment={this.submitComment.bind(this)} />
+                    <Interact user = {userId} userVote = {this.state.userVote} agree = {this.state.agree} disagree = {this.state.disagree} userRate = {this.state.userRate} userComment = {this.props.userComment} submitNote = {this.submitNote.bind(this)} />
 				    <Comment data={this.state.data} userId={userId} uRate={this.state.uRate}/>
                 </main>
 				<Footer />

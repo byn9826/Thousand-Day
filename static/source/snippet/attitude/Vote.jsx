@@ -5,7 +5,7 @@ class Vote extends Component {
 		this.state = {
 			agree: this.props.agree || 0,
 			disagree: this.props.disagree || 0,
-			interact: (this.props.interact=='true') || false,
+			interact: (this.props.interact == 'true') || false,
 			left: this.props.left || "Agree: ",
 			right: this.props.right || "Disagree: ",
 			enterLeft: false,
@@ -35,10 +35,10 @@ class Vote extends Component {
 		}
 	}
 	chooseRight() {
-		if (this.state.choice != 0) {
-			this.setState({choice: 0});
-			this.props.newChoice(0);
-		} else if (this.state.choice == 0) {
+		if (this.state.choice != "0") {
+			this.setState({choice: "0"});
+			this.props.newChoice("0");
+		} else if (this.state.choice == "0") {
 			this.setState({choice: 2});
 			this.props.newChoice(2);
 		}
@@ -106,82 +106,81 @@ class Vote extends Component {
 		if (this.state.interact) {
 			if(this.state.enterLeft) {
 				agreeInside = (
-					<div style = {agreeStyleChoose} onMouseLeave = {this.leaveLeft.bind(this)} onClick = {this.chooseLeft.bind(this)} >
+					<div style={agreeStyleChoose} onMouseLeave={this.leaveLeft.bind(this)} onClick={this.chooseLeft.bind(this)}>
 						{this.state.left}
 					</div>
 				);
 				disagreeInside = (
-					<div style = {disagreeStyleActive}>
+					<div style={disagreeStyleActive}>
 						{this.state.right}
 					</div>
 				);
 			} else if (this.state.enterRight) {
 				agreeInside = (
-					<div style = {agreeStyleActive}>
+					<div style={agreeStyleActive}>
 						{this.state.left}
 					</div>
 				);
 				disagreeInside = (
-					<div style = {disagreeStyleChoose} onMouseLeave = {this.leaveRight.bind(this)} onClick = {this.chooseRight.bind(this)}>
+					<div style={disagreeStyleChoose} onMouseLeave={this.leaveRight.bind(this)} onClick={this.chooseRight.bind(this)}>
 						{this.state.right}
 					</div>
 				);
 			} else if (!this.state.enterLeft && !this.state.enterRight) {
 				if (this.state.choice == "2") {
 					agreeInside = (
-						<div style = {agreeStyleActive} onMouseEnter = {this.enterLeft.bind(this)}>
+						<div style={agreeStyleActive} onMouseEnter={this.enterLeft.bind(this)}>
 							{this.state.left}
 						</div>
 					);
 					disagreeInside = (
-						<div style = {disagreeStyleActive} onMouseEnter = {this.enterRight.bind(this)}>
+						<div style={disagreeStyleActive} onMouseEnter={this.enterRight.bind(this)}>
 							{this.state.right}
 						</div>
 					);
 				} else if (this.state.choice == "1") {
 					agreeInside = (
-						<div style = {agreeStyleChoose} onMouseEnter = {this.enterLeft.bind(this)}>
+						<div style={agreeStyleChoose} onMouseEnter={this.enterLeft.bind(this)}>
 							{this.state.left}
 						</div>
 					);
 					disagreeInside = (
-						<div style = {disagreeStyleActive} onMouseEnter = {this.enterRight.bind(this)}>
+						<div style={disagreeStyleActive} onMouseEnter={this.enterRight.bind(this)}>
 							{this.state.right}
 						</div>
 					);
 				} else if (this.state.choice == "0") {
 					agreeInside = (
-						<div style = {agreeStyleActive} onMouseEnter = {this.enterLeft.bind(this)}>
+						<div style={agreeStyleActive} onMouseEnter={this.enterLeft.bind(this)}>
 							{this.state.left}
 						</div>
 					);
 					disagreeInside = (
-						<div style = {disagreeStyleChoose} onMouseEnter = {this.enterRight.bind(this)}>
+						<div style={disagreeStyleChoose} onMouseEnter={this.enterRight.bind(this)}>
 							{this.state.right}
 						</div>
 					);
 				}
-				
 			}
 		} else {
 			agreeInside = (
-				<div style = {agreeStylePassive}>
+				<div style={agreeStylePassive}>
 					{this.state.left}: {this.state.agree}
 				</div>
 			);
 			disagreeInside = (
-				<div style = {disagreeStylePassive}>
+				<div style={disagreeStylePassive}>
 					{this.state.right}: {this.state.disagree}
 				</div>
-			)
+			);
 		}
 		return (
-			<span style = {spanStyle}>
+			<span style={spanStyle}>
 				{agreeInside}
-				<div style = {vsStyle}>vs</div>
+				<div style={vsStyle}>vs</div>
 				{disagreeInside}
 			</span>
 		);
 	}
-};
+}
 export default Vote;

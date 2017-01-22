@@ -19,11 +19,11 @@ def showvalue():
     else:
         abort(404)
 
-@api_pages.route('/api/valuePlans', methods=['GET', 'POST'])
+@api_pages.route('/api/valuePlans', methods = ['GET', 'POST'])
 def getplans():
     if request.method == 'POST':
         user = request.form['user']
-        plans = db.plan.find({'user':int(user)},{'title': 1, '_id':0})
+        plans = db.plan.find({'user': int(user)},{'title': 1, '_id': 0})
         titles = []
         for plan in plans:
             titles.append(plan["title"])

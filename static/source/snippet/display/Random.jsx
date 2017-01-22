@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 class Random extends Component {
-    render () {
+    render() {
         let content = this.props.content;
         let randomNumber = Math.floor(Math.random() * content.length);
         let randomContent = content[randomNumber];
@@ -12,5 +12,5 @@ class Random extends Component {
             )
 		);
 	}
-};
+}
 export default Random;

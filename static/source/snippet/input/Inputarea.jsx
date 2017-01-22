@@ -9,11 +9,11 @@ class Inputarea extends Component {
       		fontSize: this.props.font || "13px",
      		content: this.props.content || "",
       		count: parseInt(this.props.max) - this.props.content.length,
-      		length: parseInt(this.props.max),
+      		length: parseInt(this.props.max)
 		};
 	}
 	editInput(event) {
-		let changedInput = event.target.value.substr(0,this.state.length);
+		let changedInput = event.target.value.substr(0, this.state.length);
 		this.setState({content: changedInput});
       	this.setState({count: this.state.length - changedInput.length});
 	}
@@ -36,13 +36,13 @@ class Inputarea extends Component {
 			fontFamily: "Times New Roman",
 			fontSize: "11px",
 			width: "100%"
-		}
+		};
 		return (
-			<span style = {spanStyle}>
-				<textarea style = {inputStyle} value = {this.state.content} onChange = {this.editInput.bind(this)} />
-        		<span style = {countStyle}>{this.state.count} / {this.state.length}</span>
+			<span style={spanStyle}>
+				<textarea style={inputStyle} value={this.state.content} onChange={this.editInput.bind(this)} />
+        		<span style={countStyle}>{this.state.count}/{this.state.length}</span>
 			</span>
 		);
 	}
-};
+}
 export default Inputarea;

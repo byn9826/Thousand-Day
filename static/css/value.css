@@ -1,73 +1,78 @@
-#main {
-    float:left;
+#main{
+    float: left;
     width: 45%;
     padding: 15px 2%;
     margin-left: 10%;
 }
 
-#main h1 {
-	display:block;
+#main h1{
+	display: block;
 	width: 100%;
 	margin-bottom: 30px;
 }
 
-#main-about {
+#main-about{
 	float: left;
 	width: 70%;
 }
 
-#main-about img {
+#main-about img{
 	float: left;
 	width: 40%;
 }
 
-#main-about-desc {
+#main-about-desc{
     float: right;
 	width: 55%;
 }
 
-#main-about-desc h4 {
+#main-about-desc h4{
 	display: inline-block;
     width: 100%;
 	margin-bottom: 8px;
 }
 
-#main-about-desc >:nth-child(4) {
+#main-about-desc>:nth-child(4){
 	margin-top: 15px;
 	margin-bottom: 6px;
 }
 
-#main-subject {
-	float:right;
+#main-subject{
+	float: right;
 	width: 30%;
 }
 
-#main-subject h4 {
+#main-subject h4{
 	color:#1f427a;
 }
 
-#main-interact {
+#main-interact{
 	display: inline-block;
-	width:100%;
-	margin-top:20px;
+	width: 100%;
+	margin-top: 20px;
 	border-top: 1px solid black;
 }
 
-#main-interact>:first-child {
+.main-interact-button{
 	float: left;
 	margin-top: 10px;
 	margin-left: 2%;
 }
 
-#main-interact-note h4 {
+#main-interact-note h4{
 	font-weight: bold;
-	margin-top: 10px;
+	margin-top: 15px;
 	margin-bottom: 5px;
 }
 
-#main-interact-note>:nth-child(6) {
+#main-interact-note>:nth-child(6){
 	margin-bottom: 20px;
 }
+
+#main-interact-plan>:first-child{
+	margin-bottom: 20px;
+}
+
 
 #main-interact-plan-first{
     float: left;
@@ -78,40 +83,40 @@
 #main-interact-plan-second{
     float: left;
 	margin-top: 40px;
-	margin-bottom:10px;
+	margin-bottom: 10px;
 	width: 100%;
 }
 
 .main-interact-plan-button{
 	float: left;
 	width: 30%;
-	margin-top:20px;
+	margin-top: 20px;
 }
 
 #main-comment{
 	display: inline-block;
-	width:100%;
+	width: 100%;
 	margin-top: 30px;
 }
 
 #main-comment h3{
     display: block;
-	width:97%;
-	background-color:#348964;
+	width: 97%;
+	background-color: #348964;
 	margin-bottom: 15px;
     padding-left: 3%;
     padding-top: 10px;
     padding-bottom: 10px;
     font-weight: bold;
-	color:white;
+	color: white;
 }
 
 .main-comment-each{
-    float:left;
-	width:90%;
-	margin-left:2%;
-	margin-top:15px;
-	margin-bottom:15px;
+    float: left;
+	width: 90%;
+	margin-left: 2%;
+	margin-top: 15px;
+	margin-bottom: 15px;
 	border-bottom: 1px solid #b5c5dd;
 	word-wrap: break-word;
 }
