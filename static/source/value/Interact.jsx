@@ -14,8 +14,8 @@ class Interact extends Component {
             userRate: this.props.userRate,//rate from current user
             userComment: this.props.userComment,
             clickNote: false,//if the comment popup box open
-
             clickPlan:false,//if the plan popup box open
+
             content:this.props.uContent,//comment content from current user
             title:this.props.uTitle,//comment title from current user
             plan:[]//plans from current user
@@ -50,7 +50,7 @@ class Interact extends Component {
         reqwest({
             url: '/api/valuePlans',
             method: 'post',
-            data: {"user":this.props.user},
+            data: {"user": this.props.user},
             success: function (result) {
                 result = JSON.parse(result);
                 this.setState({plan: result, clickPlan: true});
@@ -97,7 +97,7 @@ class Interact extends Component {
             showPlan = (
                 <div className="pop-container">
                     <span id="main-interact-plan">
-                        <AddtoList ref="planChoice" title="Add to your plans:" content={this.state.plan} />
+                        <AddtoList ref="planChoice" title="Add to your plans:" content={this.state.plan} choice />
                         <button className="button-nborder" onClick={this.submitPlan.bind(this)}>submit</button>
                         <button className="button-nborder">cancel</button>
                     </span>
