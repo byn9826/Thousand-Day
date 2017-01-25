@@ -1,29 +1,23 @@
 import React, {Component} from 'react';
-class Footer extends Component{
-	render(){
-    let footer = {
-      float:"left",
-      width:"100%",
-      backgroundColor:"black",
-      height:"40px",
-      marginTop:"40px"
-    };
-    let footerContent = {
-      float:"left",
-      marginLeft:"10%",
-      color:"white",
-      fontSize:"11px",
-      fontFamily:"Arial, Helvetica, sans-serif",
-      lineHeight:"40px",
-      verticalAlign:"middle"
-    };
+class Footer extends Component {
+	render () {
+		let footer = {
+			display: "block",
+			width: "100%",
+			backgroundColor: "black",
+			clear: "both",
+			padding: "5px 0"
+		};
+		let footerInfo = {
+			display: "inline-block",
+			marginLeft: "10%",
+			color: "white"
+		};
 		return(
 			<footer style={footer}>
-        <h6 style={footerContent}>
-          Copyright 2016-2017 Thousanday All Rights Reserved.
-        </h6>
+				<h6 style={footerInfo}>© 2017 thousanday.com byn9826@gmail.com</h6>
 			</footer>
-		)
+		);
 	}
-};
+}
 export default Footer;
