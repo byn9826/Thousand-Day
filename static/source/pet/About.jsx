@@ -19,7 +19,7 @@ class About extends Component {
                 <h1>{this.props.data.name}</h1>
                 <h5>♂</h5>
                 <Like agree={this.state.like} newTotal={this.updateLike.bind(this)}/>
-                <h4><b>Point: {this.props.data.point}</b></h4>
+                <h4><b>Power: {this.props.data.power}</b></h4>
                 <h4><b>Nature: {this.props.data.nature}</b></h4>
                 <h4>Type: {this.props.data.type}</h4>
                 <h4>Reg in hub: {this.props.data.day}</h4>

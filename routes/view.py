@@ -30,3 +30,8 @@ def petView():
 @view_pages.route('/react')
 def reactHome():
     return render_template('react.html')
+
+
+@view_pages.route('/test')
+def testHome():
+    return render_template('test.html')

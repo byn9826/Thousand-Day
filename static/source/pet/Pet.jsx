@@ -3,12 +3,14 @@ import ReactDOM from 'react-dom';
 import reqwest from 'reqwest';
 import Header from '../general/Header';
 import About from './About';
+import Ability from './Ability';
 class Pet extends Component {
 	render() {
 		return (
 			<div id="container">
 				<Header />
 				<About data={this.props.data} />
+				<Ability />
 			</div>
 		);
 	}
