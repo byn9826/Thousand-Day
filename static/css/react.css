@@ -1,0 +1,90 @@
+#header{
+	margin-bottom: 50px;
+}
+
+#main {
+	float: left;
+	width: 26%;
+	margin-left: 10%;
+	text-align: left;
+}
+
+#main h1 {
+	display: block;
+	width: 100%;
+	margin: 5px 0;
+}
+
+#main h2 {
+	display: block;
+	width: 100%;
+	margin-bottom: 15px;
+}
+
+#main >:nth-child(3) {
+	display: block;
+	padding: 5px 3%;
+	width: 94%;
+	background-color: #dae2ef;
+	color: black;
+	margin-bottom: 10px;
+}
+
+#main section {
+	display: block;
+	padding: 5px 0;
+	width: 100%;
+	margin-top: 20px;
+}
+
+.main-list{
+	display: block;
+	border-left: 5px solid #348964;
+	padding-left: 3%;
+	margin-bottom: 15px;
+	border-bottom: 1px dashed black;
+}
+
+#main h4 {
+	margin-right: 3%;
+	margin-bottom: 15px;
+}
+
+#main a {
+	color: white;
+}
+
+.example {
+	float: right;
+	margin-right: 10%;
+  margin-bottom: 15px;
+	width: 45%;
+	padding: 15px 2%;
+	background-color: #fcf5ed;
+	border-radius: 5px;
+}
+
+.example-header {
+	border-bottom: 1px dotted black;
+	display: block;
+	margin-bottom: 10px;
+}
+
+.example-header h2 {
+	display: inline-block;
+	color:  #1d4077;
+	font-weight: bold;
+}
+
+.example-header h3 {
+	display: inline-block;
+	margin-left: 5%;
+}
+
+.example h4{
+	display: block;
+	width: 100%;
+	font-weight: bold;
+	margin-top: 10px;
+	margin-bottom: 5px;
+}

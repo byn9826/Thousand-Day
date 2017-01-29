@@ -1,0 +1,62 @@
+h1{
+	font-family: "Times New Roman", Georgia, Serif;
+	font-size: 24px;
+	font-weight: bold;
+	margin: 0;
+	padding: 0;
+}
+
+h2{
+	font-family: "Times New Roman", Georgia, Serif;
+	font-size: 20px;
+	font-weight: normal;
+	margin: 0;
+	padding: 0;
+}
+
+h3{
+	font-family: "Times New Roman", Georgia, Serif;
+	font-size: 18px;
+	font-weight: normal;
+	margin: 0;
+	padding: 0;
+}
+
+h4{
+	font-family: "Times New Roman", Georgia, Serif;
+	font-size: 16px;
+	font-weight: normal;
+	margin: 0;
+	padding: 0;
+}
+
+h5{
+	font-family: "Times New Roman", Georgia, Serif;
+	font-size: 14px;
+	font-weight: normal;
+	margin: 0;
+	padding: 0;
+}
+
+
+h6{
+	font-family: "Times New Roman", Georgia, Serif;
+	font-size: 12px;
+	font-weight: normal;
+	margin: 0;
+	padding: 0;
+}
+
+body{
+	margin: 0;
+	padding: 0;
+}
+
+a{
+	text-decoration: none;
+}
+
+#container{
+	display: block;
+	width: 100%;
+}	

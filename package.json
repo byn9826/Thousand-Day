@@ -1,0 +1,24 @@
+{
+  "name": "petinhub",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.py",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "GPL",
+  "dependencies": {
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "reqwest": "^2.0.5",
+    "thousanday-react": "^0.6.2"
+  },
+  "devDependencies": {
+    "babel-core": "^6.21.0",
+    "babel-loader": "^6.2.10",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-react": "^6.22.0",
+    "webpack": "^1.14.0"
+  }
+}

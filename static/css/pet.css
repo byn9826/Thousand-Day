@@ -1,0 +1,63 @@
+#about{
+    float: left;
+    width: 15%;
+	margin-left: 10%;
+	margin-top: 50px;
+}
+
+#about img{
+	display: block;
+	width: 100%;
+	border-radius: 5px;
+}
+
+#about h1{
+	display: block;
+	width: 100%;
+	clear: both;
+	margin: 10px 0;
+}
+
+#about h5{
+	display: inline-block;
+	color: white;
+	background-color: #032056;
+	padding: 1px 1%;
+	margin-right: 6%;
+}
+
+#about>:nth-child(5){
+	border-top: 1px dotted gray;
+	padding-top: 10px;
+	margin-top: 10px;
+}
+
+#about h4{
+	display: block;
+	width: 100%;
+	margin-bottom: 10px;
+}
+
+.right{
+	float: right;
+	width: 60%;
+	margin-right: 10%;
+}
+
+#ability{
+	margin-top: 50px;
+}
+
+#ability h4{
+	border-radius: 3px;
+	display: inline-block;
+	margin-right: 5%;
+	padding: 5px 1%;
+	border-left: 2px solid orange;
+	border-right: 2px solid orange;
+	font-weight: bold;
+}
+
+#ability img{
+	width: 10%;
+}
