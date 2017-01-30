@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import Blueprint, render_template, abort, request
 from pymongo import MongoClient
-from lib import database
+import database
 from bson import json_util
 
 
