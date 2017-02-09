@@ -1,22 +1,6 @@
-#about{
-    float: left;
-    width: 15%;
-	margin-left: 10%;
-	margin-top: 50px;
-}
+/*About Component*/
 
-#about img{
-	display: block;
-	width: 100%;
-	border-radius: 5px;
-}
 
-#about h1{
-	display: block;
-	width: 100%;
-	clear: both;
-	margin: 10px 0;
-}
 
 #about h5{
 	display: inline-block;

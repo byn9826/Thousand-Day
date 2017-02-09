@@ -4,7 +4,7 @@ class Ability extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            progress: 18
+            attack: 50
         };
     }
     clickButton() {
@@ -13,16 +13,12 @@ class Ability extends Component {
     render() {
         return(
             <section id="ability" className="right">
-                <h4>Attack: 100</h4>
-                <h4>Defend: 100</h4>
-                <h4>Health: 100</h4>
-                <h4>Cure: 100</h4>
-                <h4>Swift: 100</h4>
-                <h4>Lucky: 100</h4>
-                <div>
-                    <Progress progress={this.state.progress} max="103" width="30%" height="12px" />
-                </div>
-                <button type="button" value="submit" onClick={this.clickButton.bind(this)} />
+                <h5>Attack</h5><Progress progress={this.state.attack} max="100" width="30%" height="12px" />
+                <h5>Defend</h5><Progress progress={this.state.attack} max="100" width="30%" height="12px" />
+                <h5>Health</h5><Progress progress={this.state.attack} max="100" width="30%" height="12px" />
+                <h5>Cure</h5><Progress progress={this.state.attack} max="100" width="30%" height="12px" />
+                <h5>Swift</h5><Progress progress={this.state.attack} max="100" width="30%" height="12px" />
+                <h5>Lucky</h5><Progress progress={this.state.attack} max="100" width="30%" height="12px" />
             </section>
         );
     }
