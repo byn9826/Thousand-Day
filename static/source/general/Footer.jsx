@@ -5,7 +5,8 @@ class Footer extends Component {
 			display: "block",
 			width: "80%",
 			backgroundColor: "black",
-			padding: "5px 10%"
+			padding: "5px 10%",
+			marginTop: "20px"
 		};
 		let footerInfoStyle = {
 			display: "inline-block",

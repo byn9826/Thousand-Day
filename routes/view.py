@@ -19,7 +19,7 @@ def petHome(id):
 def petView():
     if request.method == 'POST':
         id = request.form['id']
-        pet = db.pet.find_one({"id": int(id)})
+        pet = db.pet.find_one({'id': int(id)})
         if not pet:
             abort(404)
         return json_util.dumps(pet)

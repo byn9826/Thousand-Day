@@ -27,7 +27,7 @@ reqwest({
 	method: "POST",
 	data: {"id": window.location.pathname.split("/").pop()},
 	success: function(result) {
-		let Data = JSON.parse(result);
-		ReactDOM.render(<Pet data={Data} />, document.getElementById("root"));
+		let data = JSON.parse(result);
+		ReactDOM.render(<Pet data={data} />, document.getElementById("root"));
 	}
 });

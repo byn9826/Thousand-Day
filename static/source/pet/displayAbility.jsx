@@ -75,7 +75,7 @@ class Ability extends Component {
                         </h5>
                     </div>
                     <div style={pointHolderStyle}>
-                        <img alt="ability-icon" src="/img/pet/icon/glyphicons-potential.png" / >
+                        <img alt="potential-icon" src="/img/pet/icon/glyphicons-potential.png" / >
                         <h5 style={holderFontStyle}>
                             Potential: <br />
                             {this.state.potential}

@@ -1,9 +1,10 @@
 import React, {Component} from "react";
+import Team from "./aboutTeam";
+import Like from "../snippet/attitude/Like";
 import noGetGender from "../../js/noGetGender.js";
 import noGetNature from "../../js/noGetNature.js";
 import noGetType from "../../js/noGetType.js";
 import noGetLocation from "../../js/noGetLocation.js";
-import Like from "../snippet/attitude/Like";
 class About extends Component {
     constructor(props) {
         super(props);
@@ -42,7 +43,7 @@ class About extends Component {
             display: "inline-block",
             verticalAlign: "middle"
         };
-        let aboutTypeStyle = {
+        let aboutFirstStyle = {
             display: "block",
             width: "90%",
             marginLeft: "5%",
@@ -56,6 +57,15 @@ class About extends Component {
             display: "block",
             width: "90%",
             margin: "8px 5%"
+        };
+        let aboutLastStyle = {
+            display: "block",
+            width: "90%",
+            marginLeft: "5%",
+            marginRight: "5%",
+            marginTop: "8px",
+            paddingBottom: "20px",
+            borderBottom: "1px solid #e5e5e5"
         };
         let petGender = noGetGender(this.props.data.gender);
         let petNature = noGetNature(this.props.data.nature);
@@ -71,10 +81,11 @@ class About extends Component {
                 <div style={aboutLineStyle}>
                     <Like agree={this.state.like} newTotal={this.updateLike.bind(this)}/>
                 </div>
-                <h5 style={aboutTypeStyle}>Nature: {petNature}</h5>
+                <h5 style={aboutFirstStyle}>Nature: {petNature}</h5>
                 <h5 style={aboutDetailStyle}>Type: {petType}</h5>
                 <h5 style={aboutDetailStyle}>Location: {petLocation}</h5>
-                <h5 style={aboutDetailStyle}>Reg in hub: {this.props.data.reg}</h5>
+                <h5 style={aboutLastStyle}>Reg in hub: {this.props.data.reg}</h5>
+                <Team companion={this.props.data.companion} human={this.props.data.human} />
             </main>
         );
     }

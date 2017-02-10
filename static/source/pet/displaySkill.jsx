@@ -11,7 +11,7 @@ class Skill extends Component {
             display: "block",
             padding: "10px 2%",
             width: "96%",
-            marginTop: "30px",
+            marginTop: "40px",
             border: "2px solid #f7d7b4",
             borderRadius: "5px"
         };
@@ -35,7 +35,7 @@ class Skill extends Component {
             display: "inline-block",
             width: "23%",
             margin: "0 1%",
-            verticalAlign: "middle",
+            verticalAlign: "bottom",
             borderTop: "2px solid #f7f9fc"
         };
         let singleTitleStyle = {

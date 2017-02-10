@@ -4,5 +4,8 @@ export default function noGetNature(value) {
         case 0:
             return "cute";
             break;
+        case 1:
+            return "strong";
+            break;
     }
 }
