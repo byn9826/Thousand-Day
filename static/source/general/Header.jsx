@@ -36,7 +36,8 @@ class Header extends Component {
 		};
 		let randomContent = [
 			"Digital hub for your pets",
-			"Better together everyday"
+			"Your pets also love social",
+			"Share your cute to the world"
 		];
 		return (
 			<header style={headerStyle}>

@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import Team from "./aboutTeam";
-import Like from "../snippet/attitude/Like";
 import noGetGender from "../../js/noGetGender.js";
 import noGetNature from "../../js/noGetNature.js";
 import noGetType from "../../js/noGetType.js";
@@ -77,9 +76,6 @@ class About extends Component {
                 <div style={aboutLineStyle}>
                     <h1 style={titleNameStyle}>{this.props.data.name}</h1>
                     <h4 style={titleGenderStyle}>{petGender}</h4>
-                </div>
-                <div style={aboutLineStyle}>
-                    <Like agree={this.state.like} newTotal={this.updateLike.bind(this)}/>
                 </div>
                 <h5 style={aboutFirstStyle}>Nature: {petNature}</h5>
                 <h5 style={aboutDetailStyle}>Type: {petType}</h5>

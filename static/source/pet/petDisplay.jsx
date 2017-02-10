@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import Ability from "./displayAbility";
 import Skill from "./displaySkill";
+import Moment from "./displayMoment";
 import Progress from "../snippet/display/Progress";
 class Display extends Component {
     render() {
@@ -15,6 +16,7 @@ class Display extends Component {
             <section style={displayStyle}>
                 <Ability ability={this.props.data.ability} potential={this.props.data.potential} />
                 <Skill id={this.props.data.id} skill={this.props.data.skill} />
+                <Moment id={this.props.data.id} moment={this.props.data.moment} />
             </section>
         );
     }
