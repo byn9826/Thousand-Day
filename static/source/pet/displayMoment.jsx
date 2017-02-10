@@ -4,9 +4,16 @@ class Moment extends Component {
     constructor(props) {
         super(props);
 		this.state = {
-            moment: this.props.moment
+            moment: this.props.moment,
+            active:""
 		};
 	}
+    showContent(event) {
+        this.setState({active: parseInt(event.target.name)});
+    }
+    hideContent() {
+        this.setState({active: ""});
+    }
     render() {
         let momentStyle = {
             display: "block",
@@ -74,33 +81,34 @@ class Moment extends Component {
         };
         let momentLeft = [];
         let momentRight = [];
-        for (var i = 0; i < this.state.moment.length; i = i + 2) {
-            momentLeft.push(
-                <div key={"momentLeft" + i} style={lineContainerStyle}>
-                    <img style={containerImgStyle} alt={this.state.moment[i][2]} src={"/img/pet/" + this.props.id + "/moment/" + this.state.moment[i][1] + ".jpg"} />
-                    <h5 style={containerContentStyle}>
-                        {this.state.moment[i][2]}
-                    </h5>
-                    <div style={containerInfoStyle}>
-                        <Like name={"like" + i} agree={this.state.moment[i][3]} />
-                        <h6 style={infoDateStyle}>{this.state.moment[i][0]}</h6>
+        let momentSingle;
+        for (var i = 0; i < this.state.moment.length; i++) {
+            if (this.state.active === i) {
+                momentSingle = (
+                    <div key={"momentline" + i} style={lineContainerStyle}>
+                        <img style={containerImgStyle} name={i} alt={this.state.moment[i][2]} src={"/img/pet/" + this.props.id + "/moment/" + this.state.moment[i][1] + ".jpg"} onMouseLeave={this.hideContent.bind(this)} />
+                        <h5 style={containerContentStyle}>
+                            {this.state.moment[i][2]}
+                        </h5>
+                        <div style={containerInfoStyle}>
+                            <Like agree={this.state.moment[i][3]} />
+                            <h6 style={infoDateStyle}>{this.state.moment[i][0]}</h6>
+                        </div>
                     </div>
-                </div>
-            );
-        }
-        for (var j = 1; j < this.state.moment.length; j = j + 2) {
-            momentRight.push(
-                <div key={"momentRight" + j} style={lineContainerStyle}>
-                    <img style={containerImgStyle} alt={this.state.moment[j][2]} src={"/img/pet/" + this.props.id + "/moment/" + this.state.moment[j][1] + ".jpg"} />
-                    <h5 style={containerContentStyle}>
-                        {this.state.moment[j][2]}
-                    </h5>
-                    <div style={containerInfoStyle}>
-                        <Like name={"like" + j} agree={this.state.moment[j][3]} />
-                        <h6 style={infoDateStyle}>{this.state.moment[j][0]}</h6>
+                );
+            }
+            else {
+                momentSingle = (
+                    <div key={"momentLeft" + i} style={lineContainerStyle}>
+                        <img style={containerImgStyle} name={i} alt={this.state.moment[i][2]} src={"/img/pet/" + this.props.id + "/moment/" + this.state.moment[i][1] + ".jpg"} onMouseEnter={this.showContent.bind(this)} />
                     </div>
-                </div>
-            );
+                );
+            }
+            if (i % 2 === 0) {
+                momentLeft.push(momentSingle);
+            } else {
+                momentRight.push(momentSingle);
+            }
         }
         return (
             <section style={momentStyle}>
