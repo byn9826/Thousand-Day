@@ -2,8 +2,9 @@ import React, {Component} from "react";
 import ReactDOM from "react-dom";
 import reqwest from "reqwest";
 import Header from "../general/Header";
+import Footer from "../general/Footer";
 import About from "./petAbout";
-import Ability from "./Ability";
+import Display from "./petDisplay";
 class Pet extends Component {
 	render() {
 		let containerStyle = {
@@ -14,7 +15,8 @@ class Pet extends Component {
 			<div style={containerStyle}>
 				<Header />
 				<About data={this.props.data} />
-				<Ability />
+				<Display data={this.props.data} />
+				<Footer />
 			</div>
 		);
 	}

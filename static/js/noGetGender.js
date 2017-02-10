@@ -1,5 +1,5 @@
-export default function getGender(value) {
-    let gender;
+export default function noGetGender(value) {
+    value = parseInt(value);
     if (value === 0) {
         return "♂";
     } else {

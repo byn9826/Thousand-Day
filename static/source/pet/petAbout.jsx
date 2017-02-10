@@ -1,6 +1,9 @@
-import React, {Component} from 'react';
-import getGender from '../../js/getGender.js';
-import Like from '../snippet/attitude/Like';
+import React, {Component} from "react";
+import noGetGender from "../../js/noGetGender.js";
+import noGetNature from "../../js/noGetNature.js";
+import noGetType from "../../js/noGetType.js";
+import noGetLocation from "../../js/noGetLocation.js";
+import Like from "../snippet/attitude/Like";
 class About extends Component {
     constructor(props) {
         super(props);
@@ -11,16 +14,14 @@ class About extends Component {
     updateLike(change) {
         let like = this.state.like;
         this.setState({like: like + change});
-        console.log(this.state.like);
     }
-
-
     render() {
         let aboutStyle = {
             display: "inline-block",
             width: "18%",
             marginLeft: "10%",
-            marginTop: "50px"
+            marginTop: "50px",
+            verticalAlign: "top"
         };
         let aboutProfileStyle = {
             display: "block",
@@ -56,10 +57,13 @@ class About extends Component {
             width: "90%",
             margin: "8px 5%"
         };
-        let petGender = getGender(parseInt(this.props.data.gender));
+        let petGender = noGetGender(this.props.data.gender);
+        let petNature = noGetNature(this.props.data.nature);
+        let petType = noGetType(this.props.data.type);
+        let petLocation = noGetLocation(this.props.data.location);
         return(
             <main style={aboutStyle}>
-                <img alt = {this.props.data.name} src = {"/img/pet/" + this.props.data.id + "/" + this.props.data.profile + ".jpg"} style={aboutProfileStyle} />
+                <img style={aboutProfileStyle} alt = {this.props.data.name} src = {"/img/pet/" + this.props.data.id + "/cover/0.jpg"} />
                 <div style={aboutLineStyle}>
                     <h1 style={titleNameStyle}>{this.props.data.name}</h1>
                     <h4 style={titleGenderStyle}>{petGender}</h4>
@@ -67,8 +71,9 @@ class About extends Component {
                 <div style={aboutLineStyle}>
                     <Like agree={this.state.like} newTotal={this.updateLike.bind(this)}/>
                 </div>
-                <h5 style={aboutTypeStyle}>Nature: {this.props.data.nature}</h5>
-                <h5 style={aboutDetailStyle}>Type: {this.props.data.type}</h5>
+                <h5 style={aboutTypeStyle}>Nature: {petNature}</h5>
+                <h5 style={aboutDetailStyle}>Type: {petType}</h5>
+                <h5 style={aboutDetailStyle}>Location: {petLocation}</h5>
                 <h5 style={aboutDetailStyle}>Reg in hub: {this.props.data.reg}</h5>
             </main>
         );
