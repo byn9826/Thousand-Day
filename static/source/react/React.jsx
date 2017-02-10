@@ -41,14 +41,16 @@ class Reactui extends Component {
 						<h4 className = "orange-box"><a href = "#inputarea">Inputarea</a></h4>
 					</section>
 				</main>
-				<RandomEG />
-				<RateEG />
-				<InputboxEG />
-				<InputareaEG />
-				<AddtolistEG />
-				<VoteEG />
-				<LikeEG />
-				<ProgressEG />
+				<section id="right">
+					<RandomEG />
+					<RateEG />
+					<InputboxEG />
+					<InputareaEG />
+					<AddtolistEG />
+					<VoteEG />
+					<LikeEG />
+					<ProgressEG />
+				</section>
 				<Footer />
 			</div>
 		)

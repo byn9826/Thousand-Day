@@ -1,12 +1,10 @@
-#header{
-	margin-bottom: 50px;
-}
-
 #main {
-	float: left;
+	display: inline-block;
 	width: 26%;
 	margin-left: 10%;
 	text-align: left;
+	vertical-align: top;
+	margin-top: 40px;
 }
 
 #main h1 {
@@ -54,11 +52,18 @@
 	color: white;
 }
 
-.example {
-	float: right;
-	margin-right: 10%;
-  margin-bottom: 15px;
+#right{
+	display: inline-block;
+	vertical-align: top;
+	margin-left: 7%;
+	margin-top: 40px;
 	width: 45%;
+}
+
+.example {
+	display: block;
+	width: 100%;
+	margin-bottom: 15px;
 	padding: 15px 2%;
 	background-color: #fcf5ed;
 	border-radius: 5px;
