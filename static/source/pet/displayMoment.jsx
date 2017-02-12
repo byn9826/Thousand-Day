@@ -5,8 +5,7 @@ class Moment extends Component {
     constructor(props) {
         super(props);
 		this.state = {
-            moment: this.props.moment,
-            active: ""
+            moment: this.props.moment
 		};
 	}
     clickNumber(index) {
@@ -18,6 +17,23 @@ class Moment extends Component {
             padding: "0px 2%",
             width: "96%",
             marginTop: "40px"
+        };
+        let momentTitleStyle = {
+            display: "block",
+            width: "100%",
+            borderBottom: "1px solid #f7d7b4",
+            paddingBottom: "10px",
+            marginBottom: "15px"
+        };
+        let titleIconStyle = {
+            display: "inline-block",
+            verticalAlign: "middle",
+            marginRight: "5%"
+        };
+        let titleMomentStyle = {
+            display: "inline-block",
+            verticalAlign: "middle",
+            fontWeight: "bold"
         };
         let images = [
             ["/img/pet/0/moment/0.jpg", "I'm a beauty guy with long legs"],
@@ -35,7 +51,11 @@ class Moment extends Component {
         ];
         return (
             <section style={momentStyle}>
-                <Waterfall column="3" image={images} clickNumber={this.clickNumber.bind(this)} />
+                <div style={momentTitleStyle}>
+                    <img style={titleIconStyle} alt="moment-icon" src="/img/pet/icon/glyphicons-moment.png" / >
+                    <h4 style={titleMomentStyle}>Moments</h4>
+                </div>
+                 <Waterfall column="3" image={images} clickNumber={this.clickNumber.bind(this)} />
             </section>
         );
     }
