@@ -10,10 +10,20 @@ class Waterfall extends Component {
         let columnLow = 0;
         let columnHigh = 0;
         let oneColumn = document.getElementsByName("reactWaterfallColumn");
-        let columnNumber = parseInt(this.props.column);
         let exchangeChild;
+        let columnNumber = parseInt(this.props.column);
         let j;
-        setTimeout(function() {
+        for (j = 1; j < columnNumber ; j++) {
+        if (oneColumn[j].offsetHeight <= oneColumn[columnLow].offsetHeight) {
+                columnLow = j;
+            } else if (oneColumn[j].offsetHeight > oneColumn[columnHigh].offsetHeight) {
+                columnHigh = j;
+            }
+        }
+        while ((oneColumn[columnHigh].offsetHeight - oneColumn[columnLow].offsetHeight) > oneColumn[columnHigh].lastChild.offsetHeight ) {
+            exchangeChild = oneColumn[columnHigh].lastChild;
+            oneColumn[columnHigh].removeChild(oneColumn[columnHigh].lastChild);
+            oneColumn[columnLow].appendChild(exchangeChild);
             for (j = 1; j < columnNumber; j++) {
                 if (oneColumn[j].offsetHeight <= oneColumn[columnLow].offsetHeight) {
                     columnLow = j;
@@ -21,20 +31,7 @@ class Waterfall extends Component {
                     columnHigh = j;
                 }
             }
-            while ((oneColumn[columnHigh].offsetHeight - oneColumn[columnLow].offsetHeight) > oneColumn[columnHigh].lastChild.offsetHeight ) {
-                exchangeChild = oneColumn[columnHigh].lastChild;
-                oneColumn[columnHigh].removeChild(oneColumn[columnHigh].lastChild);
-                oneColumn[columnLow].appendChild(exchangeChild);
-                for (j = 1; j < columnNumber; j++) {
-                    if (oneColumn[j].offsetHeight <= oneColumn[columnLow].offsetHeight) {
-                        columnLow = j;
-                    } else if (oneColumn[j].offsetHeight > oneColumn[columnHigh].offsetHeight) {
-                        columnHigh = j;
-                    }
-                }
-            }
-        }, 10);
-        
+        }
     }
     componentDidUpdate() {
         let waterfall = document.getElementById("reactWaterfall");

@@ -1,22 +1,8 @@
 import React, {Component} from "react";
 import ReactDOM from "react-dom";
-import Waterfall from "waterfall-react";
+import Waterfall from "../snippet/WaterfallReact";
 import Header from "../general/Header";
 import Footer from "../general/Footer";
-let images = [
-    ["/img/pet/0/moment/0.jpg", "I'm a beauty guy with long legs"],
-    ["/img/pet/0/moment/1.jpg", "Boring, sleep"],
-    ["/img/pet/0/moment/2.jpg", "Unhappy"],
-    ["/img/pet/0/moment/3.jpg", "I'm sunflower"],
-    ["/img/pet/0/moment/4.jpg", "Love the bed"],
-    ["/img/pet/0/moment/5.jpg", "Just leave me alone"],
-    ["/img/pet/0/moment/0.jpg", "I'm a beauty guy with long legs"],
-    ["/img/pet/0/moment/1.jpg", "Boring, sleep"],
-    ["/img/pet/0/moment/2.jpg", "Unhappy"],
-    ["/img/pet/0/moment/3.jpg", "I'm sunflower"],
-    ["/img/pet/0/moment/4.jpg", "Love the bed"],
-    ["/img/pet/0/moment/5.jpg", "Just leave me alone"]
-];
 class Example extends Component {
     constructor(props) {
         super(props);
@@ -50,6 +36,20 @@ class Example extends Component {
             verticalAlign: "top",
             marginTop: "40px"
         };
+        let images = [
+            ["/img/pet/0/moment/0.jpg", "I'm a beauty guy with long legs"],
+            ["/img/pet/0/moment/1.jpg", "Boring, sleep"],
+            ["/img/pet/0/moment/2.jpg", "Unhappy"],
+            ["/img/pet/0/moment/3.jpg", "I'm sunflower"],
+            ["/img/pet/0/moment/4.jpg", "Love the bed"],
+            ["/img/pet/0/moment/5.jpg", "Just leave me alone"],
+            ["/img/pet/0/moment/0.jpg", "I'm a beauty guy with long legs"],
+            ["/img/pet/0/moment/1.jpg", "Boring, sleep"],
+            ["/img/pet/0/moment/2.jpg", "Unhappy"],
+            ["/img/pet/0/moment/3.jpg", "I'm sunflower"],
+            ["/img/pet/0/moment/4.jpg", "Love the bed"],
+            ["/img/pet/0/moment/5.jpg", "Just leave me alone"]
+        ];
 		return (
 			<div style={rootStyle}>
 				<Header />
@@ -65,11 +65,11 @@ class Example extends Component {
                 <section style={containerStyle}>
                     <h5>Change the column numbers: </h5><input type="text" value={this.state.column} onChange={this.changeLayout.bind(this)} />
                     <div>Index number of the image you clicked: {this.state.id}</div>
-                    <Waterfall column={this.state.column} image={this.props.images} clickNumber={this.clickNumber.bind(this)} />
+                    <Waterfall column={this.state.column} image={images} clickNumber={this.clickNumber.bind(this)} />
                 </section>
 				<Footer />
 			</div>
 		);
 	}
 }
-ReactDOM.render(<Example images={images} />, document.getElementById("root"));
+ReactDOM.render(<Example />, document.getElementById("root"));
