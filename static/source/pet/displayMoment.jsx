@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import Waterfall from "../snippet/WaterfallReact";
+import Waterfall from "../snippet/display/Waterfall";
 import Like from "../snippet/attitude/Like";
 class Moment extends Component {
     constructor(props) {

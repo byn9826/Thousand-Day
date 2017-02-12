@@ -4,6 +4,7 @@ import Header from '../general/Header';
 import Footer from '../general/Footer';
 import RandomEG from './RandomEG';
 import RateEG from './RateEG';
+import WaterfallEG from './WaterfallEG';
 import InputboxEG from './InputboxEG';
 import InputareaEG from './InputareaEG';
 import AddtolistEG from './AddtolistEG';
@@ -29,6 +30,7 @@ class Reactui extends Component {
 					<section>
 						<h3 className = "main-list">Display</h3>
 						<h4 className = "orange-box"><a href ="#random">Random</a></h4>
+						<h4 className = "orange-box"><a href ="#waterfall">Waterfall</a></h4>
 						<h4 className = "orange-box"><a href ="#progress">Progress</a></h4>
 						<h3 className = "main-list">List</h3>
 						<h4 className = "orange-box"><a href ="#addtolist">AddtoList</a></h4>
@@ -44,6 +46,7 @@ class Reactui extends Component {
 				<section id="right">
 					<RandomEG />
 					<RateEG />
+					<WaterfallEG />
 					<InputboxEG />
 					<InputareaEG />
 					<AddtolistEG />

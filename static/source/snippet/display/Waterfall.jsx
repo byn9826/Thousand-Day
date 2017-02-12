@@ -3,7 +3,7 @@ class Waterfall extends Component {
     constructor(props) {
         super(props);
 		this.state = {
-            active: ""
+            active: "",
 		};
 	}
     componentDidMount() {
@@ -32,6 +32,30 @@ class Waterfall extends Component {
                 }
             }
         }
+        let fire = false;
+        window.addEventListener("scroll", () => {
+            if (fire === false) {
+                for (j = 1; j < columnNumber ; j++) {
+                    if (oneColumn[j].offsetHeight <= oneColumn[columnLow].offsetHeight) {
+                        columnLow = j;
+                    } else if (oneColumn[j].offsetHeight > oneColumn[columnHigh].offsetHeight) {
+                        columnHigh = j;
+                    }
+                }
+                while ((oneColumn[columnHigh].offsetHeight - oneColumn[columnLow].offsetHeight) > oneColumn[columnHigh].lastChild.offsetHeight ) {
+                    exchangeChild = oneColumn[columnHigh].lastChild;
+                    oneColumn[columnHigh].removeChild(oneColumn[columnHigh].lastChild);
+                    oneColumn[columnLow].appendChild(exchangeChild);
+                    for (j = 1; j < columnNumber; j++) {
+                        if (oneColumn[j].offsetHeight <= oneColumn[columnLow].offsetHeight) {
+                            columnLow = j;
+                        } else if (oneColumn[j].offsetHeight > oneColumn[columnHigh].offsetHeight) {
+                            columnHigh = j;
+                        }
+                    }
+                }
+            }
+        });
     }
     componentDidUpdate() {
         let waterfall = document.getElementById("reactWaterfall");
