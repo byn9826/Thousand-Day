@@ -32,3 +32,6 @@ def reactHome():
     return render_template('react.html')
 
 
+@view_pages.route('/waterfall')
+def waterfallHome():
+    return render_template('waterfall.html')
