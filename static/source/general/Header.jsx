@@ -45,9 +45,6 @@ class Header extends Component {
 				<Random content={randomContent} font="h3" style={headerSloganStyle} />
 				<nav style={headerNavStyle}>
 					<h4><a href="/" style={navLinkStyle}>Home</a></h4>
-					<h4><a href="/" style={navLinkStyle}>Love</a></h4>
-					<h4><a href="/" style={navLinkStyle}>Pets</a></h4>
-					<h4><a href="/" style={navLinkStyle}>Play</a></h4>
 				</nav>
 			</header>
 		);
