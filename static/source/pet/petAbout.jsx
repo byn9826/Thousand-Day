@@ -72,7 +72,7 @@ class About extends Component {
         let petLocation = noGetLocation(this.props.data.location);
         return(
             <main style={aboutStyle}>
-                <img style={aboutProfileStyle} alt = {this.props.data.name} src = {"/img/pet/" + this.props.data.id + "/cover/0.jpg"} />
+                <img style={aboutProfileStyle} alt={this.props.data.name} src={"/img/pet/" + this.props.data.id + "/cover/0.jpg"} />
                 <div style={aboutLineStyle}>
                     <h1 style={titleNameStyle}>{this.props.data.name}</h1>
                     <h4 style={titleGenderStyle}>{petGender}</h4>

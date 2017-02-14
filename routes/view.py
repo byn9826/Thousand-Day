@@ -27,11 +27,23 @@ def petView():
         abort(404)
 
 
+@view_pages.route('/user/<int:id>')
+def userHome(id):
+    return render_template('user.html')
+
+
+@view_pages.route('/user/view', methods = ['GET', 'POST'])
+def userView():
+    if request.method == 'POST':
+        id = request.form['id']
+        user = db.user.find_one({'id': int(id)})
+        if not user:
+            abort(404)
+        return json_util.dumps(user)
+    else:
+        abort(404)
+
+
 @view_pages.route('/react')
 def reactHome():
     return render_template('react.html')
-
-
-@view_pages.route('/waterfall')
-def waterfallHome():
-    return render_template('waterfall.html')

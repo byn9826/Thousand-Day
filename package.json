@@ -12,7 +12,7 @@
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "reqwest": "^2.0.5",
-    "thousanday-react": "^0.6.2"
+    "thousanday-react": "^0.7.0"
   },
   "devDependencies": {
     "babel-core": "^6.21.0",

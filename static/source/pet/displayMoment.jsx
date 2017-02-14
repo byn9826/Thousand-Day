@@ -35,27 +35,18 @@ class Moment extends Component {
             verticalAlign: "middle",
             fontWeight: "bold"
         };
-        let images = [
-            ["/img/pet/0/moment/0.jpg", "I'm a beauty guy with long legs"],
-            ["/img/pet/0/moment/1.jpg", "Boring, sleep"],
-            ["/img/pet/0/moment/2.jpg", "Unhappy"],
-            ["/img/pet/0/moment/3.jpg", "I'm sunflower"],
-            ["/img/pet/0/moment/4.jpg", "Love the bed"],
-            ["/img/pet/0/moment/5.jpg", "Just leave me alone"],
-            ["/img/pet/0/moment/0.jpg", "I'm a beauty guy with long legs"],
-            ["/img/pet/0/moment/1.jpg", "Boring, sleep"],
-            ["/img/pet/0/moment/2.jpg", "Unhappy"],
-            ["/img/pet/0/moment/3.jpg", "I'm sunflower"],
-            ["/img/pet/0/moment/4.jpg", "Love the bed"],
-            ["/img/pet/0/moment/5.jpg", "Just leave me alone"]
-        ];
+        let i;
+        let allImages = this.state.moment;
+        for (i = 0; i < this.state.moment.length; i++) {
+            allImages[i][0] = "/img/pet/" + this.props.id + "/moment/" + allImages[i][0] + ".jpg";
+        }
         return (
             <section style={momentStyle}>
                 <div style={momentTitleStyle}>
                     <img style={titleIconStyle} alt="moment-icon" src="/img/pet/icon/glyphicons-moment.png" / >
                     <h4 style={titleMomentStyle}>Moments</h4>
                 </div>
-                 <Waterfall column="3" image={images} clickNumber={this.clickNumber.bind(this)} />
+                 <Waterfall column="3" image={allImages} clickNumber={this.clickNumber.bind(this)} />
             </section>
         );
     }

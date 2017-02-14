@@ -1,11 +1,11 @@
-import React, {Component} from "react";
+import React, {Component} from "react"
 import ReactDOM from "react-dom";
 import reqwest from "reqwest";
 import Header from "../general/Header";
 import Footer from "../general/Footer";
-import About from "./petAbout";
-import Display from "./petDisplay";
-class Pet extends Component {
+import Profile from "./userProfile";
+import Hub from "./userHub";
+class User extends Component {
 	render() {
 		let containerStyle = {
 			display: "block",
@@ -14,20 +14,19 @@ class Pet extends Component {
 		return (
 			<div style={containerStyle}>
 				<Header />
-				<About data={this.props.data} />
-				<Display data={this.props.data} />
+                <Profile data={this.props.data} />
+				<Hub pets={this.props.data.pet} />
 				<Footer />
 			</div>
 		);
 	}
 }
-//get defaultdata
 reqwest({
-	url: "/pet/view",
+	url: "/user/view",
 	method: "POST",
 	data: {"id": window.location.pathname.split("/").pop()},
 	success: function(result) {
 		let data = JSON.parse(result);
-		ReactDOM.render(<Pet data={data} />, document.getElementById("root"));
+		ReactDOM.render(<User data={data} />, document.getElementById("root"));
 	}
 });
