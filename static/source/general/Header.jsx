@@ -35,9 +35,7 @@ class Header extends Component {
 			padding: "0"
 		};
 		let randomContent = [
-			"Digital hub for your pets",
-			"Explore beautiful moments",
-			"Share your cute to the world"
+			"The site is still under development"
 		];
 		return (
 			<header style={headerStyle}>

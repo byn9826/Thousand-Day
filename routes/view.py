@@ -10,9 +10,9 @@ conn = database.mongo()
 db = MongoClient(conn).baozier
 
 
-@view_pages.route('/pet/<int:id>')
-def petHome(id):
-    return render_template('pet.html')
+@view_pages.route('/explore')
+def storyHome():
+    return render_template('explore.html')
 
 
 @view_pages.route('/pet/view', methods = ['GET', 'POST'])
