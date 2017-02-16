@@ -15,6 +15,11 @@ def storyHome():
     return render_template('explore.html')
 
 
+@view_pages.route('/pet/<int:id>')
+def petHome(id):
+    return render_template('pet.html')
+
+
 @view_pages.route('/pet/view', methods = ['GET', 'POST'])
 def petView():
     if request.method == 'POST':
