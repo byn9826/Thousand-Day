@@ -43,7 +43,7 @@ class Moment extends Component {
         return (
             <section style={momentStyle}>
                 <div style={momentTitleStyle}>
-                    <img style={titleIconStyle} alt="moment-icon" src="/img/pet/icon/glyphicons-moment.png" / >
+                    <img style={titleIconStyle} alt="moment-icon" src="/img/icon/glyphicons-moment.png" / >
                     <h4 style={titleMomentStyle}>Moments</h4>
                 </div>
                  <Waterfall column="4" image={allImages} clickNumber={this.clickNumber.bind(this)} />

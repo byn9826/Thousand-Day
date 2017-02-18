@@ -2,11 +2,18 @@ import React, {Component} from "react";
 import noGetNature from "../../js/noGetNature.js";
 import noGetAbility from "../../js/noGetAbility.js";
 class Team extends Component {
+    constructor(props) {
+        super(props);
+		this.state = {
+            companion: this.props.data.companion
+		};
+	}
     render() {
         let teamStyle = {
             display: "block",
             width: "100%",
-            marginTop: "20px"
+            marginTop: "20px",
+            marginBottom: "30px"
         };
         let teamHumanStyle = {
             display: "block",
@@ -36,7 +43,7 @@ class Team extends Component {
             display: "block",
             width: "92%",
             padding: "5px 4%",
-            marginBottom: "10px",
+            marginBottom: "20px",
             backgroundColor: "#e5e5e5"
         };
         let titleIconStyle = {
@@ -86,36 +93,36 @@ class Team extends Component {
             display: "inline-block",
             verticalAlign: "middle"
         };
-        let humen = this.props.human.map((human, index) => 
-            <h6 key={"pethuman" + index} style={humanNameStyle}>{human[1] + " + 10% " + noGetAbility(human[2])}</h6>
+        let relative = this.props.data.relative.map((owner, index) => 
+            <h6 key={"pethuman" + index} style={humanNameStyle}>{owner[1] + " + 10% " + noGetAbility(owner[2])}</h6>
         );
         return (
             <section style={teamStyle}>
                 <div style={teamHumanStyle}>
                     <h5 style={humanTitleStyle}>Relative</h5>
-                    {humen}
+                    {relative}
                 </div>
                 <div style={teamTitleStyle}>
-                    <img style={titleIconStyle} alt="skill-icon" src="/img/pet/icon/glyphicons-team.png" / >
+                    <img style={titleIconStyle} alt="skill-icon" src="/img/icon/glyphicons-team.png" / >
                     <h5 style={titleFontStyle}>Companion</h5>
                 </div>
                 <div style={teamPetStyle}>
-                    <img style={petImgStyle} src = {"/img/pet/" + this.props.companion[0][0] + "/cover/0.jpg"}  />
+                    <img style={petImgStyle} src = {"/img/pet/" + this.state.companion[0][0] + "/cover/0.jpg"}  />
                     <div style={petContainerStyle}>
-                        <h6 style={containerLineStyle}>{noGetNature(this.props.companion[0][1])}</h6>
+                        <h6 style={containerLineStyle}>{noGetNature(this.state.companion[0][1])}</h6>
                         <div style={containerLineStyle}>
-                            <img style={pointIconStyle} alt="ability-icon" src="/img/pet/icon/glyphicons-ability.png" / >
-                            <h6 style={pointContentStyle}>{this.props.companion[0][2]}</h6>
+                            <img style={pointIconStyle} alt="ability-icon" src="/img/icon/glyphicons-ability.png" / >
+                            <h6 style={pointContentStyle}>{this.state.companion[0][2]}</h6>
                         </div>
                     </div>
                 </div>
                 <div style={teamPetStyle}>
-                    <img style={petImgStyle} src = {"/img/pet/" + this.props.companion[1][0] + "/cover/0.jpg"}  />
+                    <img style={petImgStyle} src = {"/img/pet/" + this.state.companion[1][0] + "/cover/0.jpg"}  />
                     <div style={petContainerStyle}>
-                        <h6 style={containerLineStyle}>{noGetNature(this.props.companion[1][1])}</h6>
+                        <h6 style={containerLineStyle}>{noGetNature(this.state.companion[1][1])}</h6>
                         <div style={containerLineStyle}>
-                            <img style={pointIconStyle} alt="ability-icon" src="/img/pet/icon/glyphicons-ability.png" / >
-                            <h6 style={pointContentStyle}>{this.props.companion[1][2]}</h6>
+                            <img style={pointIconStyle} alt="ability-icon" src="/img/icon/glyphicons-ability.png" / >
+                            <h6 style={pointContentStyle}>{this.state.companion[1][2]}</h6>
                         </div>
                     </div>
                 </div>

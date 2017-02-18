@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Blueprint, render_template, abort, request
+from flask import Blueprint, render_template, abort, request, jsonify
 from pymongo import MongoClient
 import database
 from bson import json_util
@@ -27,6 +27,8 @@ def petView():
         pet = db.pet.find_one({'id': int(id)})
         if not pet:
             abort(404)
+        moment = db.moment.find_one({'id': int(id)})
+        pet['moment'] = moment['moment']
         return json_util.dumps(pet)
     else:
         abort(404)

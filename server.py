@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, render_template
 from routes.view import view_pages
+from routes.update import update_pages
 
 
 app = Flask(__name__, static_folder='static', static_url_path='')
 app.register_blueprint(view_pages)
+app.register_blueprint(update_pages)
 
 
 @app.errorhandler(404)

@@ -5,6 +5,7 @@ import Header from "../general/Header";
 import Footer from "../general/Footer";
 import About from "./petAbout";
 import Display from "./petDisplay";
+let userId = 0;
 class Pet extends Component {
 	render() {
 		let containerStyle = {
@@ -14,7 +15,7 @@ class Pet extends Component {
 		return (
 			<div style={containerStyle}>
 				<Header />
-				<About data={this.props.data} />
+				<About userId={userId} data={this.props.data} />
 				<Display data={this.props.data} />
 				<Footer />
 			</div>

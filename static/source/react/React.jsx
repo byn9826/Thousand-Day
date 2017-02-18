@@ -10,6 +10,7 @@ import InputareaEG from './InputareaEG';
 import AddtolistEG from './AddtolistEG';
 import VoteEG from './VoteEG';
 import LikeEG from './LikeEG';
+import OvaleditEG from './OvaleditEG';
 import ProgressEG from './ProgressEG';
 class Reactui extends Component {
 	constructor() {
@@ -41,6 +42,8 @@ class Reactui extends Component {
 						<h3 className = "main-list">Input</h3>
 						<h4 className = "orange-box"><a href = "#inputbox">Inputbox</a></h4>
 						<h4 className = "orange-box"><a href = "#inputarea">Inputarea</a></h4>
+						<h3 className = "main-list">Button</h3>
+						<h4 className = "orange-box"><a href ="#ovaledit">Ovaledit</a></h4>
 					</section>
 				</main>
 				<section id="right">
@@ -53,6 +56,7 @@ class Reactui extends Component {
 					<VoteEG />
 					<LikeEG />
 					<ProgressEG />
+					<OvaleditEG />
 				</section>
 				<Footer />
 			</div>

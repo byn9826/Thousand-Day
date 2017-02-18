@@ -68,14 +68,14 @@ class Ability extends Component {
             <section style={displayStyle}>
                 <div style={displayPointStyle}>
                     <div style={pointHolderStyle}>
-                        <img alt="ability-icon" src="/img/pet/icon/glyphicons-ability.png" / >
+                        <img alt="ability-icon" src="/img/icon/glyphicons-ability.png" / >
                         <h5 style={holderFontStyle}>
                             Ability: <br />
                             {point}
                         </h5>
                     </div>
                     <div style={pointHolderStyle}>
-                        <img alt="potential-icon" src="/img/pet/icon/glyphicons-potential.png" / >
+                        <img alt="potential-icon" src="/img/icon/glyphicons-potential.png" / >
                         <h5 style={holderFontStyle}>
                             Potential: <br />
                             {this.state.potential}

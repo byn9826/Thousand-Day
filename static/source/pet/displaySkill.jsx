@@ -54,14 +54,14 @@ class Skill extends Component {
         };
         let skills = this.state.skill.map((skill, index) => 
             <div key={"petskill" + index} style={skillSingleStyle}>
-                <h5 style={singleTitleStyle}>{this.state.skill[index][0]}</h5>
-                <img style={singleImgStyle} alt={this.state.skill[index][0]} src={"/img/pet/" + this.props.id + "/cover/" + (parseInt(index) + 1) + ".jpg"} />
+                <h5 style={singleTitleStyle}>{skill[0]}</h5>
+                <img style={singleImgStyle} alt={skill[0]} src={"/img/pet/" + this.props.id + "/cover/" + (parseInt(index) + 1) + ".jpg"} />
             </div>
         );
         return (
             <section style={skillStyle}>
                 <div style={skillTitleStyle}>
-                    <img style={titleIconStyle} alt="skill-icon" src="/img/pet/icon/glyphicons-skill.png" / >
+                    <img style={titleIconStyle} alt="skill-icon" src="/img/icon/glyphicons-skill.png" / >
                     <h4 style={titleFontStyle}>Skill Panel</h4>
                 </div>
                 {skills}
