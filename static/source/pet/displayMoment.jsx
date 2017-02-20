@@ -36,9 +36,11 @@ class Moment extends Component {
             fontWeight: "bold"
         };
         let i;
-        let allImages = this.state.moment;
+        let allImages = [];
         for (i = 0; i < this.state.moment.length; i++) {
-            allImages[i][0] = "/img/pet/" + this.props.id + "/moment/" + allImages[i][0] + ".jpg";
+            allImages[i] = [];
+            allImages[i][0] = "/img/pet/" + this.props.id + "/moment/" + this.state.moment[i][1] + ".jpg";
+            allImages[i][1] = this.state.moment[i][2];
         }
         return (
             <section style={momentStyle}>

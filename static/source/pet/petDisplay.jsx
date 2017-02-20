@@ -9,14 +9,14 @@ class Display extends Component {
             display: "inline-block",
             width: "55%",
             marginLeft: "6%",
-            marginTop: "50px",
+            marginTop: "100px",
             verticalAlign: "top"
         };
         return (
             <section style={displayStyle}>
-                <Ability ability={this.props.data.ability} potential={this.props.data.potential} />
-                <Skill id={this.props.data.id} skill={this.props.data.skill} />
-                <Moment id={this.props.data.id} moment={this.props.data.moment} />
+                <Ability pet={this.props.pet} />
+                <Skill pet={this.props.pet} />
+                <Moment id={this.props.pet.pet_id} moment={this.props.moment} />
             </section>
         );
     }

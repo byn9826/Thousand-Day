@@ -3,12 +3,14 @@ import Random from "../snippet/display/Random";
 class Header extends Component {
 	render () {
     	let headerStyle = {
-			display: "block",
+			position: "fixed",
 			width: "100%",
 			height: "50px",
 			lineHeight: "50px",
+			borderBottom: "1px solid white",
 			backgroundColor: "#ef8513",
-			color: "white"
+			color: "white",
+			zIndex: "999"
     	};
     	let headerLogoStyle = {
 			display: "inline-block",

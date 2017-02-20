@@ -5,7 +5,8 @@ class Team extends Component {
     constructor(props) {
         super(props);
 		this.state = {
-            companion: this.props.data.companion
+            owner: this.props.owner,
+            companion: this.props.companion
 		};
 	}
     render() {
@@ -93,39 +94,37 @@ class Team extends Component {
             display: "inline-block",
             verticalAlign: "middle"
         };
-        let relative = this.props.data.relative.map((owner, index) => 
-            <h6 key={"pethuman" + index} style={humanNameStyle}>{owner[1] + " + 10% " + noGetAbility(owner[2])}</h6>
-        );
         return (
             <section style={teamStyle}>
                 <div style={teamHumanStyle}>
                     <h5 style={humanTitleStyle}>Relative</h5>
-                    {relative}
+                    <h6 style={humanNameStyle}><a href={"/user/" + this.state.owner[0].user_id}>{this.state.owner[0].user_name + " + 10% " + noGetAbility(this.state.owner[0].user_aura)}</a></h6>
+                    <h6 style={humanNameStyle}><a href={"/user/" + this.state.owner[1].user_id}>{this.state.owner[1].user_name + " + 10% " + noGetAbility(this.state.owner[1].user_aura)}</a></h6>
                 </div>
                 <div style={teamTitleStyle}>
                     <img style={titleIconStyle} alt="skill-icon" src="/img/icon/glyphicons-team.png" / >
                     <h5 style={titleFontStyle}>Companion</h5>
                 </div>
-                <div style={teamPetStyle}>
-                    <img style={petImgStyle} src = {"/img/pet/" + this.state.companion[0][0] + "/cover/0.jpg"}  />
+                <div style={teamPetStyle}><a href={"/pet/" + this.state.companion[0].pet_id}>
+                    <img style={petImgStyle} src = {"/img/pet/" + this.state.companion[0].pet_id + "/cover/0.jpg"}  />
                     <div style={petContainerStyle}>
-                        <h6 style={containerLineStyle}>{noGetNature(this.state.companion[0][1])}</h6>
+                        <h6 style={containerLineStyle}>{noGetNature(this.state.companion[0].pet_nature)}</h6>
                         <div style={containerLineStyle}>
                             <img style={pointIconStyle} alt="ability-icon" src="/img/icon/glyphicons-ability.png" / >
-                            <h6 style={pointContentStyle}>{this.state.companion[0][2]}</h6>
+                            <h6 style={pointContentStyle}>{this.state.companion[0].pet_ability}</h6>
                         </div>
                     </div>
-                </div>
-                <div style={teamPetStyle}>
-                    <img style={petImgStyle} src = {"/img/pet/" + this.state.companion[1][0] + "/cover/0.jpg"}  />
+                </a></div>
+                <div style={teamPetStyle}><a href={"/pet/" + this.state.companion[1].pet_id}>
+                    <img style={petImgStyle} src = {"/img/pet/" + this.state.companion[1].pet_id + "/cover/0.jpg"}  />
                     <div style={petContainerStyle}>
-                        <h6 style={containerLineStyle}>{noGetNature(this.state.companion[1][1])}</h6>
+                        <h6 style={containerLineStyle}>{noGetNature(this.state.companion[1].pet_nature)}</h6>
                         <div style={containerLineStyle}>
                             <img style={pointIconStyle} alt="ability-icon" src="/img/icon/glyphicons-ability.png" / >
-                            <h6 style={pointContentStyle}>{this.state.companion[1][2]}</h6>
+                            <h6 style={pointContentStyle}>{this.state.companion[1].pet_ability}</h6>
                         </div>
                     </div>
-                </div>
+                </a></div>
             </section>
         );
     }

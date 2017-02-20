@@ -5,8 +5,8 @@ class Ability extends Component {
     constructor(props) {
         super(props);
 		this.state = {
-            ability: this.props.ability,
-            potential: this.props.potential
+            ability: [this.props.pet.ability_attack, this.props.pet.ability_defend, this.props.pet.ability_health, this.props.pet.ability_swift, this.props.pet.ability_lucky],
+            potential: this.props.pet.pet_potential
 		};
 	}
     render() {
