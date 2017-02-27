@@ -5,7 +5,6 @@ import Header from "../general/Header";
 import Footer from "../general/Footer";
 import About from "./petAbout";
 import Display from "./petDisplay";
-let userId = 0;
 class Pet extends Component {
 	render() {
 		let containerStyle = {
@@ -15,7 +14,7 @@ class Pet extends Component {
 		return (
 			<div style={containerStyle}>
 				<Header />
-				<About userId={userId} pet={this.props.pet} owner={this.props.owner} watcher={this.props.watcher} companion={this.props.companion} />
+				<About userId={this.props.userId} pet={this.props.pet} owner={this.props.owner} watcher={this.props.watcher} companion={this.props.companion} />
 				<Display pet={this.props.pet} moment={this.props.moment} />
 				<Footer />
 			</div>
@@ -23,11 +22,10 @@ class Pet extends Component {
 	}
 }
 reqwest({
-	url: "/pet/view",
+	url: "/pet",
 	method: "POST",
 	data: {"id": window.location.pathname.split("/").pop()},
 	success: function(result) {
-		let data = result;
-		ReactDOM.render(<Pet pet={data[0]} owner={data[1]} watcher={data[2]} companion={data[3]} moment={data[4]} />, document.getElementById("root"));
+		ReactDOM.render(<Pet pet={result[0]} owner={result[1]} watcher={result[2]} companion={result[3]} moment={result[4]} userId={result[5]} />, document.getElementById("root"));
 	}
 });

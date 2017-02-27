@@ -1,8 +1,6 @@
 import React, {Component} from "react";
 import reqwest from "reqwest";
 import Team from "./aboutTeam";
-import ModifyPet from "./ModifyPet";
-import Updateprofile from "../snippet/button/Updateprofile";
 import Ovaledit from "../snippet/button/Ovaledit";
 import noGetGender from "../../js/noGetGender.js";
 import noGetNature from "../../js/noGetNature.js";
@@ -12,54 +10,40 @@ class About extends Component {
     constructor(props) {
         super(props);
 		this.state = {
-            name: this.props.pet.pet_name,
             watcher: this.props.watcher,
-            location: this.props.pet.pet_location,
-            showEdit: false,
-            editPet: false
+            showEdit: false
 		};
 	}
     watchPet() {
         let currentIndex = this.state.watcher.indexOf(this.props.userId);
         let newWatch = this.state.watcher;
+        let addWatch;
         if (currentIndex !== -1 ) {
             newWatch.splice(currentIndex, 1);
             this.setState({watcher: newWatch});
+            addWatch = false;
         } else {
             newWatch.push(this.props.userId);
             this.setState({watcher: newWatch});
+            addWatch = true;
         }
-        console.log(newWatch);
-        {/*
         reqwest({
             url: "/pet/updateWatch",
             type: "json",
             method: "POST",
-            contentType: 'application/json', 
-            headers: {'X-My-Custom-Header': 'SomethingImportant'},
-            data: JSON.stringify({"id": this.props.userId, "watch": newWatch})
+            contentType: "application/json", 
+            headers: {"X-My-Custom-Header": "SomethingImportant"},
+            data: JSON.stringify({"petId": this.props.pet.pet_id, "addWatch": addWatch}),
+            success: function(result) {
+                console.log(result);
+            }
         });
-        */}
     }
     showEdit() {
         this.setState({showEdit: true});
     }
     hideEdit() {
         this.setState({showEdit: false});
-    }
-    clickEdit() {
-        this.setState({editPet: true});
-    }
-    saveProfile(finalUrl) {
-        let formData = new FormData();
-        formData.append('file', finalUrl, "7.png");
-        reqwest({
-            url: "/upate/petProfile",
-            method: "POST",
-            data: formData,
-            contentType: false,
-            processData: false
-        });
     }
     render() {
         let aboutStyle = {
@@ -127,7 +111,7 @@ class About extends Component {
         };
         let editPet;
         if ((this.props.userId == this.props.pet.owner_id || this.props.userId == this.props.pet.relative_id) && this.state.showEdit === true) {
-            editPet = <Ovaledit value="Edit" clickEdit={this.clickEdit.bind(this)} />
+            editPet = <Ovaledit value="Edit" href={"/edit/pet/" + this.props.pet.pet_id} />
         }
         let watchPet;
         if (this.state.watcher.indexOf(this.props.userId) !== -1 ) {
@@ -135,24 +119,18 @@ class About extends Component {
         } else {
             watchPet = "+ Watch | by " + this.state.watcher.length;
         }
-        let fullEdit;
-        if (this.state.editPet) {
-            fullEdit = (<ModifyPet pet={this.props.pet} />)
-        }
         return(
             <main style={aboutStyle} onMouseEnter={this.showEdit.bind(this)} onMouseLeave={this.hideEdit.bind(this)}>
-                {fullEdit}
-                <Updateprofile src={"/img/pet/" + this.props.pet.pet_id + "/cover/0.jpg"} width="200" saveProfile={this.saveProfile.bind(this)} />
-                <img style={aboutProfileStyle} alt={this.state.name} src={"/img/pet/" + this.props.pet.pet_id + "/cover/0.jpg"} />
+                <img style={aboutProfileStyle} alt={this.props.pet.pet_name} src={"/img/pet/" + this.props.pet.pet_id + "/cover/0.png"} />
                 <div style={aboutLineStyle}>
-                    <h1 style={titleNameStyle}>{this.state.name}</h1>
+                    <h1 style={titleNameStyle}>{this.props.pet.pet_name}</h1>
                     <h4 style={titleGenderStyle}>{noGetGender(this.props.pet.pet_gender)}</h4>
                     {editPet}
                 </div>
                 <h5 style={aboutWatchStyle} onClick={this.watchPet.bind(this)}>{watchPet}</h5>
                 <h5 style={aboutFirstStyle}>Nature: {noGetNature(this.props.pet.pet_nature)}</h5>
                 <h5 style={aboutDetailStyle}>Type: {noGetType(this.props.pet.pet_type)}</h5>
-                <h5 style={aboutDetailStyle}>Location: {noGetLocation(this.state.location)}</h5>
+                <h5 style={aboutDetailStyle}>Location: {noGetLocation(this.props.pet.pet_location)}</h5>
                 <h5 style={aboutLastStyle}>Reg in hub: {new Date(this.props.pet.pet_reg).toISOString().substring(0, 10)}</h5>
                 <Team owner={this.props.owner} companion={this.props.companion} />
             </main>
