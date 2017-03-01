@@ -1,5 +1,6 @@
+@import url('https://fonts.googleapis.com/css?family=Rubik');
 h1{
-	font-family: "Times New Roman", Georgia, Serif;
+	font-family: 'Rubik', sans-serif;
 	font-size: 28px;
 	font-weight: bold;
 	margin: 0;
@@ -7,7 +8,7 @@ h1{
 }
 
 h2{
-	font-family: "Times New Roman", Georgia, Serif;
+	font-family: 'Rubik', sans-serif;
 	font-size: 20px;
 	font-weight: normal;
 	margin: 0;
@@ -15,7 +16,7 @@ h2{
 }
 
 h3{
-	font-family: "Times New Roman", Georgia, Serif;
+	font-family: 'Rubik', sans-serif;
 	font-size: 18px;
 	font-weight: normal;
 	margin: 0;
@@ -23,7 +24,7 @@ h3{
 }
 
 h4{
-	font-family: "Times New Roman", Georgia, Serif;
+	font-family: 'Rubik', sans-serif;
 	font-size: 16px;
 	font-weight: normal;
 	margin: 0;
@@ -31,7 +32,7 @@ h4{
 }
 
 h5{
-	font-family: "Times New Roman", Georgia, Serif;
+	font-family: 'Rubik', sans-serif;
 	font-size: 14px;
 	font-weight: normal;
 	margin: 0;
@@ -39,7 +40,7 @@ h5{
 }
 
 h6{
-	font-family: "Times New Roman", Georgia, Serif;
+	font-family: 'Rubik', sans-serif;
 	font-size: 12px;
 	font-weight: normal;
 	margin: 0;
@@ -54,4 +55,8 @@ a{
 body{
 	margin: 0;
 	padding: 0;
+}
+
+label{
+	font-family: 'Rubik', sans-serif;
 }

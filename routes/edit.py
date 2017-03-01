@@ -30,19 +30,26 @@ def petView():
         try:
             #search for pet owner
             cnx = mysql.connector.connect(**config)
-            ownerCursor = cnx.cursor(dictionary=True)
-            ownerQuery = 'SELECT * FROM pet WHERE pet_id = %s AND (owner_id = %s OR relative_id = %s)'
-            ownerCursor.execute(ownerQuery, (pet_id, user_id, user_id))
-            owner = ownerCursor.fetchone()
-            if owner:
-                session['petId'] = pet_id
-                return jsonify(owner)
+            petCursor = cnx.cursor(dictionary=True)
+            petQuery = 'SELECT pet_id, pet_name, pet_location, companion_first, companion_second FROM pet WHERE pet_id = %s AND (owner_id = %s OR relative_id = %s)'
+            petCursor.execute(petQuery, (pet_id, user_id, user_id))
+            pet = petCursor.fetchone()
+            if pet:
+                #get companions info
+                companion_first = pet['companion_first']
+                companion_second = pet['companion_second']
+                companionCursor = cnx.cursor(dictionary=True)
+                companionQuery = 'SELECT pet_id, pet_nature, (ability_attack + ability_defend + ability_health + ability_swift + ability_lucky) AS pet_ability FROM pet WHERE pet_id = %s OR pet_id = %s'
+                companionCursor.execute(companionQuery, (companion_first, companion_second))
+                companion = companionCursor.fetchall()
+                result = [pet, companion]
+                return jsonify(result)
             else:
                 abort(404)
         except mysql.connector.Error as err:
             print("Something went wrong: {}".format(err))
         finally:
-            ownerCursor.close()
+            petCursor.close()
             cnx.close()
     else:
         abort(404)

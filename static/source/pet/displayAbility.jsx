@@ -61,7 +61,7 @@ class Ability extends Component {
         let abilities = this.state.ability.map((ability, index) => 
             <div key={"abilitysingle" + index} style={abilityLineStyle}>
                 <h6 style={lineAttriStyle}>{noGetAbility(index)}</h6>
-                <Progress progress={ability} max="100" percentage="false" width="75%" height="12px" />
+                <Progress progress={ability} max="100" percentage="false" width="75%" height="12px" fontFamily="'Rubik', sans-serif" fontSize="7px" fontColor="#4b4f56" />
             </div>
         );
         return(

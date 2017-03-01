@@ -42,7 +42,7 @@ class Header extends Component {
 		return (
 			<header style={headerStyle}>
 				<img src="/img/logo.png" alt="logo" style={headerLogoStyle} />
-				<Random content={randomContent} font="h3" style={headerSloganStyle} />
+				<Random content={randomContent} font="h5" style={headerSloganStyle} />
 				<nav style={headerNavStyle}>
 					<h4><a href="/" style={navLinkStyle}>Home</a></h4>
 				</nav>

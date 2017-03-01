@@ -2,13 +2,6 @@ import React, {Component} from "react";
 import noGetNature from "../../js/noGetNature.js";
 import noGetAbility from "../../js/noGetAbility.js";
 class Team extends Component {
-    constructor(props) {
-        super(props);
-		this.state = {
-            owner: this.props.owner,
-            companion: this.props.companion
-		};
-	}
     render() {
         let teamStyle = {
             display: "block",
@@ -98,30 +91,30 @@ class Team extends Component {
             <section style={teamStyle}>
                 <div style={teamHumanStyle}>
                     <h5 style={humanTitleStyle}>Relative</h5>
-                    <h6 style={humanNameStyle}><a href={"/user/" + this.state.owner[0].user_id}>{this.state.owner[0].user_name + " + 10% " + noGetAbility(this.state.owner[0].user_aura)}</a></h6>
-                    <h6 style={humanNameStyle}><a href={"/user/" + this.state.owner[1].user_id}>{this.state.owner[1].user_name + " + 10% " + noGetAbility(this.state.owner[1].user_aura)}</a></h6>
+                    <h6 style={humanNameStyle}><a href={"/user/" + this.props.owner[0].user_id}>{this.props.owner[0].user_name + " + 10% " + noGetAbility(this.props.owner[0].user_aura)}</a></h6>
+                    <h6 style={humanNameStyle}><a href={"/user/" + this.props.owner[1].user_id}>{this.props.owner[1].user_name + " + 10% " + noGetAbility(this.props.owner[1].user_aura)}</a></h6>
                 </div>
                 <div style={teamTitleStyle}>
                     <img style={titleIconStyle} alt="skill-icon" src="/img/icon/glyphicons-team.png" / >
                     <h5 style={titleFontStyle}>Companion</h5>
                 </div>
-                <div style={teamPetStyle}><a href={"/pet/" + this.state.companion[0].pet_id}>
-                    <img style={petImgStyle} src = {"/img/pet/" + this.state.companion[0].pet_id + "/cover/0.jpg"}  />
+                <div style={teamPetStyle}><a href={"/pet/" + this.props.companion[0].pet_id}>
+                    <img style={petImgStyle} src = {"/img/pet/" + this.props.companion[0].pet_id + "/cover/0.jpg"}  />
                     <div style={petContainerStyle}>
-                        <h6 style={containerLineStyle}>{noGetNature(this.state.companion[0].pet_nature)}</h6>
+                        <h6 style={containerLineStyle}>{noGetNature(this.props.companion[0].pet_nature)}</h6>
                         <div style={containerLineStyle}>
                             <img style={pointIconStyle} alt="ability-icon" src="/img/icon/glyphicons-ability.png" / >
-                            <h6 style={pointContentStyle}>{this.state.companion[0].pet_ability}</h6>
+                            <h6 style={pointContentStyle}>{this.props.companion[0].pet_ability}</h6>
                         </div>
                     </div>
                 </a></div>
-                <div style={teamPetStyle}><a href={"/pet/" + this.state.companion[1].pet_id}>
-                    <img style={petImgStyle} src = {"/img/pet/" + this.state.companion[1].pet_id + "/cover/0.jpg"}  />
+                <div style={teamPetStyle}><a href={"/pet/" + this.props.companion[1].pet_id}>
+                    <img style={petImgStyle} src = {"/img/pet/" + this.props.companion[1].pet_id + "/cover/0.jpg"}  />
                     <div style={petContainerStyle}>
-                        <h6 style={containerLineStyle}>{noGetNature(this.state.companion[1].pet_nature)}</h6>
+                        <h6 style={containerLineStyle}>{noGetNature(this.props.companion[1].pet_nature)}</h6>
                         <div style={containerLineStyle}>
                             <img style={pointIconStyle} alt="ability-icon" src="/img/icon/glyphicons-ability.png" / >
-                            <h6 style={pointContentStyle}>{this.state.companion[1].pet_ability}</h6>
+                            <h6 style={pointContentStyle}>{this.props.companion[1].pet_ability}</h6>
                         </div>
                     </div>
                 </a></div>

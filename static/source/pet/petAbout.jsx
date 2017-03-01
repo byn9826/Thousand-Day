@@ -111,7 +111,7 @@ class About extends Component {
         };
         let editPet;
         if ((this.props.userId == this.props.pet.owner_id || this.props.userId == this.props.pet.relative_id) && this.state.showEdit === true) {
-            editPet = <Ovaledit value="Edit" href={"/edit/pet/" + this.props.pet.pet_id} />
+            editPet = <Ovaledit value="Edit" fontFamily="'Rubik', sans-serif" href={"/edit/pet/" + this.props.pet.pet_id} />
         }
         let watchPet;
         if (this.state.watcher.indexOf(this.props.userId) !== -1 ) {

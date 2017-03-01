@@ -7,6 +7,13 @@ import Inputbox from '../snippet/input/Inputbox';
 import Header from "../general/Header";
 import Footer from "../general/Footer";
 class EditPet extends Component {
+	constructor(props) {
+        super(props);
+		this.state = {
+            petName: this.props.pet.pet_name,
+            companion: this.props.companion
+		};
+	}
 	saveProfile(newUrl) {
 		let fileData = new FormData();
     	fileData.append('file', newUrl, "0.png");
@@ -30,22 +37,23 @@ class EditPet extends Component {
 			display: "block",
 			width: "80%",
 			marginLeft: "10%",
-			paddingTop: "90px"
+			paddingTop: "120px"
 		};
 		let mainSectionStyle = {
-			display: "block",
-			width: "100%",
-			marginBottom: "30px"
-		};
-		let sectionHeaderStyle = {
-			display: "block",
-			width: "90%",
-			marginBottom: "15px",
-			padding: "15px 5%",
+			display: "inline-block",
+			verticalAlign: "top",
+			marginRight: "4%",
+			marginBottom: "20px",
 			borderRight: "1px solid #e5e5e5",
             borderBottom: "1px solid #e5e5e5",
             borderRadius: "10px",
             boxShadow: "2px 2px 1px #e5e5e5"
+		};
+		let sectionHeaderStyle = {
+			display: "block",
+			width: "90%",
+			borderBottom: "1px dashed #f7d7b4",
+			padding: "8px 5%"
 		};
 		let headerIconStyle = {
 			display: "inline-block",
@@ -55,27 +63,58 @@ class EditPet extends Component {
 		let headerContentStyle = {
 			display: "inline-block",
 			verticalAlign: "middle",
+			fontWeight: "bold",
+			marginLeft: "10px"
+		};
+		let sectionMainStyle = {
+			display: "block",
+			width: "200px",
+			padding: "20px 20px 35px 20px"
+		};
+		let mainRightStyle = {
+			display: "inline-block",
+			verticalAlign: "top",
+			width: "30%",
+			marginBottom: "20px",
+			borderRight: "1px solid #e5e5e5",
+            borderBottom: "1px solid #e5e5e5",
+            borderRadius: "10px",
+            boxShadow: "2px 2px 1px #e5e5e5"
+		};
+		let rightGroupStyle = {
+			display: "block",
+			marginTop: "20px",
+			padding: "0 10%",
+			width: "80%"
+		};
+		let nameLabelStyle = {
+			display: "inline-block",
+			verticalAlign: "top",
+			color: "#ef8513",
+			fontSize: "14px",
 			fontWeight: "bold"
 		};
-		let sectionProfileStyle = {
-			display: "inline-block",
-			verticalAlign: "top",
-			marginLeft: "3%"
-		};
-		let profileInfoStyle = {
+		let groupTitleStyle = {
 			display: "block",
-			width: "100%",
-			marginTop: "20px"
+			color: "#ef8513",
+			fontWeight: "bold"
 		};
-		let infoLabelStyle = {
+		let groupProfileStyle = {
 			display: "inline-block",
-			width: "20%",
-			fontSize: "16px",
-			fontFamily: "Times New Roman",
-			fontWeight: "bold",
-			verticalAlign: "top",
+			width: "48%",
 			marginRight: "2%",
-			marginTop: "4px"
+			borderRadius: "8px"
+		};
+		let groupDescStyle = {
+			display: "inline-block",
+			width: "50%",
+			verticalAlign: "top"
+		};
+		let descContentStyle = {
+			display: "block",
+			margin: "8px 0",
+			borderRadius: "0 5px 5px 0",
+			backgroundColor: "#f7d7b4"
 		};
 		return (
 			<div style={containerStyle}>
@@ -83,27 +122,31 @@ class EditPet extends Component {
 				<main style={containerMainStyle}>
 					<section style={mainSectionStyle}>
 						<header style={sectionHeaderStyle}>
-							<img style={headerIconStyle} alt="Basic-info" src="/img/icon/glyphicons-basic.png" />
-							<h4 style={headerContentStyle}>Basic Information</h4>
+							<h4 style={headerContentStyle}>Update Profile</h4>
 						</header>
-						<div style={sectionProfileStyle}>
-							<Updateprofile src={"/img/pet/" + this.props.pet.pet_id + "/cover/0.png"} width="200" saveProfile={this.saveProfile.bind(this)} />
+						<Updateprofile src={"/img/pet/" + this.props.pet.pet_id + "/cover/0.png"} width="200" saveProfile={this.saveProfile.bind(this)} fontFamily="'Rubik', sans-serif" />
+					</section>
+					<section style={mainSectionStyle}>
+						<header style={sectionHeaderStyle}>
+							<h4 style={headerContentStyle}>Update Location</h4>
+						</header>
+						<div style={sectionMainStyle}>
+							<Getlocation center={[-79.4292782, 43.8641138]} zoom="10" setZoom="10" saveLocation={this.saveLocation.bind(this)} fontFamily="'Rubik', sans-serif" />
 						</div>
-						<div style={sectionProfileStyle}>
-							<div style={profileInfoStyle}>
-								<label style={infoLabelStyle} htmlFor="pet-name">
-									Name
-								</label>
-								<Inputbox id="pet-name" content={this.props.pet.pet_name} max="10" width="78%" />
-							</div>
-							<div style={profileInfoStyle}>
-								<label style={infoLabelStyle} htmlFor="pet-name">
-									Name
-								</label>
-								<Inputbox id="pet-name" content={this.props.pet.pet_name} max="10" width="78%" />
-							</div>
-							<div style={profileInfoStyle}>
-								<Getlocation center={[-79.4292782, 43.8641138]} saveLocation={this.saveLocation.bind(this)} />
+					</section>
+					<section style={mainRightStyle}>
+						<header style={sectionHeaderStyle}>
+							<h4 style={headerContentStyle}>Update Companions</h4>
+						</header>
+						<div style={rightGroupStyle}>
+							<label style={nameLabelStyle} htmlFor="pet-name">Pet Name:</label>
+							<Inputbox id="pet-name" content={this.state.petName} max="10" width="100%" fontFamily="'Rubik', sans-serif" />
+						</div>
+						<div style={rightGroupStyle}>
+							<h5 style={groupTitleStyle}>Build Team:</h5>
+							<img style={groupProfileStyle} src = {"/img/pet/" + this.state.companion[0].pet_id + "/cover/0.jpg"} />
+							<div style={groupDescStyle}>
+								<span style={descContentStyle}>123</span>		
 							</div>
 						</div>
 					</section>
@@ -119,6 +162,6 @@ reqwest({
 	data: {"id": window.location.pathname.split("/").pop()},
 	success: function(result) {
 		console.log(result);
-		ReactDOM.render(<EditPet pet={result} />, document.getElementById("root"));
+		ReactDOM.render(<EditPet pet={result[0]} companion={result[1]} />, document.getElementById("root"));
 	}
 });
