@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import ReactDOM from "react-dom";
 import reqwest from "reqwest";
 import Updateprofile from '../snippet/button/Updateprofile';
+import Delmember from '../snippet/button/Delmember';
 import Getlocation from '../snippet/display/Getlocation';
 import Inputbox from '../snippet/input/Inputbox';
 import Header from "../general/Header";
@@ -99,23 +100,6 @@ class EditPet extends Component {
 			color: "#ef8513",
 			fontWeight: "bold"
 		};
-		let groupProfileStyle = {
-			display: "inline-block",
-			width: "48%",
-			marginRight: "2%",
-			borderRadius: "8px"
-		};
-		let groupDescStyle = {
-			display: "inline-block",
-			width: "50%",
-			verticalAlign: "top"
-		};
-		let descContentStyle = {
-			display: "block",
-			margin: "8px 0",
-			borderRadius: "0 5px 5px 0",
-			backgroundColor: "#f7d7b4"
-		};
 		return (
 			<div style={containerStyle}>
 				<Header />
@@ -144,10 +128,8 @@ class EditPet extends Component {
 						</div>
 						<div style={rightGroupStyle}>
 							<h5 style={groupTitleStyle}>Build Team:</h5>
-							<img style={groupProfileStyle} src = {"/img/pet/" + this.state.companion[0].pet_id + "/cover/0.jpg"} />
-							<div style={groupDescStyle}>
-								<span style={descContentStyle}>123</span>		
-							</div>
+							<Delmember profile={"/img/pet/" + this.state.companion[0].pet_id + "/cover/0.jpg"} width="80" fontFamily="'Rubik', sans-serif" />
+							<Delmember profile={"/img/pet/" + this.state.companion[1].pet_id + "/cover/0.jpg"} width="80" fontFamily="'Rubik', sans-serif" />
 						</div>
 					</section>
 				</main>
