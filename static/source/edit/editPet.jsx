@@ -29,6 +29,9 @@ class EditPet extends Component {
 	saveLocation(coordinate) {
 		console.log(coordinate);
 	}
+	clickDel(index) {
+		console.log(index);
+	}
 	render() {
 		let containerStyle = {
 			display: "block",
@@ -98,7 +101,8 @@ class EditPet extends Component {
 		let groupTitleStyle = {
 			display: "block",
 			color: "#ef8513",
-			fontWeight: "bold"
+			fontWeight: "bold",
+			marginBottom: "10px"
 		};
 		return (
 			<div style={containerStyle}>
@@ -128,8 +132,8 @@ class EditPet extends Component {
 						</div>
 						<div style={rightGroupStyle}>
 							<h5 style={groupTitleStyle}>Build Team:</h5>
-							<Delmember profile={"/img/pet/" + this.state.companion[0].pet_id + "/cover/0.jpg"} width="80" fontFamily="'Rubik', sans-serif" />
-							<Delmember profile={"/img/pet/" + this.state.companion[1].pet_id + "/cover/0.jpg"} width="80" fontFamily="'Rubik', sans-serif" />
+							<Delmember profile={"/img/pet/" + this.state.companion[0].pet_id + "/cover/0.jpg"} index={this.state.companion[0].pet_id} clickDel={this.clickDel.bind(this)} width="80" height="80" fontFamily="'Rubik', sans-serif" />
+							<Delmember profile={"/img/pet/" + this.state.companion[1].pet_id + "/cover/0.jpg"} index={this.state.companion[1].pet_id} clickDel={this.clickDel.bind(this)} width="80" height="80" fontFamily="'Rubik', sans-serif" />
 						</div>
 					</section>
 				</main>
