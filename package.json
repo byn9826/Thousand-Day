@@ -9,6 +9,7 @@
   "author": "",
   "license": "GPL",
   "dependencies": {
+    "inline-animation": "0.0.1",
     "openlayers": "^4.0.1",
     "react": "^15.4.2",
     "react-avatar-editor": "^8.0.0",
