@@ -98,7 +98,7 @@ class AnimationEG extends Component {
 						<b>install:</b><br />
 						npm install Inline-Animation --save
 					</h3>
-					<a className = "github-button" href = "https://github.com/byn9826/thousanday-react" data-style = "mega" aria-label = "Star byn9826/thousanday-react on GitHub">Star</a>
+					<a className = "github-button" href = "https://github.com/byn9826/inline-animation" data-style = "mega" aria-label = "Star byn9826/inline-animation on GitHub">Star</a>
 					<section>
 						<h3 className = "main-list">Play around with these effects:</h3>
 						<h6 className = "orange-box"><a href="#" onClick={this.action.bind(this, 0)}>Rotate to Left 90 deg</a></h6>
