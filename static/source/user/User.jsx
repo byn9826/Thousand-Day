@@ -14,8 +14,8 @@ class User extends Component {
 		return (
 			<div style={containerStyle}>
 				<Header />
-                <Profile data={this.props.data} />
-				<Hub pets={this.props.data.pet} />
+                <Profile user={this.props.user} relative={this.props.relative} relation={this.props.relation} />
+				<Hub pet={this.props.pet} moment={this.props.moment} />
 				<Footer />
 			</div>
 		);
@@ -26,7 +26,14 @@ reqwest({
 	method: "POST",
 	data: {"id": window.location.pathname.split("/").pop()},
 	success: function(result) {
-		let data = JSON.parse(result);
-		ReactDOM.render(<User data={data} />, document.getElementById("root"));
+		console.log(result);
+		if (result.Result === 1 || result.Result === 2) {
+			console.log("Something Wrong");
+		} else {
+			ReactDOM.render(<User user={result[0]} relative={result[1]} relation={result[2]} pet={result[3]} moment={result[4]} />, document.getElementById("root"));
+		}
+	},
+	error: function (err) {
+		console.log("Something Wrong");
 	}
 });

@@ -1,14 +1,89 @@
 import React, {Component} from "react";
+import reqwest from "reqwest";
 import noGetAbility from "../../js/noGetAbility.js";
 import Progress from "../snippet/display/Progress";
+import Ovaledit from "../snippet/button/Ovaledit";
 class Ability extends Component {
     constructor(props) {
         super(props);
 		this.state = {
+            //Inital and Update ability
             ability: [this.props.pet.ability_attack, this.props.pet.ability_defend, this.props.pet.ability_health, this.props.pet.ability_swift, this.props.pet.ability_lucky],
-            potential: this.props.pet.pet_potential
-		};
+            //Inital and Update potential
+            potential: this.props.pet.pet_potential,
+            //Use for roll back ability if db update fail
+            prevAbility: [this.props.pet.ability_attack, this.props.pet.ability_defend, this.props.pet.ability_health, this.props.pet.ability_swift, this.props.pet.ability_lucky],
+            //Use for roll back potential if db update fail
+            prevPotential: this.props.pet.pet_potential,
+            //If edit button is show or not
+            showButton: false,
+            //If edit panel is show or not
+            showEdit: false,
+            //Check if ability has been changed
+            isChanged: false
+        };
 	}
+    //Update ability and potential after user click on +
+    addAbility(index) {
+        if (this.state.potential > 0) {
+            let potential = this.state.potential - 1;
+            let ability = this.state.ability;
+            ability[index] = this.state.ability[index] + 1
+            this.setState({ability: ability, potential: potential, isChanged: true});
+        } 
+    }
+    clickButton() {
+        if (this.state.showEdit) {
+            //Hide edit panel when it's alreay show
+            this.setState({showEdit: false});
+            //If ability has been changed
+            if (this.state.isChanged) {
+                reqwest({
+                    url: "/pet/updateAbility",
+                    type: "json",
+                    method: "POST",
+                    contentType: "application/json", 
+                    headers: {"X-My-Custom-Header": "SomethingImportant"},
+                    //Send new ability, potential, pet id, origin abilty, origin potential to backend
+                    data: JSON.stringify({"petId": this.props.pet.pet_id, "ability": this.state.ability, "prevAbility": this.state.prevAbility, "potential": this.state.potential, "prevPotential": this.state.prevPotential}),
+                    success: function (result) {
+                        if (result.Result === 0) {
+                            let ability = this.state.ability.slice();
+                            let potential = this.state.potential;
+                            //Update roll back ability potential after db success update
+                            this.setState({prevAbility: ability, prevPotential: potential});
+                            console.log("Success");
+                        } else {
+                            let ability = this.state.prevAbility.slice();
+                            let potential = this.state.prevPotential;
+                            //Roll back ability potential if db fails
+                            this.setState({ability: ability, potential: potential});
+                            console.log("Something wrong");
+                        }
+                    }.bind(this),
+                    error: function (err) {
+                        let ability = this.state.prevAbility.slice();
+                        let potential = this.state.prevPotential;
+                        //Roll back ability potential if db fails
+                        this.setState({ability: ability, potential: potential});
+                        console.log("Something wrong");
+                    }.bind(this)
+                });
+            }
+        } else {
+            //Show edit panel when it's not show
+            this.setState({showEdit: true});
+        }
+    }
+    //Show edit button when mouse enter
+    showEdit() {
+        this.setState({showButton: true});
+    }
+    //Hide edit button when mouse leave
+    hideEdit() {
+        //Close edit ability panel and empty ability change statue
+        this.setState({showButton: false});
+    }
     render() {
         let displayStyle = {
             display: "block",
@@ -18,7 +93,7 @@ class Ability extends Component {
             display: "inline-block",
             width: "40%",
             marginRight: "6%",
-            verticalAlign: "top"
+            verticalAlign: "middle"
         };
         let pointHolderStyle = {
             display: "block",
@@ -31,6 +106,11 @@ class Ability extends Component {
             verticalAlign: "middle",
             textAlign: "center",
             boxShadow: "2px 2px 1px #e5e5e5"
+        };
+        let holderEditStyle = {
+            display: "block",
+            width: "100%",
+            height: "18px"
         };
         let holderFontStyle = {
             display: "inline-block",
@@ -46,7 +126,8 @@ class Ability extends Component {
         let abilityLineStyle = {
             display: "block",
             width: "100%",
-            marginBottom: "5px"
+            marginBottom: "5px",
+            verticalAlign: "top"
         };
         let lineAttriStyle = {
             display: "inline-block",
@@ -54,16 +135,68 @@ class Ability extends Component {
             verticalAlign: "middle",
             color: "#ef8513",
         };
+        let lineAddStyle;
+        if (this.state.potential > 0) {
+             lineAddStyle = {
+                display: "inline-block",
+                verticalAlign: "middle",
+                backgroundColor: "#ef8513",
+                width: "16px",
+                height: "16px",
+                lineHeight: "16px",
+                color: "white",
+                textAlign: "center",
+                borderRadius: "8px",
+                marginLeft: "5px",
+                cursor: "pointer"
+            };
+        } else {
+            lineAddStyle = {
+                display: "inline-block",
+                verticalAlign: "middle",
+                backgroundColor: "#f7d7b4",
+                width: "16px",
+                height: "16px",
+                lineHeight: "16px",
+                color: "white",
+                textAlign: "center",
+                borderRadius: "8px",
+                marginLeft: "5px"
+            };
+        }
+        //Calculate total abilities
         let point = 0;
         for (var i = 0; i < 5; i++) {
             point += this.state.ability[i];
         }
-        let abilities = this.state.ability.map((ability, index) => 
-            <div key={"abilitysingle" + index} style={abilityLineStyle}>
-                <h6 style={lineAttriStyle}>{noGetAbility(index)}</h6>
-                <Progress progress={ability} max="100" percentage="false" width="75%" height="12px" fontFamily="'Rubik', sans-serif" fontSize="7px" fontColor="#4b4f56" />
-            </div>
-        );
+        let abilities;
+        //Show edit panel when user is pet owner or relative and user click show edit panel
+        if ((this.props.userId == this.props.pet.owner_id || this.props.userId == this.props.pet.relative_id) && this.state.showEdit) {
+            abilities = this.state.ability.map((ability, index) => 
+                <div key={"abilitysingle" + index} style={abilityLineStyle}>
+                    <h6 style={lineAttriStyle}>{noGetAbility(index)}</h6>
+                    <Progress progress={ability} max="1000" percentage="false" width="68%" height="12px" fontFamily="'Rubik', sans-serif" fontSize="7px" fontColor="#4b4f56" />
+                    <h7 style={lineAddStyle} onClick={this.addAbility.bind(this, index)}>+</h7>
+                </div>
+            );
+        } 
+        //Only show ability progress bar
+        else {
+            abilities = this.state.ability.map((ability, index) => 
+                <div key={"abilitysingle" + index} style={abilityLineStyle}>
+                    <h6 style={lineAttriStyle}>{noGetAbility(index)}</h6>
+                    <Progress progress={ability} max="1000" percentage="false" width="75%" height="12px" fontFamily="'Rubik', sans-serif" fontSize="7px" fontColor="#4b4f56" />
+                </div>
+            );
+        }
+        let editButton;
+        //Show save button when edit panel is show
+        if (this.state.showEdit) {
+            editButton = <Ovaledit value="Save" clickEdit={this.clickButton.bind(this)} />;
+        } else if ((this.props.userId == this.props.pet.owner_id || this.props.userId == this.props.pet.relative_id) && !this.state.showEdit && this.state.showButton) {
+            //Show edit button when edit panel is not show, current user is pet owner/relative, and the button should show
+            editButton = <Ovaledit value="Edit" clickEdit={this.clickButton.bind(this)} />;
+        }
         return(
             <section style={displayStyle}>
                 <div style={displayPointStyle}>
@@ -74,7 +207,11 @@ class Ability extends Component {
                             {point}
                         </h5>
                     </div>
-                    <div style={pointHolderStyle}>
+                    {/*Show edit button on mouse enter, hide edit button on mouse leave*/}
+                    <div style={pointHolderStyle} onMouseEnter={this.showEdit.bind(this)} onMouseLeave={this.hideEdit.bind(this)}>
+                        <div style={holderEditStyle}>
+                            {editButton}
+                        </div>
                         <img alt="potential-icon" src="/img/icon/glyphicons-potential.png" / >
                         <h5 style={holderFontStyle}>
                             Potential: <br />
@@ -82,7 +219,8 @@ class Ability extends Component {
                         </h5>
                     </div>
                 </div>
-                <div style={displayAbilityStyle}>
+                {/*Show edit button on mouse enter, hide edit button on mouse leave*/}
+                <div style={displayAbilityStyle} onMouseEnter={this.showEdit.bind(this)} onMouseLeave={this.hideEdit.bind(this)}>
                     {abilities}
                 </div>
             </section>

@@ -47,6 +47,14 @@ h6{
 	padding: 0;
 }
 
+h7{
+	font-family: 'Rubik', sans-serif;
+	font-size: 9px;
+	font-weight: normal;
+	margin: 0;
+	padding: 0;
+}
+
 a{
 	text-decoration: none;
 	color: inherit;

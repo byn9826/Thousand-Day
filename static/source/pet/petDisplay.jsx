@@ -14,9 +14,9 @@ class Display extends Component {
         };
         return (
             <section style={displayStyle}>
-                <Ability pet={this.props.pet} />
-                <Skill pet={this.props.pet}/>
-                <Moment id={this.props.pet.pet_id} moment={this.props.moment} />
+                <Ability userId={this.props.userId} pet={this.props.pet} />
+                <Skill userId={this.props.userId} pet={this.props.pet}/>
+                <Moment petId={this.props.pet.pet_id} moment={this.props.moment} />
             </section>
         );
     }

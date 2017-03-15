@@ -7,7 +7,9 @@ class Team extends Component {
             display: "block",
             width: "100%",
             marginTop: "20px",
-            marginBottom: "30px"
+            marginBottom: "30px",
+            borderTop: "1px solid #e5e5e5",
+            paddingTop: "20px"
         };
         let teamHumanStyle = {
             display: "block",
@@ -87,37 +89,38 @@ class Team extends Component {
             display: "inline-block",
             verticalAlign: "middle"
         };
+        //Show existed relatives
+        let relatives = this.props.owner.map((relative, index) =>
+            <h6 key={"petowner" + index} style={humanNameStyle}>
+                <a href={"/user/" + relative.user_id}>
+                    {relative.user_name + " + 10% " + noGetAbility(relative.user_aura)}
+                </a>
+            </h6>
+        );
+        //Show existed companions
+        let companions = this.props.companion.map((companion, index) =>
+            <div key={"petcompanion" + index} style={teamPetStyle}><a href={"/pet/" + companion.pet_id}>
+                <img style={petImgStyle} src = {"/img/pet/" + companion.pet_id + "/cover/0.jpg"}  />
+                <div style={petContainerStyle}>
+                    <h6 style={containerLineStyle}>{noGetNature(companion.pet_nature)}</h6>
+                    <div style={containerLineStyle}>
+                        <img style={pointIconStyle} alt="ability-icon" src="/img/icon/glyphicons-ability.png" />
+                        <h6 style={pointContentStyle}>{companion.pet_ability}</h6>
+                    </div>
+                </div>
+            </a></div>
+        );
         return (
             <section style={teamStyle}>
                 <div style={teamHumanStyle}>
                     <h5 style={humanTitleStyle}>Relative</h5>
-                    <h6 style={humanNameStyle}><a href={"/user/" + this.props.owner[0].user_id}>{this.props.owner[0].user_name + " + 10% " + noGetAbility(this.props.owner[0].user_aura)}</a></h6>
-                    <h6 style={humanNameStyle}><a href={"/user/" + this.props.owner[1].user_id}>{this.props.owner[1].user_name + " + 10% " + noGetAbility(this.props.owner[1].user_aura)}</a></h6>
+                    {relatives}
                 </div>
                 <div style={teamTitleStyle}>
-                    <img style={titleIconStyle} alt="skill-icon" src="/img/icon/glyphicons-team.png" / >
+                    <img style={titleIconStyle} alt="skill-icon" src="/img/icon/glyphicons-team.png" />
                     <h5 style={titleFontStyle}>Companion</h5>
                 </div>
-                <div style={teamPetStyle}><a href={"/pet/" + this.props.companion[0].pet_id}>
-                    <img style={petImgStyle} src = {"/img/pet/" + this.props.companion[0].pet_id + "/cover/0.jpg"}  />
-                    <div style={petContainerStyle}>
-                        <h6 style={containerLineStyle}>{noGetNature(this.props.companion[0].pet_nature)}</h6>
-                        <div style={containerLineStyle}>
-                            <img style={pointIconStyle} alt="ability-icon" src="/img/icon/glyphicons-ability.png" / >
-                            <h6 style={pointContentStyle}>{this.props.companion[0].pet_ability}</h6>
-                        </div>
-                    </div>
-                </a></div>
-                <div style={teamPetStyle}><a href={"/pet/" + this.props.companion[1].pet_id}>
-                    <img style={petImgStyle} src = {"/img/pet/" + this.props.companion[1].pet_id + "/cover/0.jpg"}  />
-                    <div style={petContainerStyle}>
-                        <h6 style={containerLineStyle}>{noGetNature(this.props.companion[1].pet_nature)}</h6>
-                        <div style={containerLineStyle}>
-                            <img style={pointIconStyle} alt="ability-icon" src="/img/icon/glyphicons-ability.png" / >
-                            <h6 style={pointContentStyle}>{this.props.companion[1].pet_ability}</h6>
-                        </div>
-                    </div>
-                </a></div>
+                {companions}
             </section>
         );
     }

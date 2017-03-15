@@ -1,15 +1,16 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import os
 from flask import Flask, render_template, request
 import secret
 from routes.pet import pet_routes
+from routes.user import user_routes
 from routes.edit import edit_routes
 
 
 app = Flask(__name__, static_folder='static', static_url_path='')
 app.secret_key = secret.secretKey()
 app.register_blueprint(pet_routes)
+app.register_blueprint(user_routes)
 app.register_blueprint(edit_routes)
 
 
