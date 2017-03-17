@@ -14,35 +14,37 @@ class Moment extends Component {
 	}
     //load more picture
     loadMore() {
-        reqwest({
-            url: "/pet/loadMoment",
-            type: "json",
-            method: "POST",
-            contentType: "application/json", 
-            headers: {"X-My-Custom-Header": "SomethingImportant"},
-            data: JSON.stringify({"petId": this.props.petId, "showMore": this.state.showMore}),
-            success: function(result) {
-                if (result.Result === 2) {
-                    //Increase load record, update message
-                    let newShow = this.state.showMore + 1;
-                    this.setState({showMore: newShow, showMessage: "No more moments"});
-                } else if (result.Result === 1) {
-                    console.log("Something Wrong");
-                } else {
-                    //Increase load record
-                    let newShow = this.state.showMore + 1;
-                    //Update moment array
-                    let moment = this.state.moment.concat(result);
-                    this.setState({showMore: newShow, moment: moment});
-                    if (result.length < 20) {
-                        this.setState({showMessage: "No more moments"});
+        if (this.state.showMessage == "Click to load more ...") {
+            reqwest({
+                url: "/pet/loadMoment",
+                type: "json",
+                method: "POST",
+                contentType: "application/json", 
+                headers: {"X-My-Custom-Header": "SomethingImportant"},
+                data: JSON.stringify({"petId": this.props.petId, "showMore": this.state.showMore}),
+                success: function(result) {
+                    if (result.Result === 2) {
+                        //Increase load record, update message
+                        let newShow = this.state.showMore + 1;
+                        this.setState({showMore: newShow, showMessage: "No more moments"});
+                    } else if (result.Result === 1) {
+                        console.log("Something Wrong");
+                    } else {
+                        //Increase load record
+                        let newShow = this.state.showMore + 1;
+                        //Update moment array
+                        let moment = this.state.moment.concat(result);
+                        this.setState({showMore: newShow, moment: moment});
+                        if (result.length < 20) {
+                            this.setState({showMessage: "No more moments"});
+                        }
                     }
+                }.bind(this),
+                error: function (err) {
+                    console.log("Something Wrong");
                 }
-            }.bind(this),
-            error: function (err) {
-                console.log("Something Wrong");
-            }
-        });
+            });
+        }
     }
     render() {
         let momentStyle = {

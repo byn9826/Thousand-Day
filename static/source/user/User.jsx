@@ -15,7 +15,7 @@ class User extends Component {
 			<div style={containerStyle}>
 				<Header />
                 <Profile user={this.props.user} relative={this.props.relative} relation={this.props.relation} />
-				<Hub pet={this.props.pet} moment={this.props.moment} />
+				<Hub user={this.props.user} pet={this.props.pet} moment={this.props.moment} />
 				<Footer />
 			</div>
 		);

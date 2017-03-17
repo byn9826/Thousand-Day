@@ -1,16 +1,55 @@
 import React, {Component} from "react";
+import reqwest from "reqwest";
 import noGetGender from "../../js/noGetGender.js";
 import noGetType from "../../js/noGetType.js";
 import noGetNature from "../../js/noGetNature.js";
 import Waterfall from "../snippet/display/Waterfall";
 import noGetImgType from "../../js/noGetImgType.js";
+import Publish from "./hubPublish";
 class Profile extends Component {
     constructor(props) {
         super(props);
 		this.state = {
-            moment: this.props.moment
+            moment: this.props.moment,
+            showMore: 1,
+            showMessage: (this.props.moment.length < 20)? "No more moments": "Click to load more ..."
 		};
 	}
+    //load more picture
+    loadMore() {
+        if (this.state.showMessage == "Click to load more ...") {
+            reqwest({
+                url: "/user/loadMoment",
+                type: "json",
+                method: "POST",
+                contentType: "application/json", 
+                headers: {"X-My-Custom-Header": "SomethingImportant"},
+                data: JSON.stringify({"userId": this.props.user.user_id, "showMore": this.state.showMore}),
+                success: function(result) {
+                    if (result.Result === 2) {
+                        //Increase load record, update message
+                        let newShow = this.state.showMore + 1;
+                        this.setState({showMore: newShow, showMessage: "No more moments"});
+                    } else if (result.Result === 1) {
+                        console.log("Something Wrong");
+                    } else {
+                        console.log(result);
+                        //Increase load record
+                        let newShow = this.state.showMore + 1;
+                        //Update moment array
+                        let moment = this.state.moment.concat(result);
+                        this.setState({showMore: newShow, moment: moment});
+                        if (result.length < 20) {
+                            this.setState({showMessage: "No more moments"});
+                        }
+                    }
+                }.bind(this),
+                error: function (err) {
+                    console.log("Something Wrong");
+                }
+            });
+        }
+    }
     render() {
         let hubStyle = {
             display: "inline-block",
@@ -25,7 +64,7 @@ class Profile extends Component {
             padding: "10px 3%",
             boxShadow: "2px 2px 1px #e5e5e5",
             marginBottom: "25px",
-            marginTop: "40px"
+            marginTop: "20px"
         };
         let headerIconStyle = {
             display: "inline-block",
@@ -107,9 +146,20 @@ class Profile extends Component {
             textAlign: "center",
             verticalAlign: "middle"
         };
+        let momentLoadStyle = {
+            display: "block",
+            width: "100%",
+            backgroundColor: "#f7d7b4",
+            color: "#052456",
+            border: "1px solid #f7f9fc",
+            textAlign: "center",
+            padding: "6px 0",
+            borderRadius: "5px",
+            cursor: "pointer"
+        };
         //Show all pets
         let pets = this.props.pet.map((pet, index) =>
-            <div key={"petdetail" + index} style={hubPetStyle}>
+            <div key={"petdetail" + index} style={hubPetStyle}><a href={"/pet/" + pet.pet_id}>
                 <img style={petImgStyle} alt={pet.pet_name} src={"/img/pet/" + pet.pet_id + "/cover/0.png"} />
                 <div style={petInfoStyle}>
                     <div style={infoLineStyle}>
@@ -119,15 +169,15 @@ class Profile extends Component {
                     </div>
                     <div style={infoLineStyle}>
                         <div style={lineAbilityStyle}>
-                            <img style={abilityImgStyle} alt="ability-icon" src="/img/icon/glyphicons-moment.png" />
-                            <h6 style={abilityFontStyle}>
-                                Moment: <br />
-                            </h6>
-                        </div>
-                        <div style={lineAbilityStyle}>
                             <img style={abilityImgStyle} alt="ability-icon" src="/img/icon/glyphicons-ability.png" />
                             <h6 style={abilityFontStyle}>
                                 Ability: {pet.pet_ability}<br />
+                            </h6>
+                        </div>
+                        <div style={lineAbilityStyle}>
+                            <img style={abilityImgStyle} alt="ability-icon" src="/img/icon/glyphicons-moment.png" />
+                            <h6 style={abilityFontStyle}>
+                                Potential: {pet.pet_potential}<br />
                             </h6>
                         </div>
                         <div style={lineAbilityStyle}>
@@ -138,7 +188,7 @@ class Profile extends Component {
                         </div>
                     </div>
                 </div>
-            </div>
+            </a></div>
         );
         let allImages = [];
         for (let i = 0; i < this.state.moment.length; i++) {
@@ -149,6 +199,7 @@ class Profile extends Component {
         }
         return (
             <section style={hubStyle}>
+                <Publish />
                 <div style={hubHeaderStyle}>
                     <img style={headerIconStyle} alt="hub-icon" src="/img/icon/glyphicons-hub.png" />
                     <h4 style={headerContentStyle}>Pets in hub</h4>
@@ -159,6 +210,7 @@ class Profile extends Component {
                     <h4 style={headerContentStyle}>Moments</h4>
                 </div>
                 <Waterfall column="4" image={allImages} link="true" fontFamily="'Rubik', sans-serif" />
+                <h5 style={momentLoadStyle} onClick={this.loadMore.bind(this)}>{this.state.showMessage}</h5>
             </section>
         );
     }

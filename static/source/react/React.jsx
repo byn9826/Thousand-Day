@@ -15,6 +15,7 @@ import ProgressEG from './ProgressEG';
 import UpdateprofileEG from './UpdateprofileEG';
 import GetlocationEG from './GetlocationEG';
 import DelmemberEG from './DelmemberEG';
+import PostimgEG from './PostimgEG';
 class Reactui extends Component {
 	constructor() {
 		super();
@@ -46,16 +47,16 @@ class Reactui extends Component {
 						<h6 className = "orange-box"><a href ="#vote">Vote</a></h6>
 						<h6 className = "orange-box"><a href ="#like">Like</a></h6>
 						<h3 className = "main-list">Input</h3>
+						<h6 className = "orange-box"><a href = "#postimg">Postimg</a></h6>
 						<h6 className = "orange-box"><a href = "#inputbox">Inputbox</a></h6>
 						<h6 className = "orange-box"><a href = "#inputarea">Inputarea</a></h6>
 						<h3 className = "main-list">List</h3>
 						<h6 className = "orange-box"><a href ="#addtolist">AddtoList</a></h6>
-						<h3 className = "main-list">Other: React Inline Animation</h3>
-						<h6 className = "orange-box"><a href="http://www.thousanday.com/animation">Inline-Animation</a></h6>
 					</section>
 				</main>
 				<section id="right">
 					<WaterfallEG />
+					<PostimgEG />
 					<UpdateprofileEG />
 					<DelmemberEG />
 					<GetlocationEG />

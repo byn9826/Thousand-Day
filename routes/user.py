@@ -27,7 +27,7 @@ def userView():
         relativeQuery = 'SELECT owner_id, relative_id FROM pet WHERE owner_id = %s OR relative_id = %s'
         #Find all pet of current owner
         petsQuery = (
-            'SELECT pet_id, pet_name, pet_gender, pet_win, pet_type, '
+            'SELECT pet_id, pet_name, pet_gender, pet_win, pet_potential, pet_type, '
             '(ability_attack + ability_defend + ability_health + ability_swift + ability_lucky) AS pet_ability '
             'FROM pet WHERE owner_id = %s OR relative_id = %s'
         )
@@ -122,6 +122,50 @@ def addFriend():
             cnx.rollback()
         finally:
             friendCursor.close()
+            cnx.close()
+    else:
+        abort(404)
+
+
+#Load more moment
+@user_routes.route('/user/loadMoment', methods = ['GET', 'POST'])
+def loadMoment():
+    if request.method == 'POST':
+        json = request.json
+        user_id = json['userId']
+        showMore = json['showMore']
+        #Get the start row number
+        startPin = showMore * 20
+        #Find all pet of current owner
+        petQuery = 'SELECT pet_id FROM pet WHERE owner_id = %s OR relative_id = %s'
+        #Find relative moments
+        momentQuery = 'SELECT * FROM moment WHERE pet_id in (%s) ORDER BY moment_id DESC LIMIT %s, 20'
+        #get moment info
+        try:
+            cnx = mysql.connector.connect(**config)
+            petCursor = cnx.cursor()
+            petCursor.execute(petQuery, (user_id, user_id))
+            #Get all relative pets
+            pets = petCursor.fetchall()
+            all_id = [x[0] for x in pets]
+            all_id = list(set(all_id))
+            allPlaceholder = all_id + [int(startPin)]
+            ids = ', '.join(list(map(lambda x: '%s', all_id)))
+            momentQuery = momentQuery % (ids, '%s')
+            momentCursor = cnx.cursor(dictionary=True)
+            momentCursor.execute(momentQuery, allPlaceholder)
+            moment = momentCursor.fetchall()
+            if moment:
+                return jsonify(moment)
+            else:
+                return jsonify({'Result': 2})
+        except mysql.connector.Error as err:
+            cnx.rollback()
+            print('Something went wrong: {}'.format(err))
+            return jsonify({'Result': 1})
+        finally:
+            petCursor.close()
+            momentCursor.close()
             cnx.close()
     else:
         abort(404)
