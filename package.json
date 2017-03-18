@@ -15,7 +15,7 @@
     "react-avatar-editor": "^8.0.0",
     "react-dom": "^15.4.2",
     "reqwest": "^2.0.5",
-    "thousanday-react": "^0.7.11"
+    "thousanday-react": "^0.8.0"
   },
   "devDependencies": {
     "babel-core": "^6.21.0",

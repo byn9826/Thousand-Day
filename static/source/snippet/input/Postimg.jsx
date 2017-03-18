@@ -79,6 +79,7 @@ class Inputarea extends Component {
 			backgroundColor: "#f7f9fc",
 			borderRadius: "6px",
 			padding: "20px 3%",
+			width: "94%"
 		};
 		let inputStyle = {
 			display: "block",
@@ -143,7 +144,7 @@ class Inputarea extends Component {
 			opacity: "0"
 		};
 		let imgStyle = {
-			display: "block",
+			float: "left",
 			marginTop: "10px",
 			marginBottom: "5px",
 			height: "150px",
@@ -164,6 +165,8 @@ class Inputarea extends Component {
 					<span style={countStyle}>{this.state.count}/{this.state.length}</span>
 					<div style={postStyle} onClick={this.submitPost.bind(this)}>Post</div>
 					<span style={errorStyle}>{this.state.error}</span>
+				</div>
+				<div style={lineStyle}>
 					{image}
 				</div>
 			</span>

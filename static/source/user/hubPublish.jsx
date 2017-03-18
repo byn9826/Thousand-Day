@@ -12,7 +12,7 @@ class Publish extends Component {
         };
         return (
             <section style={containerStyle}>
-                <Postimg content="" max="150" title="Share your story today" submitImg={this.submitImg.bind(this)} fontFamily="'Rubik', sans-serif" />
+                <Postimg content="" max="150" title="Share new moment" submitImg={this.submitImg.bind(this)} fontFamily="'Rubik', sans-serif" />
             </section>
         );
     }

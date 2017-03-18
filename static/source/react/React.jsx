@@ -7,10 +7,7 @@ import RateEG from './RateEG';
 import WaterfallEG from './WaterfallEG';
 import InputboxEG from './InputboxEG';
 import InputareaEG from './InputareaEG';
-import AddtolistEG from './AddtolistEG';
-import VoteEG from './VoteEG';
 import LikeEG from './LikeEG';
-import OvaleditEG from './OvaleditEG';
 import ProgressEG from './ProgressEG';
 import UpdateprofileEG from './UpdateprofileEG';
 import GetlocationEG from './GetlocationEG';
@@ -41,34 +38,27 @@ class Reactui extends Component {
 						<h3 className = "main-list">Button</h3>
 						<h6 className = "orange-box"><a href ="#updateprofile">Updateprofile</a></h6>
 						<h6 className = "orange-box"><a href ="#delmember">Delmember</a></h6>
-						<h6 className = "orange-box"><a href ="#ovaledit">Ovaledit</a></h6>
 						<h3 className = "main-list">Attitude</h3>
 						<h6 className = "orange-box"><a href ="#rate">Rate</a></h6>
-						<h6 className = "orange-box"><a href ="#vote">Vote</a></h6>
 						<h6 className = "orange-box"><a href ="#like">Like</a></h6>
 						<h3 className = "main-list">Input</h3>
 						<h6 className = "orange-box"><a href = "#postimg">Postimg</a></h6>
 						<h6 className = "orange-box"><a href = "#inputbox">Inputbox</a></h6>
 						<h6 className = "orange-box"><a href = "#inputarea">Inputarea</a></h6>
-						<h3 className = "main-list">List</h3>
-						<h6 className = "orange-box"><a href ="#addtolist">AddtoList</a></h6>
 					</section>
 				</main>
 				<section id="right">
 					<WaterfallEG />
 					<PostimgEG />
-					<UpdateprofileEG />
-					<DelmemberEG />
 					<GetlocationEG />
-					<RateEG />
+					<DelmemberEG />
 					<InputboxEG />
 					<InputareaEG />
+					<UpdateprofileEG />
 					<LikeEG />
 					<ProgressEG />
+					<RateEG />
 					<RandomEG />
-					<AddtolistEG />
-					<VoteEG />
-					<OvaleditEG />
 				</section>
 				<Footer />
 			</div>

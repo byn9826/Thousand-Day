@@ -16,8 +16,7 @@ class WaterfallEG extends Component {
             ["/img/pet/1/moment/1.jpg", "Boring, sleep"],
             ["/img/pet/1/moment/2.jpg", "Unhappy"],
             ["/img/pet/1/moment/3.jpg", "I'm sunflower"],
-            ["/img/pet/1/moment/4.jpg", "Love the bed"],
-            ["/img/pet/1/moment/5.jpg", "Just leave me alone"],
+            ["/img/pet/1/moment/4.jpg", "Love the bed"]
         ];
         return (
             <section id = "waterfall" className = "example">
