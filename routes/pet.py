@@ -184,3 +184,15 @@ def loadMoment():
             cnx.close()
     else:
         abort(404)
+
+
+#Upload moment
+@pet_routes.route('/pet/uploadMoment/<string:message>', methods=['GET', 'POST'])
+def uploadMoment(message):
+    if request.method == 'POST':
+        print(request.files['file'])
+        print(message)
+        return jsonify({'Result': 1})
+
+    else:
+         abort(404)

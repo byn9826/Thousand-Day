@@ -15,7 +15,7 @@ class User extends Component {
 			<div style={containerStyle}>
 				<Header />
                 <Profile user={this.props.user} relative={this.props.relative} relation={this.props.relation} />
-				<Hub user={this.props.user} pet={this.props.pet} moment={this.props.moment} />
+				<Hub user={this.props.user} pet={this.props.pet} moment={this.props.moment} visitorId={this.props.visitorId} />
 				<Footer />
 			</div>
 		);
@@ -30,7 +30,7 @@ reqwest({
 		if (result.Result === 1 || result.Result === 2) {
 			console.log("Something Wrong");
 		} else {
-			ReactDOM.render(<User user={result[0]} relative={result[1]} relation={result[2]} pet={result[3]} moment={result[4]} />, document.getElementById("root"));
+			ReactDOM.render(<User user={result[0]} relative={result[1]} relation={result[2]} pet={result[3]} moment={result[4]} visitorId={result[5]} />, document.getElementById("root"));
 		}
 	},
 	error: function (err) {

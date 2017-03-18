@@ -20,9 +20,10 @@ class Profile extends Component {
                 data: JSON.stringify({"apply": this.props.user.user_id}),
                 success: function(result) {
                     if (result.Result === 0) {
+                        this.setState({relation: 4});
                         console.log("Success");
                     } else if (result.Result === 2) {
-                        this.setState({relation: 3});
+                        this.setState({relation: 4});
                         console.log("Duplicate");
                     }
                     else {
@@ -138,10 +139,10 @@ class Profile extends Component {
                 friend = "Yourself";
                 break;
             case 3: 
-                friend = "Request Sent";
+                friend = "Please Login";
                 break;
             default:
-                friend = "Please Login";
+                friend = "Request Sent";
                 break;
         }
         return(

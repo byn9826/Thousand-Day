@@ -14,8 +14,14 @@ class Inputarea extends Component {
 			fontFamily: this.props.fontFamily || "Times New Roman",
 			error: "",
 			rawUrl: null,
-			title: this.props.title || null
+			title: this.props.title || null,
+			reset: this.props.reset
 		};
+	}
+	componentDidUpdate() {
+		if (this.state.reset != this.props.reset) {
+			this.setState({content: "", rawUrl: null, reset: this.props.reset, error: "Success!"});
+		}
 	}
 	editInput(event) {
 		let changedInput = event.target.value.substr(0, this.state.length);

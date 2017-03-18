@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import Publish from "./displayPublish";
 import Ability from "./displayAbility";
 import Skill from "./displaySkill";
 import Moment from "./displayMoment";
@@ -14,6 +15,7 @@ class Display extends Component {
         };
         return (
             <section style={displayStyle}>
+                <Publish />
                 <Ability userId={this.props.userId} pet={this.props.pet} />
                 <Skill userId={this.props.userId} pet={this.props.pet}/>
                 <Moment petId={this.props.pet.pet_id} moment={this.props.moment} />

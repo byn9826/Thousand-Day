@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import reqwest from "reqwest";
 import Team from "./aboutTeam";
-import Ovaledit from "../snippet/button/Ovaledit";
 import Getlocation from "../snippet/display/Getlocation";
 import noGetGender from "../../js/noGetGender.js";
 import noGetNature from "../../js/noGetNature.js";
@@ -12,8 +11,6 @@ class About extends Component {
 		this.state = {
             //Store pet watcher id
             watcher: this.props.watcher,
-            //If edit button should show or not
-            showEdit: false
 		};
 	}
     //Watch or unwatch pet
@@ -54,14 +51,6 @@ class About extends Component {
                 console.log("Something Wrong");
             }.bind(this)
         });
-    }
-    //Show edit button
-    showEdit() {
-        this.setState({showEdit: true});
-    }
-    //Hide edit button
-    hideEdit() {
-        this.setState({showEdit: false});
     }
     render() {
         let aboutStyle = {
@@ -119,11 +108,6 @@ class About extends Component {
             width: "90%",
             margin: "8px 5%"
         };
-        let editPet;
-        //Show edit button only when mouse hover and user is the pet owners
-        if ((this.props.userId == this.props.pet.owner_id || this.props.userId == this.props.pet.relative_id) && this.state.showEdit === true) {
-            editPet = <Ovaledit value="Edit" fontFamily="'Rubik', sans-serif" href={"/edit/pet/" + this.props.pet.pet_id} />
-        }
         let watchPet;
         //If current user already watched this pet
         if (this.state.watcher.indexOf(this.props.userId) !== -1 ) {
@@ -132,13 +116,11 @@ class About extends Component {
             watchPet = "+ Watch | by " + this.state.watcher.length;
         }
         return(
-            <main style={aboutStyle} onMouseEnter={this.showEdit.bind(this)} onMouseLeave={this.hideEdit.bind(this)}>
+            <main style={aboutStyle}>
                 <img style={aboutProfileStyle} alt={this.props.pet.pet_name} src={"/img/pet/" + this.props.pet.pet_id + "/cover/0.png"} />
                 <div style={aboutLineStyle}>
                     <h1 style={titleNameStyle}>{this.props.pet.pet_name}</h1>
                     <h4 style={titleGenderStyle}>{noGetGender(this.props.pet.pet_gender)}</h4>
-                    {/*Show edit button on mouse hover*/}
-                    {editPet}
                 </div>
                 {/*Watch or unwatch pet when user click*/}
                 <h5 style={aboutWatchStyle} onClick={this.watchPet.bind(this)}>{watchPet}</h5>

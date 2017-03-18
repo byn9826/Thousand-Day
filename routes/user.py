@@ -54,8 +54,8 @@ def userView():
             relative = list(set(s))
             relative = [x for x in relative if x != None and x != int(current_id)]
             #check relationship for loged in visitor
-            if session['userId']:
-                relationQuery = 'SELECT * From user_relation WHERE (applicant_id = %s AND receiver_id = %s) OR (applicant_id = %s AND receiver_id = %s) AND friend_statue = %s'
+            if session.get('userId') is not None:
+                relationQuery = 'SELECT * From user_relation WHERE ((applicant_id = %s AND receiver_id = %s) OR (applicant_id = %s AND receiver_id = %s)) AND friend_statue = %s'
                 relationCursor = cnx.cursor()
                 relationCursor.execute(relationQuery, (current_id, session['userId'], session['userId'], current_id, 1))
                 relation = relationCursor.fetchone()
@@ -71,7 +71,7 @@ def userView():
                     relations = 0
             #Not login
             else:
-                relation = 3
+                relations = 3
             #Get all pets
             petsCursor = cnx.cursor(dictionary=True)
             petsCursor.execute(petsQuery, (current_id, current_id))
@@ -84,7 +84,10 @@ def userView():
             momentsCursor = cnx.cursor(dictionary=True)
             momentsCursor.execute(momentsQuery, all_id)
             moments = momentsCursor.fetchall()
-            result = [user, relative, relations, pets, moments]
+            if session.get('userId') is not None:
+                result = [user, relative, relations, pets, moments, session['userId']]
+            else:
+                result = [user, relative, relations, pets, moments, 0]
             return jsonify(result)
         except mysql.connector.Error as err:
             print('Something went wrong: {}'.format(err))
