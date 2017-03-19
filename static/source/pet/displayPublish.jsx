@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component} from "react";
 import reqwest from "reqwest";
 import Postimg from "../snippet/input/Postimg";
 class Publish extends Component {
@@ -10,10 +10,13 @@ class Publish extends Component {
 		};
 	}
     submitImg(message, img) {
-        console.log(message);
-        console.log(img);
+        //get image type
+        let type = img.type;
+        type = type.split("/")[1];
+        type = "." + type;
+        //store image file
         let fileData = new FormData();
-    	fileData.append("file", img, "0.png");
+    	fileData.append("file", img, type);
 		reqwest({
         	url: "/pet/uploadMoment/" + message,
         	method: "POST",
@@ -21,24 +24,42 @@ class Publish extends Component {
         	contentType: false,
         	processData: false,
 			success: function(result) {
-                let reset = this.state.reset + 1;
-				this.setState({reset: reset});
+                switch(result.Result) {
+                    case 0:
+                        console.log("No image uploaded");
+                        break;
+                    case 1:
+                        console.log("File type not supported");
+                        break;
+                    case 2:
+                        console.log("Can't save image, try later");
+                        break;
+                    case 3:
+                        console.log("This is not your pet");
+                        break;
+                    case 4:
+                        console.log("Can't update moment, try later");
+                    default:
+                        //pass back to main component
+                        this.props.uploadNew(result.Result);
+                        let reset = this.state.reset + 1;
+				        this.setState({reset: reset});
+                }
 			}.bind(this),
 			error: function (err) {
-				console.log("Something Wrong");
+				console.log("Can't connect to server");
 			}
 		});
     }
     render() {
         let containerStyle = {
             display: "block",
-            padding: "0px 2%",
-            width: "96%",
-            marginBottom: "30px"
+            width: "100%",
+            marginTop: "40px"
         };
         return (
             <section style={containerStyle}>
-                <Postimg content="" max="150" title="Share new moment" submitImg={this.submitImg.bind(this)} fontFamily="'Rubik', sans-serif" reset={this.state.reset} />
+                <Postimg content="" max="120" title="Share new moment" submitImg={this.submitImg.bind(this)} fontFamily="'Rubik', sans-serif" reset={this.state.reset} />
             </section>
         );
     }

@@ -4,7 +4,6 @@ import noGetGender from "../../js/noGetGender.js";
 import noGetType from "../../js/noGetType.js";
 import noGetNature from "../../js/noGetNature.js";
 import Waterfall from "../snippet/display/Waterfall";
-import noGetImgType from "../../js/noGetImgType.js";
 import Ovaledit from "../snippet/button/Ovaledit";
 class Profile extends Component {
     constructor(props) {
@@ -234,7 +233,7 @@ class Profile extends Component {
         let allImages = [];
         for (let i = 0; i < this.state.moment.length; i++) {
             allImages[i] = [];
-            allImages[i][0] = "/img/pet/" + this.state.moment[i].pet_id + "/moment/" + this.state.moment[i].image_id + "." + noGetImgType(this.state.moment[i].image_type);
+            allImages[i][0] = "/img/pet/" + this.state.moment[i].pet_id + "/moment/" + this.state.moment[i].image_name;
             allImages[i][1] = this.state.moment[i].moment_message;
             allImages[i][2] = "/moment/" + this.state.moment[i].moment_id;
         }

@@ -77,7 +77,7 @@ def petProfile():
             try:
                 file.save( os.path.join(os.path.dirname(os.path.abspath(__file__)), fold_path, filename))
                 return jsonify({'Result': 0})
-            except mysql.connector.Error as err:
+            except Exception as err:
                 print('Something went wrong: {}'.format(err))
                 return jsonify({'Result': 1})
         else:

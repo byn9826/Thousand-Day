@@ -26,14 +26,19 @@ reqwest({
 	method: "POST",
 	data: {"id": window.location.pathname.split("/").pop()},
 	success: function(result) {
-		console.log(result);
-		if (result.Result === 1 || result.Result === 2) {
-			console.log("Something Wrong");
-		} else {
-			ReactDOM.render(<Pet pet={result[0]} owner={result[1]} watcher={result[2]} companion={result[3]} moment={result[4]} userId={result[5]} />, document.getElementById("root"));
+		switch(result.Result) {
+			case 0:
+				console.log("Pet do not exsit");
+				break;
+			case 1:
+				console.log("Can't read pet info, try later");
+				break;
+			default:
+				ReactDOM.render(<Pet pet={result[0]} owner={result[1]} watcher={result[2]} companion={result[3]} moment={result[4]} userId={result[5]} />, document.getElementById("root"));
+				break;
 		}
 	},
 	error: function (err) {
-		console.log("Something Wrong");
+		console.log("Can't connect to the server");
 	}
 });
