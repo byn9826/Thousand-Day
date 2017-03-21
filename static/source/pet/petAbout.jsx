@@ -11,6 +11,8 @@ class About extends Component {
 		this.state = {
             //Store pet watcher id
             watcher: this.props.watcher,
+            //if current user not login
+            visitor: false
 		};
 	}
     //Watch or unwatch pet
@@ -19,6 +21,10 @@ class About extends Component {
         let prevWatch = this.state.watcher.slice();
         let newWatch = this.state.watcher.slice();
         let addWatch;
+        if (!this.props.userId) {
+            this.setState({visitor: true});
+            return false;
+        }
         //If watched before, unwatch it
         if (currentIndex !== -1 ) {
             newWatch.splice(currentIndex, 1);
@@ -110,7 +116,9 @@ class About extends Component {
         };
         let watchPet;
         //If current user already watched this pet
-        if (this.state.watcher.indexOf(this.props.userId) !== -1 ) {
+        if (this.state.visitor) {
+            watchPet = "Please login";
+        } else if (this.state.watcher.indexOf(this.props.userId) !== -1 ) {
             watchPet = "Watched | by " + this.state.watcher.length;
         } else {
             watchPet = "+ Watch | by " + this.state.watcher.length;

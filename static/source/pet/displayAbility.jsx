@@ -15,8 +15,6 @@ class Ability extends Component {
             prevAbility: [this.props.pet.ability_attack, this.props.pet.ability_defend, this.props.pet.ability_health, this.props.pet.ability_swift, this.props.pet.ability_lucky],
             //Use for roll back potential if db update fail
             prevPotential: this.props.pet.pet_potential,
-            //If edit button is show or not
-            showButton: false,
             //If edit panel is show or not
             showEdit: false,
             //Check if ability has been changed
@@ -66,7 +64,7 @@ class Ability extends Component {
                         let potential = this.state.prevPotential;
                         //Roll back ability potential if db fails
                         this.setState({ability: ability, potential: potential});
-                        console.log("Something wrong");
+                        console.log("Can't connect to server");
                     }.bind(this)
                 });
             }
@@ -74,15 +72,6 @@ class Ability extends Component {
             //Show edit panel when it's not show
             this.setState({showEdit: true});
         }
-    }
-    //Show edit button when mouse enter
-    showEdit() {
-        this.setState({showButton: true});
-    }
-    //Hide edit button when mouse leave
-    hideEdit() {
-        //Close edit ability panel and empty ability change statue
-        this.setState({showButton: false});
     }
     render() {
         let displayStyle = {
@@ -192,10 +181,10 @@ class Ability extends Component {
         let editButton;
         //Show save button when edit panel is show
         if (this.state.showEdit) {
-            editButton = <Ovaledit value="Save" clickEdit={this.clickButton.bind(this)} />;
-        } else if ((this.props.userId == this.props.pet.owner_id || this.props.userId == this.props.pet.relative_id) && !this.state.showEdit && this.state.showButton) {
-            //Show edit button when edit panel is not show, current user is pet owner/relative, and the button should show
-            editButton = <Ovaledit value="Edit" clickEdit={this.clickButton.bind(this)} />;
+            editButton = <Ovaledit value="SAVE" clickEdit={this.clickButton.bind(this)} />;
+        } else if ((this.props.userId == this.props.pet.owner_id || this.props.userId == this.props.pet.relative_id) && !this.state.showEdit) {
+            //Show edit button when edit panel is not show, current user is pet owner/relative
+            editButton = <Ovaledit value="SET" clickEdit={this.clickButton.bind(this)} />;
         }
         return(
             <section style={displayStyle}>
@@ -207,8 +196,7 @@ class Ability extends Component {
                             {point}
                         </h5>
                     </div>
-                    {/*Show edit button on mouse enter, hide edit button on mouse leave*/}
-                    <div style={pointHolderStyle} onMouseEnter={this.showEdit.bind(this)} onMouseLeave={this.hideEdit.bind(this)}>
+                    <div style={pointHolderStyle}>
                         <div style={holderEditStyle}>
                             {editButton}
                         </div>
@@ -219,8 +207,7 @@ class Ability extends Component {
                         </h5>
                     </div>
                 </div>
-                {/*Show edit button on mouse enter, hide edit button on mouse leave*/}
-                <div style={displayAbilityStyle} onMouseEnter={this.showEdit.bind(this)} onMouseLeave={this.hideEdit.bind(this)}>
+                <div style={displayAbilityStyle}>
                     {abilities}
                 </div>
             </section>

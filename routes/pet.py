@@ -25,7 +25,10 @@ def petHome(id):
 def petView():
     #only response for post request
     if request.method == 'POST':
-        current_id = session['userId']
+        if session.get('userId') is None:
+            current_id = None
+        else:
+            current_id = session['userId']
         #get pet id to show
         pet_id = request.form['id']
         #Find pet info by pet id from pet table
@@ -48,8 +51,9 @@ def petView():
             pet_owner = pet['owner_id']
             pet_relative = pet['relative_id']
             #store pet id into session if pet belong to current user
-            if (session['userId'] == pet_owner or session['userId'] == pet_relative):
-                session['petId'] = pet_id
+            if session.get('userId') is not None:
+                if (session['userId'] == pet_owner or session['userId'] == pet_relative):
+                    session['petId'] = pet_id
             #get owner relative info
             ownerCursor = cnx.cursor(dictionary=True)
             ownerCursor.execute(ownerQuery, (pet_owner, pet_relative))

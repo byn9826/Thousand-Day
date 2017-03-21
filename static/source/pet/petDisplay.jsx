@@ -72,11 +72,15 @@ class Display extends Component {
             marginTop: "100px",
             verticalAlign: "top"
         };
+        let publish;
+        if (this.props.userId == this.props.pet.owner_id || this.props.userId == this.props.pet.relative_id) {
+            publish = <Publish uploadNew={this.uploadNew.bind(this)} />;
+        }
         return (
             <section style={displayStyle}>
                 <Ability userId={this.props.userId} pet={this.props.pet} />
                 <Skill userId={this.props.userId} pet={this.props.pet} />
-                <Publish uploadNew={this.uploadNew.bind(this)} />
+                {publish}
                 <Moment petId={this.props.pet.pet_id} moment={this.state.moment} showMessage={this.state.showMessage} loadMore={this.loadMore.bind(this)} />
             </section>
         );

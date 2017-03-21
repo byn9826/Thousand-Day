@@ -100,7 +100,7 @@ class Team extends Component {
         //Show existed companions
         let companions = this.props.companion.map((companion, index) =>
             <div key={"petcompanion" + index} style={teamPetStyle}><a href={"/pet/" + companion.pet_id}>
-                <img style={petImgStyle} src = {"/img/pet/" + companion.pet_id + "/cover/0.jpg"}  />
+                <img style={petImgStyle} src = {"/img/pet/" + companion.pet_id + "/cover/0.png"}  />
                 <div style={petContainerStyle}>
                     <h6 style={containerLineStyle}>{noGetNature(companion.pet_nature)}</h6>
                     <div style={containerLineStyle}>
