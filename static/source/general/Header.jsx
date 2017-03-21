@@ -54,9 +54,9 @@ class Header extends Component {
 				<img src="/img/logo.png" alt="logo" style={headerLogoStyle} />
 				<Random content={randomContent} font="h5" style={headerSloganStyle} />
 				<div style={headerUserStyle}>
-					{/*
+				
 					<Glogin googleLogin={this.googleLogin.bind(this)} clientId="168098850234-fsq84pk4cae97mlj0k464joc21cgqjvv.apps.googleusercontent.com" />
-					*/}
+			
 				</div>
 				<nav style={headerNavStyle}>
 					<h4><a href="/" style={navLinkStyle}>Home</a></h4>
