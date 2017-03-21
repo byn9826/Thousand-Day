@@ -33,7 +33,9 @@ class GloginEG extends Component {
                 <h4>
                     <b>Demo:</b><br/>
                 </h4>
+                {/*
                 <Glogin googleLogin={this.googleLogin.bind(this)} clientId="168098850234-fsq84pk4cae97mlj0k464joc21cgqjvv.apps.googleusercontent.com" width="50%" />
+                */}
                 <h4>{"Hello, " + this.state.email}</h4>
                 <img style={imageStyle} src={this.state.image} />
                 <h4>

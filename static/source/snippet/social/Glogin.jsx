@@ -29,8 +29,8 @@ class Glogin extends Component {
                 profile.token = googleUser.getAuthResponse().id_token;
                 this.props.googleLogin(profile);
             },
-            "onfailure": () => {
-                this.props.googleLogin("fail");
+            "onfailure": (error) => {
+                this.props.googleLogin(error);
             }
         });
     }
