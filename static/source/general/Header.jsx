@@ -3,7 +3,7 @@ import Random from "../snippet/display/Random";
 import Glogin from "../snippet/social/Glogin";
 class Header extends Component {
 	googleLogin(user) {
-		console.log(user.email);
+		console.log(user);
 	}
 	render () {
     	let headerStyle = {
