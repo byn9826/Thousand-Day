@@ -1,11 +1,10 @@
 import React, {Component} from "react";
-import google from "./Glogin.png";
-import "./gplatform.js";
+import "./gapi.js";
 class Glogin extends Component {
     constructor(props) {
         super(props);
 		this.state = {
-            width: this.props.width || "100%"
+            width: this.props.width || 100
 		};
 	}
     componentDidMount() {
@@ -14,10 +13,9 @@ class Glogin extends Component {
         meta.name = "google-signin-client_id";
         meta.content = this.props.clientId;
         header.appendChild(meta);
-    }
-    clickButton() {
         window.gapi.signin2.render("my-signin2", {
             "scope": "profile email",
+            "width": this.state.width,
             "onsuccess": (googleUser) => {
                 let profile = {};
                 profile.id = googleUser.getBasicProfile().getId();
@@ -38,11 +36,11 @@ class Glogin extends Component {
         let buttonStyle = {
             display: "inline-block",
             verticalAlign: "middle",
-            width: this.state.width,
-            cursor: "pointer"
+            width: "100%",
+            lineHeight: "36px"
         };
 		return (
-            <img src={google} className="my-signin2" id="my-signin2" style={buttonStyle} onClick={this.clickButton.bind(this)} />
+            <div className="my-signin2" id="my-signin2" style={buttonStyle} data-onsuccess="onSignIn" data-theme="dark"></div>
 		);
 	}
 }
