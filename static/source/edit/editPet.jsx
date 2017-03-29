@@ -4,9 +4,10 @@ import reqwest from "reqwest";
 import Updateprofile from "../snippet/button/Updateprofile";
 import Delmember from "../snippet/button/Delmember";
 import Confirmdel from "../snippet/button/Confirmdel";
+import Selectbox from "../snippet/box/Selectbox";
 import Getlocation from "../snippet/display/Getlocation";
 import Inputbox from "../snippet/input/Inputbox";
-import noGetNature from "../../js/noGetNature.js";
+import noGetAbility from "../../js/noGetAbility.js";
 import Header from "../general/Header";
 import Footer from "../general/Footer";
 class EditPet extends Component {
@@ -16,18 +17,22 @@ class EditPet extends Component {
             petName: this.props.pet.pet_name,
 			companionFirst: this.props.pet.companion_first,
 			companionSecond: this.props.pet.companion_second,
+			//store already exist companion
+			companionIndex: [],
 			//If show the popup box for all pets
 			showTeam: false,
 			//store all friends info
 			friend: null,
-			//use to restore companionFirst id
-			prevFirst: null,
-			//use to restore companionSecond id
-			prevSecond: null,
-			//use to restore is companion changed
-			change: false,
 			//if show end relation pop box
-			showEnd: true
+			showEnd: false,
+			//if show del relative pop box
+			showDel: false,
+			//for add and del update
+			relative: this.props.pet.relative_id || null,
+			//if show add relative pop box
+			showAdd: false,
+			//store all relative options
+			relOption: null,
 		};
 	}
 	//Update profile
@@ -140,9 +145,21 @@ class EditPet extends Component {
 				} else if (result.Result === 1) {
 					console.log("Something Wrong1");
 				} else if (result.Result === 2) {
-					this.setState({friend: [], showTeam: true, prevFirst: this.state.companionFirst, prevSecond: this.state.companionSecond});
+					this.setState({friend: [], companionIndex: [], showTeam: true});
 				} else {
-					this.setState({friend: result, showTeam: true, prevFirst: this.state.companionFirst, prevSecond: this.state.companionSecond});
+					let refine = [];
+					let index = [];
+					for (let i = 0; i <result.length; i++) {
+						refine[i] = [];
+						refine[i][0] = result[i].pet_name;
+						refine[i][1] = "/img/pet/" + result[i].pet_id + "/cover/0.png";
+						refine[i][2] = "Ability: " + result[i].pet_ability;
+						refine[i][3] = result[i].pet_id;
+						if (result[i].pet_id == this.state.companionFirst || result[i].pet_id == this.state.companionSecond) {
+							index.push(i);
+						}
+					}
+					this.setState({friend: refine, companionIndex: index, showTeam: true});
 				}
 			}.bind(this),
 			error: function (err) {
@@ -150,48 +167,35 @@ class EditPet extends Component {
 			}
 		});
 	}
-	//Choose one friend as companion
-	chooseTeam(index) {
-		if (this.state.friend[index].pet_id != this.state.companionFirst && this.state.friend[index].pet_id != this.state.companionSecond ) {
-			if (!this.state.companionFirst) {
-				this.setState({companionFirst: this.state.friend[index].pet_id});
-			} else if (!this.state.companionSecond) {
-				this.setState({companionSecond: this.state.friend[index].pet_id});
-			}
-		} else if (this.state.friend[index].pet_id == this.state.companionFirst) {
-			this.setState({companionFirst: null});
-		} else if (this.state.friend[index].pet_id == this.state.companionSecond) {
-			this.setState({companionSecond: null});
-		}
-		if (!this.state.change) {
-			this.setState({change: true});
-		}
-	}
 	//Close popbox for choose team
-	closeTeam() {
+	closeTeam(callback, changed) {
 		//Only update when change made
-		if ((this.state.prevFirst != this.state.companionFirst || this.state.prevSecond != this.state.companionFirst) && this.state.change) {
+		if (changed) {
+			let first, second;
+			if (callback.length > 0) {
+				first = this.state.friend[callback[0]][3];
+			}
+			if (callback.length > 1) {
+				second = this.state.friend[callback[1]][3];
+			}
 			reqwest({
 				url: "/edit/pet/updateTeam",
 				method: "POST",
-				data: {"first": this.state.companionFirst, "second": this.state.companionSecond},
+				data: {"first": first, "second": second},
 				success: function(result) {
 					if (result.Result === 1) {
 						console.log("Something Wrong");
-						this.setState({companionFirst: this.state.prevFirst, companionSecond: this.state.prevSecond, change: false});
 					} else {
 						console.log("Success");
-						this.setState({showTeam: false, change: false});
+						this.setState({companionFirst: first, companionSecond: second, companionIndex: [first, second]});
 					}
 				}.bind(this),
 				error: function (err) {
 					console.log("Something Wrong");
-					this.setState({companionFirst: this.state.prevFirst, companionSecond: this.state.prevSecond, change: false});
-				}.bind(this)
+				}
 			});
-		} else {
-			this.setState({showTeam: false, change: false});
 		}
+		this.setState({showTeam: false});
 	}
 	//open confirm end relationship box
 	endRelation() {
@@ -199,7 +203,90 @@ class EditPet extends Component {
 	}
 	//confirmed end relationship
 	confirmEnd() {
-		console.log(123);
+		reqwest({
+			url: "/edit/pet/endRelation",
+			method: "POST",
+			success: function(result) {
+				if (result.Result === 0) {
+					console.log("Something Wrong");
+				} else {
+					window.location.replace("/user/" + result.Result);
+				}
+			},
+			error: function (err) {
+				console.log("Something Wrong");
+			}
+		});
+	}
+	//Open delete a relative box
+	delRelative() {
+		this.setState({showDel: true});
+	}
+	//confirm delete a relative
+	confirmDel() {
+		reqwest({
+			url: "/edit/pet/delRelative",
+			method: "POST",
+			success: function(result) {
+				if (result.Result === 0) {
+					console.log("Something Wrong");
+				} else {
+					this.setState({relative: null, showDel: false});
+				}
+			}.bind(this),
+			error: function (err) {
+				console.log("Something Wrong");
+			}
+		});
+	}
+	//open add relative box
+	addRelative() {
+		reqwest({
+			url: "/edit/pet/searchRelative",
+			method: "POST",
+			success: function(result) {
+				if (result.Result === 0) {
+					console.log("Something Wrong");
+				} else {
+					let refine = [];
+					for (let i = 0; i < result.Result.length; i++) {
+						refine[i] = [];
+						refine[i][0] = result.Result[i].user_name;
+						refine[i][1] = "/img/user/" + result.Result[i].user_id + ".jpg";
+						refine[i][2] = "Pets + 10% " + noGetAbility(result.Result[i].user_aura);
+						refine[i][3] = result.Result[i].user_id;
+					}
+					this.setState({showAdd: true, relOption: refine});
+				}
+			}.bind(this),
+			error: function (err) {
+				console.log("Something Wrong");
+			}
+		});
+	}
+	//close add relative box
+	closeAdd(result, changed) {
+		//Only update when change made
+		if (changed && result) {
+			let choice = this.state.relOption[result[0]][3];
+			reqwest({
+				url: "/edit/pet/addRelative",
+				method: "POST",
+				data: {"choice": choice},
+				success: function(result) {
+					if (result.Result === 0) {
+						console.log("Something Wrong");
+					} else {
+						console.log("Success");
+						this.setState({relative: choice});
+					}
+				}.bind(this),
+				error: function (err) {
+					console.log("Something Wrong");
+				}
+			});
+		}
+		this.setState({showAdd: false});
 	}
 	render() {
 		let containerStyle = {
@@ -304,15 +391,7 @@ class EditPet extends Component {
 			width: "55%",
 			top: "100px",
 			marginLeft: "20%",
-			backgroundColor: "#f7d7b4",
 			zIndex: "5",
-			borderRadius: "8px",
-			height: "380px",
-			overflowY: "scroll",
-			paddingLeft: "15px",
-			paddingRight: "15px",
-			paddingBottom: "10px",
-			textAlign: "center"
 		};
 		let popActionStyle = {
 			position: "absolute",
@@ -342,66 +421,14 @@ class EditPet extends Component {
 			backgroundColor: "#f9e84d",
 			marginBottom: "10px"
 		};
-		let teamActionStyle = {
-			display: "block",
-			width: "auto",
-			height: "35px",
-			lineHeight: "35px",
-			verticalAlign: "middle",
-			backgroundColor: "#ef8513",
-			borderRadius: "2px",
-			marginLeft: "-15px",
-			marginRight: "-15px",
-			marginBottom: "15px"
-		};
-		let actionChooseStyle = {
-			float: "left",
-			marginLeft: "3%",
-			borderRadius: "5px",
-			verticalAlign: "middle",
-			color: "white"
-		};
-		let actionCloseStyle = {
-			float: "right",
-			verticalAlign: "middle",
-			marginRight: "3%",
-			color: "white",
-			cursor: "pointer",
-			fontWeight: "bold"
-		};
-		let teamSingleStyle = {
-			display: "inline-block",
-			backgroundColor: "#f7f9fc",
-			verticalAlign: "top",
-			margin: "10px 5px",
-			borderRadius: "8px",
-			padding: "10px 3%",
-			textAlign: "center",
-			cursor: "pointer"
-		};
-		let singleFriendStyle = {
-			display: "inline-block",
-			width: "50px",
-			height: "50px",
-			borderRadius: "25px",
-		};
-		let singleNameStyle = {
-			display: "block",
-			fontWeight: "bold",
-			margin: "10px 0"
-		};
-		let singleNatureStyle = {
-			display: "block",
-			margin: "10px 0",
-			color: "#052456"
-		};
 		let groupOwnerStyle = {
 			display: "inline-block",
 			color: "white",
 			backgroundColor: "red",
 			padding: "3px 3px",
 			borderRadius: "3px",
-			cursor: "pointer"
+			cursor: "pointer",
+			marginRight: "2%"
 		};
 		//Display first companion when exist
 		let firstCompanion;
@@ -419,50 +446,24 @@ class EditPet extends Component {
 		}
 		let popContainer;
 		let popTeam;
-		let popFriend;
-		let popFirst;
-		let popSecond;
 		let popAction;
 		//Popup box show all pet friends
 		if (this.state.showTeam) {
 			popContainer = (<div style={containerPopStyle}></div>);
-			if (this.state.companionFirst) {
-				let fname;
-				for (let i = 0; i < this.state.friend.length; i++) {
-					if (this.state.friend[i].pet_id == this.state.companionFirst) {
-						fname = this.state.friend[i].pet_name;
-					}
-				}
-				popFirst = (<h5 style={actionChooseStyle}>{"➲ " + fname}</h5>);
-			}
-			if (this.state.companionSecond) {
-				let sname;
-				for (let i = 0; i < this.state.friend.length; i++) {
-					if (this.state.friend[i].pet_id == this.state.companionSecond) {
-						sname = this.state.friend[i].pet_name;
-					}
-				}
-				popSecond = (<h5 style={actionChooseStyle}>{"➲ " + sname}</h5>)
-			}
-			popFriend = this.state.friend.map((friend, index) =>
-				<div key={"petfriends" + index} style={teamSingleStyle} onClick={this.chooseTeam.bind(this, index)}>
-					<img style={singleFriendStyle} alt={friend.pet_name} src={"/img/pet/" + friend.pet_id + "/cover/0.png"} />
-					<h5 style={singleNameStyle}>{friend.pet_name}</h5>
-					<h6 style={singleNatureStyle}>{"I'm " + noGetNature(friend.pet_nature)}</h6>
-					<h6 style={singleNatureStyle}>{"Ability: " + friend.pet_ability}</h6>
-				</div>
-			);
 			popTeam = (
 				<section style={popTeamStyle}>
-					<div style={teamActionStyle}>
-						{popFirst}
-						{popSecond}
-						{/*Close popbox when click x*/}
-						<h5 style={actionCloseStyle} onClick={this.closeTeam.bind(this)}>✗</h5>
-					</div>
-					{popFriend}
+					<Selectbox options={this.state.friend} max="2" decisions={this.state.companionIndex} closeBox={this.closeTeam.bind(this)} fontFamily="'Rubik', sans-serif" />
 				</section>
-			);
+			)
+		}  
+		//popup box show all friends as relative options
+		else if (this.state.showAdd) {
+			popContainer = (<div style={containerPopStyle}></div>);
+			popTeam = (
+				<section style={popTeamStyle}>
+					<Selectbox options={this.state.relOption} closeBox={this.closeAdd.bind(this)} fontFamily="'Rubik', sans-serif" />
+				</section>
+			)
 		}
 		//pop box for end relation
 		if (this.state.showEnd) {
@@ -474,21 +475,32 @@ class EditPet extends Component {
 					<Confirmdel message="End Relationship" confirmDel={this.confirmEnd.bind(this)} fontFamily="'Rubik', sans-serif"/>
 				</section>
 			);
+		} else if (this.state.showDel) {
+			popContainer = (<div style={containerPopStyle}></div>);
+			popAction = (
+				<section style={popActionStyle}>
+					<h4 style={actionTitleStyle}>Are you sure you want to delete this relative?</h4>
+					<h5 style={actionWarnStyle}>Once you delete a relative, he/she won't be able to resume it himself/herself.</h5>
+					<Confirmdel message="Delete Relative" confirmDel={this.confirmDel.bind(this)} fontFamily="'Rubik', sans-serif"/>
+				</section>
+			);
 		}
 		let ownership;
 		let ownerAction;
 		let transferAction;
 		if (this.props.userId === this.props.pet.owner_id) {
 			ownership = "You are the owner:";
-			if (this.props.pet.relative_id) {
-				ownerAction = (<h6 style={groupOwnerStyle}>Request delete relative</h6>);
+			if (this.state.relative) {
+				ownerAction = (<h6 style={groupOwnerStyle} onClick={this.delRelative.bind(this)}>Delete Relative</h6>);
 				transferAction = (<h6 style={groupOwnerStyle}>Transfer ownership</h6>);
 			} else {
-				ownerAction = (<h6 style={groupOwnerStyle}>Add relative</h6>);
+				ownerAction = (<h6 style={groupOwnerStyle} onClick={this.addRelative.bind(this)}>Add Relative</h6>);
 			}
 		} else {
 			ownership = "You are the relative:";
-			ownerAction =(<h6 style={groupOwnerStyle} onClick={this.endRelation.bind(this)}>End relation</h6>);
+			ownerAction =(
+				<h6 style={groupOwnerStyle} onClick={this.endRelation.bind(this)}>End relation</h6>
+			);
 		}
 		return (
 			<div style={containerStyle}>

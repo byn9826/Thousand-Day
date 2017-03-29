@@ -14,6 +14,9 @@ config = secret.mysql()
 #Get edit pet
 @edit_routes.route('/edit/pet/<int:id>')
 def petHome(id):
+    #for test remove later
+    session['userId'] = 2
+    #user must login
     if session.get('userId') is None:
         abort(404)
     return render_template('editPet.html')
@@ -286,6 +289,145 @@ def updateTeam():
             return jsonify({'Result': 1})
         finally:
             memberCursor.close()
+            cnx.close()
+    else:
+        abort(404)
+
+
+#End relationship with a pet
+@edit_routes.route('/edit/pet/endRelation', methods=['GET', 'POST'])
+def endRelation():
+    #only response to post
+    if request.method == 'POST':
+        #only response to pet owner
+        if session.get('petId') is None:
+            return jsonify({'Result': 0})
+        pet_id = session['petId']
+        user_id = session['userId']
+        #remove relative id
+        endQuery = 'UPDATE pet SET relative_id = %s WHERE pet_id = %s AND relative_id = %s'
+        try:
+            cnx = mysql.connector.connect(**config)
+            endCursor = cnx.cursor()
+            endCursor.execute(endQuery, (None, pet_id, user_id))
+            cnx.commit()
+            #remove pet session
+            session['petId'] = None
+            #return user id for redirect
+            return jsonify({'Result': user_id})
+        except mysql.connector.Error as err:
+            cnx.rollback()
+            print('Something went wrong: {}'.format(err))
+            return jsonify({'Result': 0})
+        finally:
+            endCursor.close()
+            cnx.close()
+    else:
+        abort(404)
+
+
+#delete relative for a pet
+@edit_routes.route('/edit/pet/delRelative', methods=['GET', 'POST'])
+def delRelative():
+    #only response to post
+    if request.method == 'POST':
+        #only response to pet owner
+        if session.get('petId') is None:
+            return jsonify({'Result': 0})
+        pet_id = session['petId']
+        user_id = session['userId']
+        #remove relative id
+        delQuery = 'UPDATE pet SET relative_id = %s WHERE pet_id = %s AND owner_id = %s'
+        try:
+            cnx = mysql.connector.connect(**config)
+            delCursor = cnx.cursor()
+            delCursor.execute(delQuery, (None, pet_id, user_id))
+            cnx.commit()
+            session['otherId'] = 0;
+            return jsonify({'Result': 1})
+        except mysql.connector.Error as err:
+            cnx.rollback()
+            print('Something went wrong: {}'.format(err))
+            return jsonify({'Result': 0})
+        finally:
+            delCursor.close()
+            cnx.close()
+    else:
+        abort(404)
+
+
+#search relative for a pet
+@edit_routes.route('/edit/pet/searchRelative', methods=['GET', 'POST'])
+def searchRelative():
+    #only response to post
+    if request.method == 'POST':
+        #only response to pet owner
+        if session.get('petId') is None:
+            return jsonify({'Result': 0})
+        pet_id = session['petId']
+        owner_id = session['userId']
+        #search all friends
+        searchQuery = 'SELECT applicant_id, receiver_id FROM user_relation WHERE (applicant_id = %s OR receiver_id = %s) AND friend_statue = %s'
+        #get all user info for friends options
+        userQuery = 'SELECT user_id, user_name, user_aura FROM user WHERE user_id IN (%s)'
+        try:
+            cnx = mysql.connector.connect(**config)
+            searchCursor = cnx.cursor()
+            searchCursor.execute(searchQuery, (owner_id, owner_id, 1))
+            options = searchCursor.fetchall()
+            combine = []
+            clean = []
+            #combine all ids
+            for o in options:
+                combine += o
+            #remove owner himself
+            for c in combine:
+                if c != owner_id:
+                    clean.append(c)
+            in_clean = ', '.join(list(map(lambda x: '%s', clean)))
+            #Get all user info
+            userQuery = userQuery % (in_clean)
+            userCursor = cnx.cursor(dictionary=True)
+            userCursor.execute(userQuery, clean)
+            users = userCursor.fetchall()
+            return jsonify({'Result': users})
+        except mysql.connector.Error as err:
+            print('Something went wrong: {}'.format(err))
+            return jsonify({'Result': 0})
+        finally:
+            searchCursor.close()
+            userCursor.close()
+            cnx.close()
+    else:
+        abort(404)
+
+
+#add relative for a pet
+@edit_routes.route('/edit/pet/addRelative', methods=['GET', 'POST'])
+def addRelative():
+    #only response to post
+    if request.method == 'POST':
+        #only response to pet owner
+        if session.get('petId') is None:
+            return jsonify({'Result': 0})
+        pet_id = session['petId']
+        owner_id = session['userId']
+        relative_id = request.form['choice']
+        #add relative id
+        addQuery = 'UPDATE pet SET relative_id = %s WHERE pet_id = %s AND owner_id = %s'
+        try:
+            cnx = mysql.connector.connect(**config)
+            addCursor = cnx.cursor()
+            addCursor.execute(addQuery, (relative_id, pet_id, owner_id))
+            cnx.commit()
+            session['otherId'] = relative_id;
+            return jsonify({'Result': 1})
+        except mysql.connector.Error as err:
+            cnx.rollback()
+            print('Something went wrong: {}'.format(err))
+            return jsonify({'Result': 0})
+        finally:
+            addCursor.close()
             cnx.close()
     else:
         abort(404)

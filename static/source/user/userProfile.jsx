@@ -150,7 +150,7 @@ class Profile extends Component {
                 <img style={profileImgStyle} alt={this.props.user.user_name} src={"/img/user/" + this.props.user.user_id + ".jpg"} />
                 <h1 style={profileNameStyle}>{this.props.user.user_name}</h1>
                 <h5 style={profileNameStyle}> - {this.props.user.user_about}</h5>
-                <h5 style={profileAuraStyle}>Aura: All pet +10% {noGetAbility(this.props.user.user_aura)}</h5>
+                <h5 style={profileAuraStyle}>Aura: Pets +10% {noGetAbility(this.props.user.user_aura)}</h5>
                 <h5 style={profileWatchStyle} onClick={this.beFriend.bind(this)}>{friend}</h5>
                 <h5 style={profileBorderStyle}>Relative:</h5>
                 {relatives}
