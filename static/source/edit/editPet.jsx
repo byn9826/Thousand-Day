@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import reqwest from "reqwest";
 import Updateprofile from "../snippet/button/Updateprofile";
 import Delmember from "../snippet/button/Delmember";
+import Confirmdel from "../snippet/button/Confirmdel";
 import Getlocation from "../snippet/display/Getlocation";
 import Inputbox from "../snippet/input/Inputbox";
 import noGetNature from "../../js/noGetNature.js";
@@ -19,8 +20,14 @@ class EditPet extends Component {
 			showTeam: false,
 			//store all friends info
 			friend: null,
-			prevFirst:null,
-			prevSecond:null
+			//use to restore companionFirst id
+			prevFirst: null,
+			//use to restore companionSecond id
+			prevSecond: null,
+			//use to restore is companion changed
+			change: false,
+			//if show end relation pop box
+			showEnd: true
 		};
 	}
 	//Update profile
@@ -34,7 +41,11 @@ class EditPet extends Component {
         	contentType: false,
         	processData: false,
 			success: function(result) {
-				if (result.Result === 1 && result.Result === 2 && result.Result === 3 && result.Result === 4) {
+				if (result.Result === 0) {
+					console.log("File not exist");
+				} else if (result.Result === 1) {
+					console.log("Wrong File Name");
+				} else if (result.Result === 3) {
 					console.log("Something Wrong");
 				} else {
 					console.log("Success");
@@ -47,24 +58,27 @@ class EditPet extends Component {
 	}
 	//Update new location
 	saveLocation(coordinate) {
-		reqwest({
-			url: "/edit/pet/updateLocation",
-			type: "json",
-			method: "POST",
-			contentType: "application/json",
-			headers: {"X-My-Custom-Header": "SomethingImportant"},
-			data: JSON.stringify({"location": coordinate}),
-			success: function(result) {
-				if (result.Result === 0) {
-					console.log("Success");
-				} else {
+		//Update only when coordinate changed
+		if (this.props.pet.location_lon != coordinate[0] || this.props.pet.location_lat != coordinate[1]) {
+			reqwest({
+				url: "/edit/pet/updateLocation",
+				type: "json",
+				method: "POST",
+				contentType: "application/json",
+				headers: {"X-My-Custom-Header": "SomethingImportant"},
+				data: JSON.stringify({"location": coordinate}),
+				success: function(result) {
+					if (result.Result === 0) {
+						console.log("Something Wrong");
+					} else if (result.Result === 1) {
+						console.log("Success!");
+					}
+				},
+				error: function (err) {
 					console.log("Something Wrong");
 				}
-			},
-			error: function (err) {
-				console.log("Something Wrong");
-			}
-		});
+			});
+		}
 	}
 	//Update pet name
 	saveName() {
@@ -77,6 +91,8 @@ class EditPet extends Component {
 				data: {"name": petName},
 				success: function(result) {
 					if (result.Result === 0) {
+						console.log("Not your pet or pet not exist");
+					} else if (result.Result === 1){
 						console.log("Success");
 						//Update name in record
 						this.setState({petName: petName});
@@ -119,8 +135,10 @@ class EditPet extends Component {
 			url: "/edit/pet/searchTeam",
 			method: "POST",
 			success: function(result) {
-				if (result.Result === 1) {
-					console.log("Something Wrong");
+				if (result.Result === 0) {
+					console.log("Something Wrong0");
+				} else if (result.Result === 1) {
+					console.log("Something Wrong1");
 				} else if (result.Result === 2) {
 					this.setState({friend: [], showTeam: true, prevFirst: this.state.companionFirst, prevSecond: this.state.companionSecond});
 				} else {
@@ -128,7 +146,7 @@ class EditPet extends Component {
 				}
 			}.bind(this),
 			error: function (err) {
-				console.log("Something Wrong");
+				console.log("Something Wrong3");
 			}
 		});
 	}
@@ -145,11 +163,14 @@ class EditPet extends Component {
 		} else if (this.state.friend[index].pet_id == this.state.companionSecond) {
 			this.setState({companionSecond: null});
 		}
+		if (!this.state.change) {
+			this.setState({change: true});
+		}
 	}
 	//Close popbox for choose team
 	closeTeam() {
 		//Only update when change made
-		if (this.state.prevFirst != this.state.companionFirst || this.state.prevSecond != this.state.companionFirst) {
+		if ((this.state.prevFirst != this.state.companionFirst || this.state.prevSecond != this.state.companionFirst) && this.state.change) {
 			reqwest({
 				url: "/edit/pet/updateTeam",
 				method: "POST",
@@ -157,20 +178,28 @@ class EditPet extends Component {
 				success: function(result) {
 					if (result.Result === 1) {
 						console.log("Something Wrong");
-						this.setState({companionFirst: prevFirst, companionSecond: prevSecond});
+						this.setState({companionFirst: this.state.prevFirst, companionSecond: this.state.prevSecond, change: false});
 					} else {
 						console.log("Success");
-						this.setState({showTeam: false});
+						this.setState({showTeam: false, change: false});
 					}
 				}.bind(this),
 				error: function (err) {
 					console.log("Something Wrong");
-					this.setState({companionFirst: prevFirst, companionSecond: prevSecond});
-				}
+					this.setState({companionFirst: this.state.prevFirst, companionSecond: this.state.prevSecond, change: false});
+				}.bind(this)
 			});
 		} else {
-			this.setState({showTeam: false});
+			this.setState({showTeam: false, change: false});
 		}
+	}
+	//open confirm end relationship box
+	endRelation() {
+		this.setState({showEnd: true});
+	}
+	//confirmed end relationship
+	confirmEnd() {
+		console.log(123);
 	}
 	render() {
 		let containerStyle = {
@@ -285,6 +314,34 @@ class EditPet extends Component {
 			paddingBottom: "10px",
 			textAlign: "center"
 		};
+		let popActionStyle = {
+			position: "absolute",
+			width: "45%",
+			top: "150px",
+			marginLeft: "25%",
+			backgroundColor: "white",
+			border: "1px solid black",
+			zIndex: "5",
+			borderRadius: "4px",
+			height: "280px",
+			paddingBottom: "10px",
+			textAlign: "center"
+		};
+		let actionTitleStyle = {
+			display: "block",
+			textAlign: "center",
+			marginTop: "20px",
+			fontWeight: "bold",
+			marginBottom: "20px"
+		};
+		let actionWarnStyle = {
+			display: "block",
+			width: "100%",
+			textAlign: "center",
+			padding: "10px 0",
+			backgroundColor: "#f9e84d",
+			marginBottom: "10px"
+		};
 		let teamActionStyle = {
 			display: "block",
 			width: "auto",
@@ -365,6 +422,7 @@ class EditPet extends Component {
 		let popFriend;
 		let popFirst;
 		let popSecond;
+		let popAction;
 		//Popup box show all pet friends
 		if (this.state.showTeam) {
 			popContainer = (<div style={containerPopStyle}></div>);
@@ -406,6 +464,17 @@ class EditPet extends Component {
 				</section>
 			);
 		}
+		//pop box for end relation
+		if (this.state.showEnd) {
+			popContainer = (<div style={containerPopStyle}></div>);
+			popAction = (
+				<section style={popActionStyle}>
+					<h4 style={actionTitleStyle}>Are you sure you want to end this relationship?</h4>
+					<h5 style={actionWarnStyle}>Once you end the relationship, you won't be able to resume it yourself.</h5>
+					<Confirmdel message="End Relationship" confirmDel={this.confirmEnd.bind(this)} fontFamily="'Rubik', sans-serif"/>
+				</section>
+			);
+		}
 		let ownership;
 		let ownerAction;
 		let transferAction;
@@ -419,7 +488,7 @@ class EditPet extends Component {
 			}
 		} else {
 			ownership = "You are the relative:";
-			ownerAction =(<h6 style={groupOwnerStyle}>End relation</h6>);
+			ownerAction =(<h6 style={groupOwnerStyle} onClick={this.endRelation.bind(this)}>End relation</h6>);
 		}
 		return (
 			<div style={containerStyle}>
@@ -436,7 +505,7 @@ class EditPet extends Component {
 							<h4 style={headerContentStyle}>Update Location</h4>
 						</header>
 						<div style={sectionMainStyle}>
-							<Getlocation center={[this.props.pet.location_lon, this.props.pet.location_lat]} zoom="10" setZoom="10" saveLocation={this.saveLocation.bind(this)} fontFamily="'Rubik', sans-serif" />
+							<Getlocation center={[this.props.pet.location_lon, this.props.pet.location_lat]} zoom="2" setZoom="2" saveLocation={this.saveLocation.bind(this)} fontFamily="'Rubik', sans-serif" />
 						</div>
 					</section>
 					<section style={mainSectionStyle}>
@@ -463,6 +532,7 @@ class EditPet extends Component {
 				<Footer />
 				{popContainer}
 				{popTeam}
+				{popAction}
 			</div>
 		);
 	}
@@ -473,9 +543,9 @@ reqwest({
 	data: {"id": window.location.pathname.split("/").pop()},
 	success: function(result) {
 		console.log(result);
-		if (result.Result === 1) {
+		if (result.Result === 0) {
 			console.log("Something Wrong");
-		} else if (result.Result === 2) {
+		} else if (result.Result === 1) {
 			console.log("Pet not belong to you or not exist");
 		} else {
 			ReactDOM.render(<EditPet pet={result[0]} userId={result[1]} />, document.getElementById("root"));

@@ -136,7 +136,7 @@ class About extends Component {
                 <h5 style={aboutDetailStyle}>Type: {noGetType(this.props.pet.pet_type)}</h5>
                 <h5 style={aboutDetailStyle}>Reg in hub: {new Date(this.props.pet.pet_reg).toISOString().substring(0, 10)}</h5>
                 <div style={aboutDetailStyle}>
-                    <Getlocation center={[this.props.pet.location_lon, this.props.pet.location_lat]} width="150" height="150" zoom="10" display="true" />
+                    <Getlocation center={[this.props.pet.location_lon, this.props.pet.location_lat]} width="150" height="150" zoom="2" display="true" />
                 </div>
                 <Team owner={this.props.owner} companion={this.props.companion} />
             </main>
