@@ -8,6 +8,7 @@ import Selectbox from "../snippet/box/Selectbox";
 import Getlocation from "../snippet/display/Getlocation";
 import Inputbox from "../snippet/input/Inputbox";
 import noGetAbility from "../../js/noGetAbility.js";
+import noGetSkillTitle from "../../js/noGetSkillTitle.js";
 import Header from "../general/Header";
 import Footer from "../general/Footer";
 class EditPet extends Component {
@@ -27,12 +28,24 @@ class EditPet extends Component {
 			showEnd: false,
 			//if show del relative pop box
 			showDel: false,
-			//for add and del update
+			//for add and del update relative id
 			relative: this.props.pet.relative_id || null,
 			//if show add relative pop box
 			showAdd: false,
 			//store all relative options
 			relOption: null,
+			//if show transfer ownership or not
+			showTrans: false,
+			//store trans relative info
+			transRelative: null,
+			//store owner id
+			owner_id: this.props.pet.owner_id,
+			//store all pet skill names 
+			skills: [this.props.pet.skillone_name, this.props.pet.skilltwo_name, this.props.pet.skillthree_name, this.props.pet.skillfour_name],
+			//indicate update skillname error
+			skillError: [0,0,0,0],
+			//indicate update name error
+			nameError: false
 		};
 	}
 	//Update profile
@@ -56,6 +69,72 @@ class EditPet extends Component {
 					console.log("Success");
 				}
 			},
+			error: function (err) {
+				console.log("Something Wrong");
+			}
+		});
+	}
+	//update skill images
+	savePic(num, url) {
+		let fileData = new FormData();
+		let name = (num + 1) + ".jpg";
+    	fileData.append("file", url, name);
+		reqwest({
+        	url: "/edit/pet/updatePic",
+        	method: "POST",
+         	data: fileData,
+        	contentType: false,
+        	processData: false,
+			success: function(result) {
+				if (result.Result === 0) {
+					console.log("Not your pet, or pet not exist");
+				} else if (result.Result === 1) {
+					console.log("File not exist");
+				} else if (result.Result === 2) {
+					console.log("File name is not correct");
+				} else if (result.Result === 3) {
+					console.log("Success");
+				} else if (result.Result === 4) {
+					console.log("Something Wrong");
+				} else if (result.Result === 5) {
+					console.log("File type not supported");
+				}
+			},
+			error: function (err) {
+				console.log("Something Wrong");
+			}
+		});
+	}
+	//init skill images for the first time
+	initPic(num, url) {
+		let fileData = new FormData();
+		let name = (num + 1) + ".jpg";
+    	fileData.append("file", url, name);
+		reqwest({
+        	url: "/edit/pet/initPic/" + num,
+        	method: "POST",
+         	data: fileData,
+        	contentType: false,
+        	processData: false,
+			success: function(result) {
+				if (result.Result === 0) {
+					console.log("Not your pet, or pet not exist");
+				} else if (result.Result === 1) {
+					console.log("File not exist");
+				} else if (result.Result === 2) {
+					console.log("File name is not correct");
+				} else if (result.Result === 3) {
+					let skills = this.state.skills;
+					skills[num] = "Unknow Skill";
+					this.setState({skills: skills});
+					//this.refs["petSkill" + num].setState({content: "Unknow Skill"});
+					console.log("Success");
+				} else if (result.Result === 4) {
+					console.log("Something Wrong");
+				} else if (result.Result === 5) {
+					console.log("File type not supported");
+				}
+			}.bind(this),
 			error: function (err) {
 				console.log("Something Wrong");
 			}
@@ -85,30 +164,82 @@ class EditPet extends Component {
 			});
 		}
 	}
-	//Update pet name
+	//Save skill name
+	saveSkill(num) {
+		let petSkill = this.refs["petSkill" + num].state.content.trim();
+		//update only when name changes, names large than 0, names exist before
+		if (petSkill != this.state.skills[num]) {
+			//only update when character exist
+			if (petSkill.length > 0) {
+				reqwest({
+					url: "/edit/pet/updateSkill",
+					method: "POST",
+					data: {"name": petSkill, "index": num},
+					success: function(result) {
+						if (result.Result === 0) {
+							this.refs["petSkill" + num].setState({content: this.state.skills[num]});
+							console.log("Not your pet or pet not exist");
+						} else if (result.Result === 1) {
+							console.log("Success");
+							let skills = this.state.skills;
+							skills[num] = petSkill;
+							//Update name in record, reset error message
+							this.setState({skills: skills, skillError: [0, 0, 0, 0]});
+						} else if (result.Result === 2) {
+							this.refs["petSkill" + num].setState({content: this.state.skills[num]});
+							console.log("Something Wrong");
+						}
+					}.bind(this),
+					error: function (err) {
+						this.refs["petSkill" + num].setState({content: this.state.skills[num]});
+						console.log("Something Wrong");
+					}.bind(this)
+				});
+			} else {
+				let error = this.state.skillError;
+				error[num] = 1;
+				//show error message
+				this.setState({skillError: error});
+				//roll back empty input
+				this.refs["petSkill" + num].setState({content: this.state.skills[num]});
+			}
+		}
+	}
+	//Save pet name
 	saveName() {
-		let petName = this.refs.petName.state.content;
+		let petName = this.refs.petName.state.content.trim();
 		//Update only when name changed
 		if (petName != this.state.petName) {
-			reqwest({
-				url: "/edit/pet/updateName",
-				method: "POST",
-				data: {"name": petName},
-				success: function(result) {
-					if (result.Result === 0) {
-						console.log("Not your pet or pet not exist");
-					} else if (result.Result === 1){
-						console.log("Success");
-						//Update name in record
-						this.setState({petName: petName});
-					} else {
+			//update only when name is not empty
+			if (petName.length > 0) {
+				reqwest({
+					url: "/edit/pet/updateName",
+					method: "POST",
+					data: {"name": petName},
+					success: function(result) {
+						if (result.Result === 0) {
+							this.refs.petName.setState({content: this.state.petName});
+							console.log("Not your pet or pet not exist");
+						} else if (result.Result === 1) {
+							console.log("Success");
+							//Update name in record
+							this.setState({petName: petName});
+						} else if (result.Result === 2) {
+							this.refs.petName.setState({content: this.state.petName});
+							console.log("Something Wrong");
+						}
+					}.bind(this),
+					error: function (err) {
+						this.refs.petName.setState({content: this.state.petName});
 						console.log("Something Wrong");
-					}
-				}.bind(this),
-				error: function (err) {
-					console.log("Something Wrong");
-				}
-			});
+					}.bind(this)
+				});
+			} else {
+				//roll back name
+				this.refs.petName.setState({content: this.state.petName});
+				//show error
+				this.setState({nameError: true});
+			}
 		}
 	}
 	//Remove a team member
@@ -201,6 +332,10 @@ class EditPet extends Component {
 	endRelation() {
 		this.setState({showEnd: true});
 	}
+	//close end relationship box
+	closeEnd() {
+		this.setState({showEnd: false});
+	}
 	//confirmed end relationship
 	confirmEnd() {
 		reqwest({
@@ -209,10 +344,10 @@ class EditPet extends Component {
 			success: function(result) {
 				if (result.Result === 0) {
 					console.log("Something Wrong");
-				} else {
-					window.location.replace("/user/" + result.Result);
+				} else if (result.Result === 1) {
+					window.location.replace("/user/" + this.props.userId);
 				}
-			},
+			}.bind(this),
 			error: function (err) {
 				console.log("Something Wrong");
 			}
@@ -221,6 +356,10 @@ class EditPet extends Component {
 	//Open delete a relative box
 	delRelative() {
 		this.setState({showDel: true});
+	}
+	//Close delete a relative box
+	closeDel() {
+		this.setState({showDel: false});
 	}
 	//confirm delete a relative
 	confirmDel() {
@@ -288,6 +427,48 @@ class EditPet extends Component {
 		}
 		this.setState({showAdd: false});
 	}
+	//show trans owner pop box
+	transOwner() {
+		reqwest({
+			url: "/edit/pet/showRelative",
+			method: "POST",
+			success: function(result) {
+				if (result.Result === 0) {
+					console.log("This pet doesn't belongs to you");
+				} else if (result.Result === 1) {
+					console.log("Relative not exist")
+				} else {
+					this.setState({showTrans: true, transRelative: result.Result});
+				}
+			}.bind(this),
+			error: function (err) {
+				console.log("Something Wrong");
+			}
+		});
+	}
+	//close show trans pop box
+	closeTrans() {
+		this.setState({showTrans: false});
+	}
+	//Confirm transfer ownership
+	confirmTrans() {
+		reqwest({
+			url: "/edit/pet/transOwner",
+			method: "POST",
+			success: function(result) {
+				if (result.Result === 0) {
+					console.log("This pet doesn't belongs to you");
+				} else if (result.Result === 1) {
+					let relative = this.state.relative;
+					//transfer owner and relative
+					this.setState({showTrans: false, owner_id: relative, transRelative: null});
+				}
+			}.bind(this),
+			error: function (err) {
+				console.log("Something Wrong");
+			}
+		});
+	}
 	render() {
 		let containerStyle = {
 			display: "block",
@@ -297,14 +478,14 @@ class EditPet extends Component {
 			display: "block",
 			width: "80%",
 			marginLeft: "10%",
-			paddingTop: "120px",
+			paddingTop: "80px",
 		};
 		let mainSectionStyle = {
 			display: "inline-block",
 			verticalAlign: "top",
 			width: "240px",
-			marginRight: "30px",
-			marginBottom: "20px",
+			marginRight: "25px",
+			marginBottom: "60px",
             borderBottom: "1px solid #e5e5e5",
             borderRadius: "10px",
             boxShadow: "2px 2px 1px #e5e5e5"
@@ -361,6 +542,10 @@ class EditPet extends Component {
             borderRadius: "3px",
 			outline: "none",
         };
+		let namePositionStyle = {
+			display: "block",
+			height: "45px"
+		};
 		let groupTitleStyle = {
 			display: "block",
 			color: "#ef8513",
@@ -406,6 +591,19 @@ class EditPet extends Component {
 			paddingBottom: "10px",
 			textAlign: "center"
 		};
+		let popTransStyle = {
+			position: "absolute",
+			width: "45%",
+			top: "150px",
+			marginLeft: "25%",
+			backgroundColor: "white",
+			border: "1px solid black",
+			zIndex: "5",
+			borderRadius: "4px",
+			height: "320px",
+			paddingBottom: "10px",
+			textAlign: "center"
+		};
 		let actionTitleStyle = {
 			display: "block",
 			textAlign: "center",
@@ -429,6 +627,46 @@ class EditPet extends Component {
 			borderRadius: "3px",
 			cursor: "pointer",
 			marginRight: "2%"
+		};
+		let actionCloseStyle = {
+			float: "right",
+			verticalAlign: "middle",
+			marginRight: "3%",
+			color: "black",
+			cursor: "pointer",
+			fontWeight: "bold"
+		};
+		let actionProfileStyle = {
+			display: "block",
+			textAlign: "center",
+			width: "50px",
+			marginBottom: "15px",
+			marginLeft: "45%",
+			borderRadius: "25px"
+		};
+		let mainHeaderStyle = {
+			display: "block",
+			width: "100%",
+			marginBottom: "60px",
+			textAlign: "left"
+		};
+		let headerUserStyle = {
+			display: "inline-block",
+			verticalAlign: "middle",
+			fontWeight: "bold",
+			backgroundColor: "black",
+			padding: "5px 2%",
+			color: "white",
+			borderRadius: "5px 0px 0px 5px"
+		};
+		let headerPetStyle = {
+			display: "inline-block",
+			verticalAlign: "middle",
+			fontWeight: "bold",
+			backgroundColor: "#ef8513",
+			padding: "5px 2%",
+			color: "white",
+			borderRadius: "0px 5px 5px 0"
 		};
 		//Display first companion when exist
 		let firstCompanion;
@@ -470,6 +708,7 @@ class EditPet extends Component {
 			popContainer = (<div style={containerPopStyle}></div>);
 			popAction = (
 				<section style={popActionStyle}>
+					<h5 style={actionCloseStyle} onClick={this.closeEnd.bind(this)}>✗</h5>
 					<h4 style={actionTitleStyle}>Are you sure you want to end this relationship?</h4>
 					<h5 style={actionWarnStyle}>Once you end the relationship, you won't be able to resume it yourself.</h5>
 					<Confirmdel message="End Relationship" confirmDel={this.confirmEnd.bind(this)} fontFamily="'Rubik', sans-serif"/>
@@ -479,20 +718,32 @@ class EditPet extends Component {
 			popContainer = (<div style={containerPopStyle}></div>);
 			popAction = (
 				<section style={popActionStyle}>
+					<h5 style={actionCloseStyle} onClick={this.closeDel.bind(this)}>✗</h5>
 					<h4 style={actionTitleStyle}>Are you sure you want to delete this relative?</h4>
 					<h5 style={actionWarnStyle}>Once you delete a relative, he/she won't be able to resume it himself/herself.</h5>
 					<Confirmdel message="Delete Relative" confirmDel={this.confirmDel.bind(this)} fontFamily="'Rubik', sans-serif"/>
+				</section>
+			);
+		} else if (this.state.showTrans) {
+			popContainer = (<div style={containerPopStyle}></div>);
+			popAction = (
+				<section style={popTransStyle}>
+					<h5 style={actionCloseStyle} onClick={this.closeTrans.bind(this)}>✗</h5>
+					<h4 style={actionTitleStyle}>Are you sure you want to transfer ownership to {this.state.transRelative.user_name}?</h4>
+					<img style={actionProfileStyle} alt={this.state.transRelative.user_name} src={"/img/user/" + this.state.transRelative.user_id + ".jpg" }/>
+					<h5 style={actionWarnStyle}>Once you transfer your ownership, you won't be able to resume it by yourself.</h5>
+					<Confirmdel message="Transfer Ownership" confirmDel={this.confirmTrans.bind(this)} fontFamily="'Rubik', sans-serif"/>
 				</section>
 			);
 		}
 		let ownership;
 		let ownerAction;
 		let transferAction;
-		if (this.props.userId === this.props.pet.owner_id) {
+		if (this.props.userId === this.state.owner_id) {
 			ownership = "You are the owner:";
 			if (this.state.relative) {
 				ownerAction = (<h6 style={groupOwnerStyle} onClick={this.delRelative.bind(this)}>Delete Relative</h6>);
-				transferAction = (<h6 style={groupOwnerStyle}>Transfer ownership</h6>);
+				transferAction = (<h6 style={groupOwnerStyle} onClick={this.transOwner.bind(this)}>Transfer ownership</h6>);
 			} else {
 				ownerAction = (<h6 style={groupOwnerStyle} onClick={this.addRelative.bind(this)}>Add Relative</h6>);
 			}
@@ -502,30 +753,65 @@ class EditPet extends Component {
 				<h6 style={groupOwnerStyle} onClick={this.endRelation.bind(this)}>End relation</h6>
 			);
 		}
+		//display four skills
+		let skills = [];
+		for (let i = 0; i < 4; i++) {
+			let skillName, skillButton, skillInput;
+			if (this.state.skillError[i] === 1 && this.state.skills[i] ) {
+				skillName = "Name can't be empty";
+				skillButton = (
+					<input type="button" style={nameFontStyle} value="Save" onClick={this.saveSkill.bind(this, i)} />
+				);
+				skillInput = <Inputbox id={"pet-skill-" + i} ref={"petSkill" + i} content={this.state.skills[i]?this.state.skills[i]:""} max="16" width="100%" fontFamily="'Rubik', sans-serif" />
+			} else if (!this.state.skills[i]) {
+				//hide update name button when skill not init
+				skillName = "Please Upload Skill Image First";
+				skillButton = (
+					<div style={namePositionStyle}></div>
+				)
+			} else {
+				skillName = "Skill Name";
+				skillButton = (
+					<input type="button" style={nameFontStyle} value="Save" onClick={this.saveSkill.bind(this, i)} />
+				);
+				skillInput = <Inputbox id={"pet-skill-" + i} ref={"petSkill" + i} content={this.state.skills[i]?this.state.skills[i]:""} max="16" width="100%" fontFamily="'Rubik', sans-serif" />
+			}
+			skills[i] = (
+				<section key={"petskill" + i} style={mainSectionStyle}>
+					<header style={sectionHeaderStyle}>
+						<h4 style={headerContentStyle}>Update {noGetSkillTitle(i)} Skill</h4>
+					</header>
+					<div style={rightGroupStyle}>
+						<label style={nameLabelStyle} htmlFor={"pet-skill-" + i}>
+							{skillName}
+						</label>
+						{skillButton}
+						{skillInput}
+					</div>
+					<Updateprofile alt={"pet skills " + i} src={this.state.skills[i]?"/img/pet/" + this.props.pet.pet_id + "/cover/" + (i + 1) + ".jpg":"/img/icon/skill.jpg"} width="104" format="image/jpg" saveProfile={this.state.skills[i]?this.savePic.bind(this, i):this.initPic.bind(this, i)} fontFamily="'Rubik', sans-serif" />
+				</section>
+			)
+		}
+		let petName;
+		if (this.state.nameError) {
+			petName = "Name can't be empty";
+		} else {
+			petName = "Pet Name:";
+		}
 		return (
 			<div style={containerStyle}>
 				<Header />
 				<main style={containerMainStyle}>
-					<section style={mainSectionStyle}>
-						<header style={sectionHeaderStyle}>
-							<h4 style={headerContentStyle}>Update Profile</h4>
-						</header>
-						<Updateprofile src={"/img/pet/" + this.props.pet.pet_id + "/cover/0.png"} width="200" saveProfile={this.saveProfile.bind(this)} fontFamily="'Rubik', sans-serif" />
-					</section>
-					<section style={mainSectionStyle}>
-						<header style={sectionHeaderStyle}>
-							<h4 style={headerContentStyle}>Update Location</h4>
-						</header>
-						<div style={sectionMainStyle}>
-							<Getlocation center={[this.props.pet.location_lon, this.props.pet.location_lat]} zoom="2" setZoom="2" saveLocation={this.saveLocation.bind(this)} fontFamily="'Rubik', sans-serif" />
-						</div>
+					<section style={mainHeaderStyle}>
+						<h4 style={headerUserStyle}><a href={"/user/" + this.props.userId}>« Back to digital home</a></h4>
+						<h4 style={headerPetStyle}><a href={"/pet/" + this.props.pet.pet_id}>Back to pet hub »</a></h4>
 					</section>
 					<section style={mainSectionStyle}>
 						<header style={sectionHeaderStyle}>
 							<h4 style={headerContentStyle}>Update Group</h4>
 						</header>
 						<div style={rightGroupStyle}>
-							<label style={nameLabelStyle} htmlFor="pet-name">Pet Name:</label>
+							<label style={nameLabelStyle} htmlFor="pet-name">{petName}</label>
 							<input type="button" style={nameFontStyle} value="Save" onClick={this.saveName.bind(this)} />
 							<Inputbox id="pet-name" ref="petName" content={this.state.petName} max="10" width="100%" fontFamily="'Rubik', sans-serif" />
 						</div>
@@ -540,6 +826,21 @@ class EditPet extends Component {
 							{transferAction}
 						</div>
 					</section>
+					<section style={mainSectionStyle}>
+						<header style={sectionHeaderStyle}>
+							<h4 style={headerContentStyle}>Update Profile</h4>
+						</header>
+						<Updateprofile src={"/img/pet/" + this.props.pet.pet_id + "/cover/0.png"} width="200" saveProfile={this.saveProfile.bind(this)} fontFamily="'Rubik', sans-serif" />
+					</section>
+					<section style={mainSectionStyle}>
+						<header style={sectionHeaderStyle}>
+							<h4 style={headerContentStyle}>Update Location</h4>
+						</header>
+						<div style={sectionMainStyle}>
+							<Getlocation center={[this.props.pet.location_lon, this.props.pet.location_lat]} zoom="2" setZoom="2" saveLocation={this.saveLocation.bind(this)} fontFamily="'Rubik', sans-serif" />
+						</div>
+					</section>
+					{skills}
 				</main>
 				<Footer />
 				{popContainer}

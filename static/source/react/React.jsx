@@ -33,9 +33,7 @@ class Reactui extends Component {
 					<h2>A list of React UI components</h2>
 					<h3>
 						<b>Install:</b><br />
-						npm install thousanday-react<br /><br />
-						<b>Webpack Config Required:</b><br />
-						url-loader - <a style={webpackConfig} href="https://github.com/byn9826/Thousanday-React/blob/master/README.md#prerequisite---webpack-config">Example</a>
+						npm install thousanday-react<br />
 					</h3>
 					<a className = "github-button" href = "https://github.com/byn9826/thousanday-react" data-style = "mega" aria-label = "Star byn9826/thousanday-react on GitHub">Star</a>
 					<section>

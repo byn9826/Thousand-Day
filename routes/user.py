@@ -76,14 +76,19 @@ def userView():
             petsCursor = cnx.cursor(dictionary=True)
             petsCursor.execute(petsQuery, (current_id, current_id))
             pets = petsCursor.fetchall()
-            #Get all moments
-            all_id = [x['pet_id'] for x in pets]
-            all_id = list(set(all_id))
-            ids = ', '.join(list(map(lambda x: '%s', all_id)))
-            momentsQuery = momentsQuery % (ids)
-            momentsCursor = cnx.cursor(dictionary=True)
-            momentsCursor.execute(momentsQuery, all_id)
-            moments = momentsCursor.fetchall()
+            #must have pets
+            if len(pets) != 0:
+                #Get all moments
+                all_id = [x['pet_id'] for x in pets]
+                all_id = list(set(all_id))
+                ids = ', '.join(list(map(lambda x: '%s', all_id)))
+                momentsQuery = momentsQuery % (ids)
+                momentsCursor = cnx.cursor(dictionary=True)
+                momentsCursor.execute(momentsQuery, all_id)
+                moments = momentsCursor.fetchall()
+                momentsCursor.close()
+            else:
+                moments = []
             if session.get('userId') is not None:
                 result = [user, relative, relations, pets, moments, session['userId']]
             else:
@@ -96,7 +101,6 @@ def userView():
             userCursor.close()
             relativeCursor.close()
             petsCursor.close()
-            momentsCursor.close()
             cnx.close()
     else:
         abort(404)

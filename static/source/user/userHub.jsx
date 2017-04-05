@@ -158,77 +158,86 @@ class Profile extends Component {
         };
         //Show all pets
         let pets;
-        if (this.props.visitorId == this.props.user.user_id) {
-            pets = this.props.pet.map((pet, index) =>
-                <div key={"petdetail" + index} style={hubPetStyle}>
-                    <a href={"/pet/" + pet.pet_id}>
-                        <img style={petImgStyle} alt={pet.pet_name} src={"/img/pet/" + pet.pet_id + "/cover/0.png"} />
-                    </a>
-                    <div style={petInfoStyle}>
-                        <Ovaledit value="Edit" href={"/edit/pet/" + pet.pet_id} />
-                        <div style={infoLineStyle}>
-                            <h6 style={lineTypeStyle}>{noGetType(pet.pet_type)}</h6>
-                            <a href={"/pet/" + pet.pet_id}><h5 style={lineNameStyle}>{pet.pet_name}</h5></a>
-                            <h6 style={lineGenderStyle}>{noGetGender(pet.pet_gender)} {noGetNature(pet[4])}</h6>
-                        </div>
-                        <div style={infoLineStyle}>
-                            <div style={lineAbilityStyle}>
-                                <img style={abilityImgStyle} alt="ability-icon" src="/img/icon/glyphicons-ability.png" />
-                                <h6 style={abilityFontStyle}>
-                                    Ability: {pet.pet_ability}<br />
-                                </h6>
-                            </div>
-                            <div style={lineAbilityStyle}>
-                                <img style={abilityImgStyle} alt="ability-icon" src="/img/icon/glyphicons-moment.png" />
-                                <h6 style={abilityFontStyle}>
-                                    Potential: {pet.pet_potential}<br />
-                                </h6>
-                            </div>
-                            <div style={lineAbilityStyle}>
-                                <img style={abilityImgStyle} alt="ability-icon" src="/img/icon/glyphicons-win.png" />
-                                <h6 style={abilityFontStyle}>
-                                    Win: {pet.pet_win}<br />
-                                </h6>
-                            </div>
-                        </div>
-                    </div>
+        //if not pets right now
+        if (this.props.pet.length === 0) {
+            pets = (
+                <div style={hubPetStyle}>
+                    <h6>No pets right now ...</h6>
                 </div>
-            );
+            )
         } else {
-            pets = this.props.pet.map((pet, index) =>
-                <div key={"petdetail" + index} style={hubPetStyle}>
-                    <a href={"/pet/" + pet.pet_id}>
-                        <img style={petImgStyle} alt={pet.pet_name} src={"/img/pet/" + pet.pet_id + "/cover/0.png"} />
-                    </a>
-                    <div style={petInfoStyle}>
-                        <div style={infoLineStyle}>
-                            <h6 style={lineTypeStyle}>{noGetType(pet.pet_type)}</h6>
-                            <a href={"/pet/" + pet.pet_id}><h5 style={lineNameStyle}>{pet.pet_name}</h5></a>
-                            <h6 style={lineGenderStyle}>{noGetGender(pet.pet_gender)} {noGetNature(pet[4])}</h6>
-                        </div>
-                        <div style={infoLineStyle}>
-                            <div style={lineAbilityStyle}>
-                                <img style={abilityImgStyle} alt="ability-icon" src="/img/icon/glyphicons-ability.png" />
-                                <h6 style={abilityFontStyle}>
-                                    Ability: {pet.pet_ability}<br />
-                                </h6>
+            if (this.props.visitorId == this.props.user.user_id) {
+                pets = this.props.pet.map((pet, index) =>
+                    <div key={"petdetail" + index} style={hubPetStyle}>
+                        <a href={"/pet/" + pet.pet_id}>
+                            <img style={petImgStyle} alt={pet.pet_name} src={"/img/pet/" + pet.pet_id + "/cover/0.png"} />
+                        </a>
+                        <div style={petInfoStyle}>
+                            <Ovaledit value="Edit" href={"/edit/pet/" + pet.pet_id} />
+                            <div style={infoLineStyle}>
+                                <h6 style={lineTypeStyle}>{noGetType(pet.pet_type)}</h6>
+                                <a href={"/pet/" + pet.pet_id}><h5 style={lineNameStyle}>{pet.pet_name}</h5></a>
+                                <h6 style={lineGenderStyle}>{noGetGender(pet.pet_gender)} {noGetNature(pet[4])}</h6>
                             </div>
-                            <div style={lineAbilityStyle}>
-                                <img style={abilityImgStyle} alt="ability-icon" src="/img/icon/glyphicons-moment.png" />
-                                <h6 style={abilityFontStyle}>
-                                    Potential: {pet.pet_potential}<br />
-                                </h6>
-                            </div>
-                            <div style={lineAbilityStyle}>
-                                <img style={abilityImgStyle} alt="ability-icon" src="/img/icon/glyphicons-win.png" />
-                                <h6 style={abilityFontStyle}>
-                                    Win: {pet.pet_win}<br />
-                                </h6>
+                            <div style={infoLineStyle}>
+                                <div style={lineAbilityStyle}>
+                                    <img style={abilityImgStyle} alt="ability-icon" src="/img/icon/glyphicons-ability.png" />
+                                    <h6 style={abilityFontStyle}>
+                                        Ability: {pet.pet_ability}<br />
+                                    </h6>
+                                </div>
+                                <div style={lineAbilityStyle}>
+                                    <img style={abilityImgStyle} alt="ability-icon" src="/img/icon/glyphicons-moment.png" />
+                                    <h6 style={abilityFontStyle}>
+                                        Potential: {pet.pet_potential}<br />
+                                    </h6>
+                                </div>
+                                <div style={lineAbilityStyle}>
+                                    <img style={abilityImgStyle} alt="ability-icon" src="/img/icon/glyphicons-win.png" />
+                                    <h6 style={abilityFontStyle}>
+                                        Win: {pet.pet_win}<br />
+                                    </h6>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            );
+                );
+            } else {
+                pets = this.props.pet.map((pet, index) =>
+                    <div key={"petdetail" + index} style={hubPetStyle}>
+                        <a href={"/pet/" + pet.pet_id}>
+                            <img style={petImgStyle} alt={pet.pet_name} src={"/img/pet/" + pet.pet_id + "/cover/0.png"} />
+                        </a>
+                        <div style={petInfoStyle}>
+                            <div style={infoLineStyle}>
+                                <h6 style={lineTypeStyle}>{noGetType(pet.pet_type)}</h6>
+                                <a href={"/pet/" + pet.pet_id}><h5 style={lineNameStyle}>{pet.pet_name}</h5></a>
+                                <h6 style={lineGenderStyle}>{noGetGender(pet.pet_gender)} {noGetNature(pet[4])}</h6>
+                            </div>
+                            <div style={infoLineStyle}>
+                                <div style={lineAbilityStyle}>
+                                    <img style={abilityImgStyle} alt="ability-icon" src="/img/icon/glyphicons-ability.png" />
+                                    <h6 style={abilityFontStyle}>
+                                        Ability: {pet.pet_ability}<br />
+                                    </h6>
+                                </div>
+                                <div style={lineAbilityStyle}>
+                                    <img style={abilityImgStyle} alt="ability-icon" src="/img/icon/glyphicons-moment.png" />
+                                    <h6 style={abilityFontStyle}>
+                                        Potential: {pet.pet_potential}<br />
+                                    </h6>
+                                </div>
+                                <div style={lineAbilityStyle}>
+                                    <img style={abilityImgStyle} alt="ability-icon" src="/img/icon/glyphicons-win.png" />
+                                    <h6 style={abilityFontStyle}>
+                                        Win: {pet.pet_win}<br />
+                                    </h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
         }
         let allImages = [];
         for (let i = 0; i < this.state.moment.length; i++) {

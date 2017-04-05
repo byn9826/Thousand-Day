@@ -15,7 +15,7 @@ config = secret.mysql()
 @edit_routes.route('/edit/pet/<int:id>')
 def petHome(id):
     #for test remove later
-    session['userId'] = 2
+    session['userId'] = 1
     #user must login
     if session.get('userId') is None:
         abort(404)
@@ -107,6 +107,105 @@ def petProfile():
          abort(404)
 
 
+#Allow jpg for skill picture
+ALLOWED_PIC = set(['jpg'])
+def allowed_pic(filename):
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in ALLOWED_PIC
+
+
+#Update skill pictures in JPG format
+@edit_routes.route('/edit/pet/updatePic', methods=['GET', 'POST'])
+def skillPic():
+    #only response to post request
+    if request.method == 'POST':
+        #only response to user own this pet
+        if session.get('petId') is None:
+            return jsonify({'Result': 0})
+        #file must exist
+        if 'file' not in request.files:
+            return jsonify({'Result': 1})
+        file = request.files['file']
+        #check preset file name
+        if file.filename not in ['1.jpg', '2.jpg', '3.jpg', '4.jpg']:
+            return jsonify({'Result': 2})
+        #check file format
+        if file and allowed_pic(file.filename):
+            filename = secure_filename(file.filename)
+            fold_path = '../static/img/pet/' + session['petId'] + '/cover/'
+            try:
+                #save profile image
+                file.save( os.path.join(os.path.dirname(os.path.abspath(__file__)), fold_path, filename))
+                return jsonify({'Result': 3})
+            except Exception as err:
+                print('Something went wrong: {}'.format(err))
+                return jsonify({'Result': 4})
+        else:
+            return jsonify({'Result': 5})
+    else:
+         abort(404)
+
+
+#Update skill pictures and namefor the first time
+@edit_routes.route('/edit/pet/initPic/<int:num>', methods=['GET', 'POST'])
+def skillInit(num):
+    #only response to post request
+    if request.method == 'POST':
+        #only response to user own this pet
+        if session.get('petId') is None:
+            return jsonify({'Result': 0})
+        #file must exist
+        if 'file' not in request.files:
+            return jsonify({'Result': 1})
+        file = request.files['file']
+        #check preset file name
+        if file.filename not in ['1.jpg', '2.jpg', '3.jpg', '4.jpg']:
+            return jsonify({'Result': 2})
+        #check file format
+        if file and allowed_pic(file.filename):
+            filename = secure_filename(file.filename)
+            fold_path = '../static/img/pet/' + session['petId'] + '/cover/'
+            try:
+                #save profile image
+                file.save( os.path.join(os.path.dirname(os.path.abspath(__file__)), fold_path, filename))
+                user_id = session['userId']
+                pet_id = session['petId']
+                skill_name = 'Unknow Skill'
+                skill_index = num
+                #match the right row
+                if skill_index == 0:
+                    nameQuery = 'UPDATE pet SET skillone_name = %s WHERE pet_id = %s AND (owner_id = %s OR relative_id = %s) AND skillone_name is %s'
+                elif skill_index == 1:
+                    nameQuery = 'UPDATE pet SET skilltwo_name = %s WHERE pet_id = %s AND (owner_id = %s OR relative_id = %s) AND skilltwo_name is %s'
+                elif skill_index == 2:
+                    nameQuery = 'UPDATE pet SET skillthree_name = %s WHERE pet_id = %s AND (owner_id = %s OR relative_id = %s) AND skillthree_name is %s'
+                elif skill_index == 3:
+                    nameQuery = 'UPDATE pet SET skillfour_name = %s WHERE pet_id = %s AND (owner_id = %s OR relative_id = %s) AND skillfour_name is %s'
+                try:
+                    cnx = mysql.connector.connect(**config)
+                    nameCursor = cnx.cursor()
+                    nameCursor.execute(nameQuery, (skill_name, pet_id, user_id, user_id, None))
+                    cnx.commit()
+                    if nameCursor.rowcount == 1:
+                        return jsonify({'Result': 3})
+                    else:
+                        return jsonify({'Result': 4})
+                except mysql.connector.Error as err:
+                    cnx.rollback()
+                    print('Something went wrong: {}'.format(err))
+                    return jsonify({'Result': 4})
+                finally:
+                    nameCursor.close()
+                    cnx.close()
+            except Exception as err:
+                print('Something went wrong: {}'.format(err))
+                return jsonify({'Result': 4})
+        else:
+            return jsonify({'Result': 5})
+    else:
+         abort(404)
+
+
 #Update location
 @edit_routes.route('/edit/pet/updateLocation', methods=['GET', 'POST'])
 def petLocation():
@@ -141,13 +240,16 @@ def petLocation():
 #Update pet name
 @edit_routes.route('/edit/pet/updateName', methods=['GET', 'POST'])
 def petName():
+    #only response to post
     if request.method == 'POST':
         #only response to pet owner
         if session.get('petId') is None:
             return jsonify({'Result': 0})
         user_id = session['userId']
         pet_id = session['petId']
-        pet_name = request.form['name']
+        pet_name = request.form['name'][:10]
+        if not pet_name:
+            return jsonify({'Result': 2})
         #update pet name
         nameQuery = 'UPDATE pet SET pet_name = %s WHERE pet_id = %s AND (owner_id = %s OR relative_id = %s)'
         try:
@@ -158,8 +260,52 @@ def petName():
             return jsonify({'Result': 1})
         except mysql.connector.Error as err:
             cnx.rollback()
-            return jsonify({'Result': 2})
             print('Something went wrong: {}'.format(err))
+            return jsonify({'Result': 2})
+        finally:
+            nameCursor.close()
+            cnx.close()
+    else:
+        abort(404)
+
+
+
+#Update pet skill name
+@edit_routes.route('/edit/pet/updateSkill', methods=['GET', 'POST'])
+def petSkill():
+    #only response to post
+    if request.method == 'POST':
+        #only response to pet owner
+        if session.get('petId') is None:
+            return jsonify({'Result': 0})
+        user_id = session['userId']
+        pet_id = session['petId']
+        skill_name = request.form['name'][:16]
+        skill_index = int(request.form['index'])
+        if not skill_name:
+            return jsonify({'Result': 2})
+        #match the right row
+        if skill_index == 0:
+            nameQuery = 'UPDATE pet SET skillone_name = %s WHERE pet_id = %s AND (owner_id = %s OR relative_id = %s) AND skillone_name is not %s'
+        elif skill_index ==1:
+            nameQuery = 'UPDATE pet SET skilltwo_name = %s WHERE pet_id = %s AND (owner_id = %s OR relative_id = %s) AND skilltwo_name is not %s'
+        elif skill_index ==2:
+            nameQuery = 'UPDATE pet SET skillthree_name = %s WHERE pet_id = %s AND (owner_id = %s OR relative_id = %s) AND skillthree_name is not %s'
+        elif skill_index ==3:
+            nameQuery = 'UPDATE pet SET skillfour_name = %s WHERE pet_id = %s AND (owner_id = %s OR relative_id = %s) AND skillfour_name is not %s'
+        try:
+            cnx = mysql.connector.connect(**config)
+            nameCursor = cnx.cursor()
+            nameCursor.execute(nameQuery, (skill_name, pet_id, user_id, user_id, None))
+            cnx.commit()
+            if nameCursor.rowcount == 1:
+                return jsonify({'Result': 1})
+            else:
+                return jsonify({'Result': 2})
+        except mysql.connector.Error as err:
+            cnx.rollback()
+            print('Something went wrong: {}'.format(err))
+            return jsonify({'Result': 2})
         finally:
             nameCursor.close()
             cnx.close()
@@ -313,8 +459,7 @@ def endRelation():
             cnx.commit()
             #remove pet session
             session['petId'] = None
-            #return user id for redirect
-            return jsonify({'Result': user_id})
+            return jsonify({'Result': 1})
         except mysql.connector.Error as err:
             cnx.rollback()
             print('Something went wrong: {}'.format(err))
@@ -428,6 +573,65 @@ def addRelative():
             return jsonify({'Result': 0})
         finally:
             addCursor.close()
+            cnx.close()
+    else:
+        abort(404)
+
+
+#search relative information
+@edit_routes.route('/edit/pet/showRelative', methods = ['GET', 'POST'])
+def showRelative():
+    if request.method == 'POST':
+        #only response to pet owner
+        if session.get('petId') is None:
+            return jsonify({'Result': 0})
+        #find relative info
+        relative_id = session['otherId']
+        relativeQuery = 'SELECT user_id, user_name FROM user WHERE user_id = %s'
+        try:
+            cnx = mysql.connector.connect(**config)
+            relativeCursor = cnx.cursor(dictionary=True)
+            relativeCursor.execute(relativeQuery, (relative_id, ))
+            relative = relativeCursor.fetchone()
+            #If relative not exist
+            if not relative:
+                return jsonify({'Result': 1})
+            return jsonify({'Result': relative})
+        except mysql.connector.Error as err:
+            print('Something went wrong: {}'.format(err))
+            return jsonify({'Result': 0})
+        finally:
+            relativeCursor.close()
+            cnx.close()
+    else:
+        abort(404)
+
+
+#transfer owner ship for a pet
+@edit_routes.route('/edit/pet/transOwner', methods=['GET', 'POST'])
+def transOwner():
+    #only response to post
+    if request.method == 'POST':
+        #only response to pet owner
+        if session.get('petId') is None:
+            return jsonify({'Result': 0})
+        pet_id = session['petId']
+        owner_id = session['userId']
+        relative_id = session['otherId']
+        #transfer roles
+        transQuery = 'UPDATE pet SET owner_id = %s, relative_id = %s WHERE owner_id = %s AND relative_id = %s AND pet_id = %s'
+        try:
+            cnx = mysql.connector.connect(**config)
+            transCursor = cnx.cursor()
+            transCursor.execute(transQuery, (relative_id, owner_id, owner_id, relative_id, pet_id))
+            cnx.commit()
+            return jsonify({'Result': 1})
+        except mysql.connector.Error as err:
+            cnx.rollback()
+            print('Something went wrong: {}'.format(err))
+            return jsonify({'Result': 0})
+        finally:
+            transCursor.close()
             cnx.close()
     else:
         abort(404)
