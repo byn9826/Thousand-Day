@@ -6,7 +6,8 @@ class Header extends Component {
 	constructor(props) {
         super(props);
 		this.state = {
-            loginName: "login"
+            loginName: "login",
+			showDrop: false
 		};
 	}
 	googleLogin(user) {
@@ -14,6 +15,9 @@ class Header extends Component {
     }
 	fLogin(response) {
         console.log(response);
+	}
+	showDrop() {
+		this.setState({showDrop: !this.state.showDrop});
 	}
 	render () {
     	let headerStyle = {
@@ -40,7 +44,8 @@ class Header extends Component {
 		};
 		let headerLoginStyle = {
 			float: "right",
-			marginRight: "10%"
+			marginRight: "10%",
+			cursor: "pointer"
 		};
 		let loginTitleStyle = {
 			display: "inline-block",
@@ -49,32 +54,46 @@ class Header extends Component {
 		let loginIconStyle = {
 			display: "inline-block",
 			verticalAlign: "middle",
-			height: "10px",
+			height: "6px",
 			marginLeft: "10px"
 		};
 		let loginDropStyle = {
 			position: "fixed",
 			top: "50px",
-			height: "50px",
-			width: "30%",
-			backgroundColor: "gray"
+			width: "224px",
+			textAlign: "center",
+			padding: "10px 0",
+			right: "10%",
+			backgroundColor: "white",
+			border: "1px solid #f7d7b4",
+			boxShadow: "0 6px 12px rgba(0, 0, 0, 0.2)",
+			marginTop: "3px",
+			borderRadius: "5px"
 		};
 		let randomContent = [
 			"The site is still under development",
-			"Your pets and you"
+			//"Your pets and you",
+			//"Meet with love",
+			//"Share your cutes"
 		];
+		let drop;
+		if (this.state.showDrop) {
+			drop = (
+				<div style={loginDropStyle}>
+					<Googlelogin gLogin={this.googleLogin.bind(this)} clientId="168098850234-fsq84pk4cae97mlj0k464joc21cgqjvv.apps.googleusercontent.com" width="200px" />
+					<Facebooklogin clientId="447688265576125" fLogin={this.fLogin.bind(this)} width="194px" />
+				</div>
+			)
+		}
 		return (
 			<header style={headerStyle}>
 				<img src="/img/logo.png" alt="logo" style={headerLogoStyle} />
 				<Random content={randomContent} font="h5" style={headerSloganStyle} />
-				<div style={headerLoginStyle}>
+				<div style={headerLoginStyle} onClick={this.showDrop.bind(this)}>
 					<h5 style={loginTitleStyle}>{this.state.loginName}</h5>
 					<img style={loginIconStyle} src="/img/icon/glyphicons-dropdown.png" />
 				</div>
-				<div style={loginDropStyle}>
-					<Googlelogin gLogin={this.googleLogin.bind(this)} clientId="168098850234-fsq84pk4cae97mlj0k464joc21cgqjvv.apps.googleusercontent.com" width="200px" />
-					<Facebooklogin clientId="447688265576125" fLogin={this.fLogin.bind(this)} width="200px" />
-				</div>
+				{/*{drop}*/}
 			</header>
 		);
 	}
