@@ -68,3 +68,8 @@ body{
 label{
 	font-family: 'Rubik', sans-serif;
 }
+
+#react-root{
+	display: block;
+	width: 100%;
+}

@@ -90,7 +90,7 @@ class AnimationEG extends Component {
         let test = <Test />
 		return (
 			<div id = "container">
-				<Header />
+				<Header visitorName={this.props.visitorName} loginSuccess={null} logOut={null} hideName={true} />
 				<main id = "main">
 					<h1>Inline-Animation</h1>
 					<h2>Inline Animation by React</h2>

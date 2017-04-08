@@ -1,273 +1,187 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import os
-import time
 from flask import Blueprint, session, render_template, abort, request, jsonify
-from html import escape
-from werkzeug.utils import secure_filename
 import mysql.connector
 import secret
+from handler.pet import searchPet, searchCompanion
+from handler.user import searchOwner
+from handler.watch import searchWatch, updateWatch
+from handler.moment import singleMoment, addMoment
+from handler.ability import updateAbility
+from handler.upload import uploadMoment
 
 
 pet_routes = Blueprint('pet_routes', __name__, template_folder = 'templates')
 config = secret.mysql()
 
-
 #Get /pet
 @pet_routes.route('/pet/<int:id>')
 def petHome(id):
-    session['userId'] = 1
     return render_template('pet.html')
-
 
 #Init pet page
 @pet_routes.route('/pet/view', methods = ['GET', 'POST'])
 def petView():
     #only response for post request
     if request.method == 'POST':
+        #get visitor name and id if user loged in
         if session.get('userId') is None:
-            current_id = None
+            currentId = None
+            currentName = None
         else:
-            current_id = session['userId']
-        #get pet id to show
-        pet_id = request.form['id']
-        #Find pet info by pet id from pet table
-        petQuery = 'SELECT * FROM pet WHERE pet_id = %s'
-        #Find pet owners info from user table
-        ownerQuery = 'SELECT user_id, user_name, user_aura FROM user WHERE user_id = %s OR user_id = %s'
-        #Find all watchers id from pet_watch table
-        watcherQuery = 'SELECT user_id FROM pet_watch WHERE pet_id = %s'
-        #Find all companion info from pet table
-        companionQuery = 'SELECT pet_id, pet_nature, (ability_attack + ability_defend + ability_health + ability_swift + ability_lucky) AS pet_ability FROM pet WHERE pet_id = %s OR pet_id = %s'
-        #Find moment info for recent 20 record
-        momentQuery = 'SELECT * FROM moment WHERE pet_id = %s ORDER BY moment_id DESC LIMIT 0, 20'
+            currentId = session['userId']
+            currentName = session['userName']
+        #get pet id of current page
+        petId = int(request.form['id'])
+        cnx = mysql.connector.connect(**config)
         try:
-            cnx = mysql.connector.connect(**config)
-            #get pet info by id
-            petCursor = cnx.cursor(dictionary=True)
-            petCursor.execute(petQuery, (pet_id, ))
-            pet = petCursor.fetchone()
+            pet = searchPet(petId, cnx)
+            #return 1 if pet not exist
+            if not pet:
+                return str(1)
+            #return 0 for db error
+            if pet == "0":
+                return str(0)
             #get owner and relative id
-            pet_owner = pet['owner_id']
-            pet_relative = pet['relative_id']
-            #store pet id into session if pet belong to current user
-            if session.get('userId') is not None:
-                if (session['userId'] == pet_owner or session['userId'] == pet_relative):
-                    session['petId'] = pet_id
-            #get owner relative info
-            ownerCursor = cnx.cursor(dictionary=True)
-            ownerCursor.execute(ownerQuery, (pet_owner, pet_relative))
-            owner = ownerCursor.fetchall()
-            #get watcher info for current pet
-            watcherCursor = cnx.cursor()
-            watcherCursor.execute(watcherQuery, (pet_id, ))
-            watcherRaw = watcherCursor.fetchall()
-            #get array store all watcher id
-            watcher = [x[0] for x in watcherRaw]
-            #get all companions info
-            companion_first = pet['companion_first']
-            companion_second = pet['companion_second']
-            companionCursor = cnx.cursor(dictionary=True)
-            companionCursor.execute(companionQuery, (companion_first, companion_second))
-            companion = companionCursor.fetchall()
-            #get moment info for current pet
-            momentCursor = cnx.cursor()
-            momentCursor.execute(momentQuery, (pet_id, ))
-            moment = momentCursor.fetchall()
-            #error for no pet or owner found
-            if not pet or not owner:
-                return jsonify({'Result': 0})
-            #return all infos
-            result = [pet, owner, watcher, companion, moment, current_id]
-            return jsonify(result)
-        #db error
-        except mysql.connector.Error as err:
-            print('Something went wrong: {}'.format(err))
-            return jsonify({'Result': 1})
+            petOwner = pet['owner_id']
+            petRelative = pet['relative_id']
+            owner = searchOwner(petOwner, petRelative, cnx)
+            #return 1 if pet not exist
+            if not owner:
+                return str(1)
+            #return 0 for db error
+            if owner == "0":
+                return str(0)
+            #get all watch ids of one pet
+            watch = searchWatch(petId, cnx)
+            #return 0 for db error
+            if watch == "0":
+                return str(0) 
+            companionFirst = pet['companion_first']
+            companionSecond = pet['companion_second']
+            #get all companion info of one pet
+            companion = searchCompanion(companionFirst, companionSecond, cnx)
+            #return 0 for db error
+            if companion == "0":
+                return str(0)
+            #get all related moment of one pet
+            moment = singleMoment(petId, 0, cnx)
+            #return 0 for db error
+            if moment == "0":
+                return str(0)
         finally:
-            petCursor.close()
-            ownerCursor.close()
-            watcherCursor.close()
-            companionCursor.close()
-            momentCursor.close()
             cnx.close()
+        #store pet id into session if pet belong to current user
+        if session.get('userId') is not None:
+            if (session['userId'] == petOwner or session['userId'] == petRelative):
+                session['petId'] = petId
+        #return all infos
+        result = [pet, owner, watch, companion, moment, currentId, currentName]
+        return jsonify(result)    
     else:
         abort(404)
 
-
-#allow jpg png for moment upload
-ALLOWED_MOMENT = set(['png', 'jpg', 'jpeg'])
-def allowed_moment(filename):
-    return '.' in filename and \
-        filename.rsplit('.', 1)[1].lower() in ALLOWED_MOMENT
-
-
 #create new moment in pet page
 @pet_routes.route('/pet/uploadMoment/<string:message>', methods=['GET', 'POST'])
-def uploadMoment(message):
+def newMoment(message):
     #only response to post request
     if request.method == 'POST':
-        #only process when pet belong to current user
+        #only process when pet belong to current user, return 0
         if session.get('petId') is None:
-            return jsonify({'Result': 3})
-        #file must be attached
+            return str(0)
+        #file must be attached, return 1
         if 'file' not in request.files:
-            return jsonify({'Result': 0})
+            return str(1)
         file = request.files['file']
-        #must contain file name, 'jpg' and 'png' created from js
-        if file.filename == '':
-            return jsonify({'Result': 0})
-        #file name must be allowed
-        if file and allowed_moment(file.filename):
-            #name image with timestamp
-            filename = str(time.time()).replace('.', '-') + '.' + secure_filename(file.filename)
-            #folder to store moment for current pet
-            fold_path = '../static/img/pet/' + session['petId'] + '/moment/'
-            #save image
-            try:
-                file.save( os.path.join(os.path.dirname(os.path.abspath(__file__)), fold_path, filename))
-                #store image message petId into moment table
-                momentQuery = 'INSERT INTO moment (image_name, moment_message, pet_id) VALUES (%s, %s, %s)'
-                try:
-                    cnx = mysql.connector.connect(**config)
-                    momentCursor = cnx.cursor()
-                    #update with filename, message from route, petid from session
-                    momentCursor.execute(momentQuery, (filename, message, session['petId']))
-                    cnx.commit()
-                    newId = momentCursor.lastrowid
-                    newMoment = [newId, filename, message]
-                    return jsonify({'Result': newMoment})
-                #error for can't insert int db
-                except mysql.connector.Error as err:
-                    print('Something went wrong: {}'.format(err))
-                    cnx.rollback()
-                    return jsonify({'Result': 4})
-                finally:
-                    momentCursor.close()
-                    cnx.close()
-            #error when image can't be saved
-            except Exception as err:
-                print('Something went wrong: {}'.format(err))
-                return jsonify({'Result': 2})
-        #file type not surpport
-        return jsonify({'Result': 1})
+        upload = uploadMoment(file, session['petId'])
+        #return error code
+        if upload == '1' or upload == '2':
+            return upload
+        #update moment table
+        cnx = mysql.connector.connect(**config)
+        try:
+            row = addMoment(upload, message, session['petId'], cnx)
+        finally:
+            cnx.close()
+        if not row:
+            return str(2)
+        return jsonify([int(row), upload, message])
     else:
          abort(404)
-
 
 #Load more moment
 @pet_routes.route('/pet/loadMoment', methods = ['GET', 'POST'])
 def loadMoment():
     #only response to post request
     if request.method == 'POST':
-        json = request.json
-        #get pet id
-        pet_id = json['petId']
-        #get how many time it load
-        showMore = json['showMore']
-        #if user posted new moment
-        addOne = json['addOne']
-        #Get the start row number
-        startPin = showMore * 20 + addOne
-        #get new 20 moment from moment table
-        momentQuery = 'SELECT * FROM moment WHERE pet_id = %s ORDER BY moment_id DESC LIMIT %s, 20'
-        #get moment info
+        petId = int(request.form['petId'])
+        loadTimes = int(request.form['showMore'])
+        addTimes = int(request.form['addOne'])
+        startPin = loadTimes * 20 + addTimes
+        cnx = mysql.connector.connect(**config)
         try:
-            cnx = mysql.connector.connect(**config)
-            momentCursor = cnx.cursor()
-            momentCursor.execute(momentQuery, (pet_id, startPin))
-            moment = momentCursor.fetchall()
-            #if there's new moment to load
-            if moment:
-                return jsonify(moment)
-            #no more moment to load
-            else:
-                return jsonify({'Result': 0})
-        #db error
-        except mysql.connector.Error as err:
-            print('Something went wrong: {}'.format(err))
-            return jsonify({'Result': 1})
-            cnx.rollback()
+            result = singleMoment(petId, 0, cnx)
         finally:
-            momentCursor.close()
             cnx.close()
+        #return 0 for db error
+        if result == '0':
+            return str(0)
+        return jsonify(result)
     else:
         abort(404)
-
-
 
 #Update watch table
 @pet_routes.route('/pet/updateWatch', methods = ['GET', 'POST'])
-def updateWatch():
+def newWatch():
+    #only response to post request
     if request.method == 'POST':
-        json = request.json
-        pet_id = json['petId']
-        addWatch = json['addWatch']
-        user_id = session['userId']
-        #Check it should be watch or unwatch
-        if addWatch:
-            watchQuery = 'INSERT INTO pet_watch (pet_id, user_id) VALUES (%s, %s)'
+        #return 0 if not login
+        if session.get('userId') is None:
+            return str(0)
+        petId = int(request.form['petId'])
+        if request.form['addWatch'] == 'false':
+            addWatch = False
         else:
-            watchQuery = 'DELETE FROM pet_watch WHERE pet_id = %s AND user_id = %s'
+            addWatch = True
+        visitorId = session['userId']
+        cnx = mysql.connector.connect(**config)
         try:
-            #update pet_watch
-            cnx = mysql.connector.connect(**config)
-            watchCursor = cnx.cursor()
-            watchCursor.execute(watchQuery, (pet_id, user_id))
-            cnx.commit()
-            return jsonify({'Result': 0})
-        except mysql.connector.Error as err:
-            cnx.rollback()
-            return jsonify({'Result': 1})
-            print('Something went wrong: {}'.format(err))
+            #get update success or not
+            result = updateWatch(visitorId, petId, addWatch, cnx)
         finally:
-            watchCursor.close()
             cnx.close()
+        return result
     else:
         abort(404)
 
-
 #Update pet ability for current user
 @pet_routes.route('/pet/updateAbility', methods = ['GET', 'POST'])
-def updateAbility():
+def newAbility():
     #Only response to POST request
     if request.method == 'POST':
+        #only response to pet owner
+        if session.get('petId') is None:
+            return str(0)
         #Get new ability, new potential, pet id
         json = request.json
-        pet_ability = json['ability']
-        pet_potential = json['potential']
-        prev_ability = json['prevAbility']
-        prev_potential = json['prevPotential']
-        pet_id = json['petId']
-        user_id = session['userId']
+        petAbility = json['ability']
+        petPotential = json['potential']
+        prevAbility = json['prevAbility']
+        prevPotential = json['prevPotential']
+        petId = json['petId']
+        userId = session['userId']
         #Get total number increased for ability
         total = 0
-        for key, value in enumerate(pet_ability):
-            total += value - prev_ability[key]
+        for key, value in enumerate(petAbility):
+            total += value - prevAbility[key]
         #Check if the increased ability equal to decreased potential
-        if (total != (prev_potential - pet_potential)):
-            return jsonify({'Result': 2})
-        #Update abilities with current pet id and user id in session
-        abilityQuery = (
-            'Update pet SET '
-            'ability_attack = %s, ability_defend = %s, ability_health = %s, '
-            'ability_swift = %s, ability_lucky = %s, pet_potential = %s '
-            'WHERE pet_id = %s AND (owner_id = %s OR relative_id = %s) '
-            'AND ability_attack = %s AND ability_defend = %s AND ability_health = %s '
-            'AND ability_swift = %s AND ability_lucky = %s'
-        )
+        if (total != (prevPotential - petPotential)):
+            return str(1)
+        cnx = mysql.connector.connect(**config)
         try:
-            cnx = mysql.connector.connect(**config)
-            abilityCursor = cnx.cursor()
-            abilityCursor.execute(abilityQuery, (pet_ability[0], pet_ability[1], pet_ability[2], pet_ability[3], pet_ability[4], pet_potential, pet_id, user_id, user_id, prev_ability[0], prev_ability[1], prev_ability[2], prev_ability[3], prev_ability[4]))
-            cnx.commit()
-            return jsonify({'Result': 0})
-        except mysql.connector.Error as err:
-            cnx.rollback()
-            print('Something went wrong: {}'.format(err))
-            return jsonify({'Result': 1})
+            result = updateAbility(petId, userId, petAbility, petPotential, prevAbility, prevPotential, cnx)
         finally:
-            abilityCursor.close()
             cnx.close()
+        return result
     else:
         abort(404)

@@ -9,7 +9,9 @@ class Display extends Component {
     constructor(props) {
         super(props);
 		this.state = {
+            //store moment info to display
             moment: this.props.moment,
+            //store how many moment have be added
             addOne: 0,
             //store moment load times
             showMore: 1,
@@ -23,39 +25,32 @@ class Display extends Component {
         if (this.state.showMessage == "Click to load more ...") {
             reqwest({
                 url: "/pet/loadMoment",
-                type: "json",
                 method: "POST",
-                contentType: "application/json", 
-                headers: {"X-My-Custom-Header": "SomethingImportant"},
-                data: JSON.stringify({"petId": this.props.pet.pet_id, "showMore": this.state.showMore, "addOne": this.state.addOne}),
+                data: {"petId": this.props.pet.pet_id, "showMore": this.state.showMore, "addOne": this.state.addOne},
                 success: function(result) {
-                    //use to update load times
-                    let newShow = this.state.showMore + 1;
-                    switch(result.Result) {
-                        case 0:
-                            //no more moment to load
-                            this.setState({showMore: newShow, showMessage: "No more moments"});
-                            break;
-                        case 1:
-                            this.setState({showMore: newShow, showMessage: "Can't load, try later"});
+                    let moment = this.state.moment;
+                    switch (result) {
+                        case "0":
+                            console.log("Can't connect to db");
                             break;
                         default:
-                            //Update moment array
-                            let moment = this.state.moment;
-                            moment = moment.concat(result);
-                            if (result.length < 20) {
-                                this.setState({showMore: newShow, moment: moment, showMessage: "No more moments"});
+                            //disable load when not more result
+                            if (result.length == 0) {
+                                this.setState({showMore: this.state.showMore + 1, showMessage: "No more moments"});
+                            } else if (result.length < 20) {
+                                moment = moment.concat(result);
+                                this.setState({showMore: this.state.showMore + 1, moment: moment, showMessage: "No more moments"});
                             } else {
-                                this.setState({showMore: newShow, moment: moment});
+                                moment = moment.concat(result);
+                                this.setState({showMore: this.state.showMore + 1, moment: moment});
                             }
-                            break;
                     }
                 }.bind(this),
                 error: function (err) {
-                    console.log("Can't connect, try later");
+                    console.log("Can't connect to server, try later");
                 }
             });
-        }
+       }
     }
     //update moment component after new post
     uploadNew(moment) {
@@ -65,21 +60,15 @@ class Display extends Component {
         this.setState({moment: oldMoment, addOne: addOne});
     }
     render() {
-        let displayStyle = {
-            display: "inline-block",
-            width: "55%",
-            marginLeft: "6%",
-            marginTop: "100px",
-            verticalAlign: "top"
-        };
+        //show publish image section when visitor is pet owner or relative
         let publish;
-        if (this.props.userId == this.props.pet.owner_id || this.props.userId == this.props.pet.relative_id) {
+        if (this.props.visitorId == this.props.pet.owner_id || this.props.visitorId == this.props.pet.relative_id) {
             publish = <Publish uploadNew={this.uploadNew.bind(this)} />;
         }
         return (
-            <section style={displayStyle}>
-                <Ability userId={this.props.userId} pet={this.props.pet} />
-                <Skill userId={this.props.userId} pet={this.props.pet} />
+            <section id="display">
+                <Ability visitorId={this.props.visitorId} pet={this.props.pet} />
+                <Skill pet={this.props.pet} />
                 {publish}
                 <Moment petId={this.props.pet.pet_id} moment={this.state.moment} showMessage={this.state.showMessage} loadMore={this.loadMore.bind(this)} />
             </section>

@@ -27,7 +27,7 @@ class Reactui extends Component {
 		};
 		return (
 			<div id = "container">
-				<Header />
+				<Header visitorName={this.props.visitorName} loginSuccess={null} logOut={null} hideName={true} />
 				<main id = "main">
 					<h1>Thousanday-React</h1>
 					<h2>A list of React UI components</h2>

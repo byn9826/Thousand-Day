@@ -15,7 +15,13 @@ class Googlelogin extends Component {
     }   
     componentDidMount() {
         let self = this;
-        window.onload = () => {
+        let interval = setInterval(() => {
+            if(document.readyState === 'complete') {
+                clearInterval(interval);
+                relayout(self);
+            }    
+        }, 500);
+        function relayout(self) {
             gapi.load('auth2', function() {
                 let instance = gapi.auth2.init({
                     client_id: self.props.clientId
@@ -31,6 +37,7 @@ class Googlelogin extends Component {
                         result.lastname = profile.getFamilyName();
                         result.imageUrl = profile.getImageUrl();
                         result.email = profile.getEmail();
+                        result.token = user.getAuthResponse().id_token;
                         self.props.gLogin(result);
                         self.setState({result: result});
                     }
@@ -52,6 +59,7 @@ class Googlelogin extends Component {
                     result.lastname = profile.getFamilyName();
                     result.imageUrl = profile.getImageUrl();
                     result.email = profile.getEmail();
+                    result.token = user.getAuthResponse().id_token;
                     this.props.gLogin(result);
                     this.setState({result: result});
                 } else {

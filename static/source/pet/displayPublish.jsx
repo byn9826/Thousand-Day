@@ -24,41 +24,35 @@ class Publish extends Component {
         	contentType: false,
         	processData: false,
 			success: function(result) {
-                switch(result.Result) {
-                    case 0:
-                        console.log("No image uploaded");
+                switch(result) {
+                    case "0":
+                        console.log("Please Login");
+                        this.setState({reset: this.state.reset + 1});
                         break;
-                    case 1:
+                    case "1":
                         console.log("File type not supported");
+                        this.setState({reset: this.state.reset + 1});
                         break;
-                    case 2:
-                        console.log("Can't save image, try later");
+                    case "2":
+                        console.log("Something Wrong With the server");
+                        this.setState({reset: this.state.reset + 1});
                         break;
-                    case 3:
-                        console.log("This is not your pet");
-                        break;
-                    case 4:
-                        console.log("Can't update moment, try later");
                     default:
-                        //pass back to main component
-                        this.props.uploadNew(result.Result);
-                        let reset = this.state.reset + 1;
-				        this.setState({reset: reset});
+                        //upLoad success
+                        this.props.uploadNew(result);
+				        this.setState({reset: this.state.reset + 1});
+                        break;     
                 }
 			}.bind(this),
 			error: function (err) {
+                this.setState({reset: this.state.reset + 1});
 				console.log("Can't connect to server");
-			}
+			}.bind(this)
 		});
     }
     render() {
-        let containerStyle = {
-            display: "block",
-            width: "100%",
-            marginTop: "40px"
-        };
         return (
-            <section style={containerStyle}>
+            <section id="publish">
                 <Postimg content="" max="120" title="Share new moment" submitImg={this.submitImg.bind(this)} fontFamily="'Rubik', sans-serif" reset={this.state.reset} />
             </section>
         );
