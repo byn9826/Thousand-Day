@@ -82,23 +82,42 @@ class Header extends Component {
 			marginLeft: "5%",
 			fontStyle: "italic"
 		};
+		//show user name area
+		let user;
+		//drop box button for login
 		let loginStyle;
-		//show loginbox for not login user after click login button
-		if (this.state.showDrop && this.state.loginName == "Login") {
-			loginStyle = "header-drop";
-		}
-		//hide login box by default
-		else {
-			loginStyle = "header-drop-hide";
-		}
-		let logout;
+		//login box
+		let login;
 		//show logout box for login user after click login button
-		if (this.state.showDrop && this.state.loginName != "Login") {
-			logout = (
-				<div className="header-drop">
-					<input type="button" value="Log Out" onClick={this.logOut.bind(this)} />
+		let logout;
+		if (!this.state.hideName) {
+			user = (
+				<div id="header-login" onClick={this.showDrop.bind(this)}>
+					<h5>{this.state.loginName}</h5>
+					<img src="/img/icon/glyphicons-dropdown.png" />
 				</div>
 			)
+			//show loginbox for not login user after click login button
+			if (this.state.showDrop && this.state.loginName == "Login" ) {
+				loginStyle = "header-drop";
+			}
+			//hide login box by default
+			else {
+				loginStyle = "header-drop-hide";
+			}
+			login = (
+				<div className={loginStyle}>
+					<Googlelogin gLogin={this.googleLogin.bind(this)} clientId="168098850234-fsq84pk4cae97mlj0k464joc21cgqjvv.apps.googleusercontent.com" width="200px" />
+					<Facebooklogin clientId="447688265576125" fLogin={this.fLogin.bind(this)} width="194px" />
+				</div>
+			)
+			if (this.state.showDrop && this.state.loginName != "Login") {
+				logout = (
+					<div className="header-drop">
+						<input type="button" value="Log Out" onClick={this.logOut.bind(this)} />
+					</div>
+				)
+			}
 		}
 		//random content show for slogan
 		let randomContent = [
@@ -107,24 +126,12 @@ class Header extends Component {
 			//"Meet with love",
 			//"Share your cutes"
 		];
-		let user;
-		if (!this.state.hideName) {
-			user = (
-				<div id="header-login" onClick={this.showDrop.bind(this)}>
-					<h5>{this.state.loginName}</h5>
-					<img src="/img/icon/glyphicons-dropdown.png" />
-				</div>
-			)
-		}
 		return (
 			<header id="header">
 				<img id="header-logo" src="/img/logo.png" alt="logo" />
 				<Random style={randomStyle} content={randomContent} font="h5" />
 				{user}
-				<div className={loginStyle}>
-					<Googlelogin gLogin={this.googleLogin.bind(this)} clientId="168098850234-fsq84pk4cae97mlj0k464joc21cgqjvv.apps.googleusercontent.com" width="200px" />
-					<Facebooklogin clientId="447688265576125" fLogin={this.fLogin.bind(this)} width="194px" />
-				</div>
+				{login}
 				{logout}
 			</header>
 		);
