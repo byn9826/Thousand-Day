@@ -22,7 +22,7 @@ class Skill extends Component {
                 //show fault picture
                 skills[i] = (
                     <div key={"petskill" + i} className="skill-one">
-                        <h5 style={singleTitleStyle}>Not learned yet</h5>
+                        <h5>Not learned yet</h5>
                         <img alt="No skill" src={"/img/icon/skill.jpg"} />
                     </div>
                 );

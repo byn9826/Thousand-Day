@@ -6,6 +6,7 @@ from routes.account import account_routes
 from routes.pet import pet_routes
 from routes.user import user_routes
 from routes.edit import edit_routes
+from routes.signup import signup_routes
 
 
 app = Flask(__name__, static_folder='static', static_url_path='')
@@ -14,6 +15,7 @@ app.register_blueprint(account_routes)
 app.register_blueprint(pet_routes)
 app.register_blueprint(user_routes)
 app.register_blueprint(edit_routes)
+app.register_blueprint(signup_routes)
 
 
 @app.route('/react')

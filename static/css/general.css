@@ -73,3 +73,10 @@
     border-radius: 5px;
     visibility: hidden;			
 }
+#header-drop-notice{
+    display: block;
+    color: #ef8513;
+    text-align: center;
+    line-height: 30px;
+    font-weight: bold;
+}

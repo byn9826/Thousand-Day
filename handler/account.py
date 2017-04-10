@@ -16,39 +16,17 @@ def checkGoogle(googleId, cnx):
     finally:
         googleCursor.close()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    visitorId = int(visitorId)
-    pageId = int(pageId)
-    #visitor visit his own page, return 2
-    if visitorId == pageId:
-        return str(2)
-    relationQuery = ('SELECT * From user_relation WHERE ((applicant_id = %s AND receiver_id = %s) '
-                     'OR (applicant_id = %s AND receiver_id = %s)) AND friend_statue = %s')
-    cnx = cnx
-    relationCursor = cnx.cursor()
-    relationCursor.execute(relationQuery, (pageId, visitorId, visitorId, pageId, 1))
-    relation = relationCursor.fetchone()
-    relationCursor.close()
-    #visitor visit friend page, return 1
-    if relation:
-        return str(1)
-    #visitor visit strange page, return 0
-    else:
+#check facebook account
+#check google account
+def checkFacebook(facebookId, cnx):
+    facebookQuery = 'SELECT user_id, user_name FROM user WHERE facebook_id = %s'
+    try:
+        facebookCursor = cnx.cursor()
+        facebookCursor.execute(facebookQuery, (facebookId, ))
+        return facebookCursor.fetchone()
+    #return 0 for db error
+    except mysql.connector.Error as err:
+        print('Something went wrong: {}'.format(err))
         return str(0)
+    finally:
+        facebookCursor.close()

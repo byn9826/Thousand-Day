@@ -1,0 +1,36 @@
+/*signup page*/
+#main{
+    display: block;
+    padding-top: 120px;
+    width: 80%;
+    margin-left: 10%;
+    text-align: center;
+    min-height: 450px;
+}
+
+#main h4{
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.main-title{
+    display: block;
+    padding: 5px 0;
+    width: 80%;
+    margin-left: 10%;
+    border-radius: 5px;
+    background-color: #ef8513;
+    color: white;
+}
+
+.main-profile{
+    display: inline-block;
+    vertical-align: top;
+    margin: 0 5%;
+}
+
+.main-profile h5{
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+}

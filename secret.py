@@ -11,3 +11,6 @@ def mysql():
 
 def secretKey():
     return '\xf3\x13\xb0\xe0\x1dqc\xd0\x00\x85\x8b\x05\xe5s\xa0!\xb7\xfe\x1e+\xdb\x82\xa0A'
+
+def facebookSecret():
+    return '39852c8c9ce56ee175ae785be81d0cea'

@@ -25,7 +25,6 @@ class Header extends Component {
 				method: "POST",
 				data: {"token": user.token},
 				success: function(result) {
-					//console.log(result);
 					switch (result) {
 						case "0":
 							console.log("DB error");
@@ -35,11 +34,15 @@ class Header extends Component {
 							break;
 						case "2":
 							console.log("Can't validate Google account");
+						case "3":
+							console.log("Please logout first");
 						default:
-							//get username, close dropdown box
-							this.setState({loginName: result[1], showDrop: false});
-							//pass user id back to parent
-							this.props.loginSuccess(result[0]);
+							if (this.state.loginName == "Login") {
+								//get username, close dropdown box
+								this.setState({loginName: result[1], showDrop: false});
+								//pass user id back to parent
+								this.props.loginSuccess(result[0]);
+							}
 					}
 				}.bind(this),
 				error: function (err) {
@@ -48,28 +51,64 @@ class Header extends Component {
 			});
 		}
     }
-	fLogin(response) {
-        //console.log(response);
-	}
-	logOut() {
-		let auth2 = gapi.auth2.getAuthInstance();
-		let self = this;
-		auth2.signOut().then(function () {
+	fLogin(response, token) {
+		//react only when user not login
+		if (this.state.loginName == "Login") {
+			//check google user token
 			reqwest({
-				url: "/account/logOut",
+				url: "/account/facebookLogin",
 				method: "POST",
+				data: {"token": token},
 				success: function(result) {
 					switch (result) {
 						case "0":
-							self.setState({loginName: "Login", showDrop: false});
-							self.props.logOut();
+							console.log("DB error");
 							break;
+						case "1":
+							console.log("Account not exist");
+							//redirect to account create page
+							window.location.replace("/signup/" + response.name);
+							break;
+						case "2":
+							console.log("Can't validate Facebook account");
+						case "3":
+							console.log("Please logout first");
+						default:
+							if (this.state.loginName == "Login") {
+								//get username, close dropdown box
+								this.setState({loginName: result[1], showDrop: false});
+								//pass user id back to parent
+								this.props.loginSuccess(result[0]);
+							}
 					}
-				},
+				}.bind(this),
 				error: function (err) {
 					console.log("Can't connect to the server");
 				}
 			});
+		}
+	}
+	logOut() {
+		let auth2 = gapi.auth2.getAuthInstance();
+		let self = this;
+		auth2.signOut();
+		FB.logout();
+		reqwest({
+			url: "/account/logOut",
+			method: "POST",
+			success: function(result) {
+				switch (result) {
+					case "0":
+						self.setState({loginName: "Login", showDrop: false});
+						self.props.logOut();
+						break;
+					case "1":
+						console.log("Please try again");
+				}
+			},
+			error: function (err) {
+				console.log("Can't connect to the server");
+			}
 		});
 	}
 	//show and close drop box
@@ -107,6 +146,7 @@ class Header extends Component {
 			}
 			login = (
 				<div className={loginStyle}>
+					<h5 id="header-drop-notice">Click to sign in or sign up</h5>
 					<Googlelogin gLogin={this.googleLogin.bind(this)} clientId="168098850234-fsq84pk4cae97mlj0k464joc21cgqjvv.apps.googleusercontent.com" width="200px" />
 					<Facebooklogin clientId="447688265576125" fLogin={this.fLogin.bind(this)} width="194px" />
 				</div>
