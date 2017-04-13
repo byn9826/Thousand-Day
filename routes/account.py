@@ -89,6 +89,12 @@ def googleLogin():
             return str(0)
         else:
             #return 1 for account not exist
+            #empty session facebook and google filed
+            session['facebook'] = None
+            session['google'] = None
+            #write google id into session
+            session['google'] = googleId
+            session['googleProfile'] = request.form['profile']
             return str(1)
     else:
         abort(404)

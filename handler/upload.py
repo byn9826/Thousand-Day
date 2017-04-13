@@ -21,7 +21,7 @@ def uploadMoment(file, petId):
         #store into pet id folder
         foldPath = '../static/img/pet/' + petId + '/moment/'
         try:
-            file.save( os.path.join(os.path.dirname(os.path.abspath(__file__)), foldPath, fileName))
+            file.save(os.path.join(os.path.dirname(os.path.abspath(__file__)), foldPath, fileName))
         except Exception as err:
             print('Something went wrong: {}'.format(err))
             return str(2)
@@ -48,7 +48,7 @@ def uploadPet(file, petId):
         foldPath = '../static/img/pet/' + str(petId) + '/cover/'
         try:
             #save profile image
-            file.save( os.path.join(os.path.dirname(os.path.abspath(__file__)), foldPath, fileName))
+            file.save(os.path.join(os.path.dirname(os.path.abspath(__file__)), foldPath, fileName))
             return str(2)
         except Exception as err:
             print('Something went wrong: {}'.format(err))
@@ -73,10 +73,27 @@ def uploadSkillimg(file, petId):
         foldPath = '../static/img/pet/' + str(petId) + '/cover/'
         try:
             #save profile image
-            file.save( os.path.join(os.path.dirname(os.path.abspath(__file__)), foldPath, fileName))
+            file.save(os.path.join(os.path.dirname(os.path.abspath(__file__)), foldPath, fileName))
             return str(2)
         except Exception as err:
             print('Something went wrong: {}'.format(err))
             return str(3)
     else:
         return str(1)
+
+#allow jpg for user profile
+ALLOWED_USER = set(['jpg'])
+def allowedUser(filename):
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in ALLOWED_USER
+
+#upload user profile for signup
+def initUser(file, userId):
+    fileName = userId + '.jpg'
+    foldPath = '../static/img/user/'
+    try:
+        #save profile image
+        file.save(os.path.join(os.path.dirname(os.path.abspath(__file__)), foldPath, fileName))
+    except Exception as err:
+            print('Something went wrong: {}'.format(err))
+    return str(3)

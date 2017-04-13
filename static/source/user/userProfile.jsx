@@ -71,7 +71,7 @@ class Profile extends Component {
                 <img id="main-profile" alt={this.props.user.user_name} src={"/img/user/" + this.props.user.user_id + ".jpg"} />
                 <h1 className="main-name">{this.props.user.user_name}</h1>
                 <h5 className="main-name"> - {this.props.user.user_about}</h5>
-                <h5 id="main-aura">Aura: Pets +10% {noGetAbility(this.props.user.user_aura)}</h5>
+                <h5 id="main-aura">{this.props.user.user_aura?"Aura: Pets +10% " + noGetAbility(this.props.user.user_aura):null}</h5>
                 <h5 className={watchStyle} onClick={this.beFriend.bind(this)}>{friend}</h5>
                 <h5 id="main-relative">Relative:</h5>
                 {relatives}

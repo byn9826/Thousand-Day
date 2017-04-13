@@ -23,7 +23,7 @@ class Header extends Component {
 			reqwest({
 				url: "/account/googleLogin",
 				method: "POST",
-				data: {"token": user.token},
+				data: {"token": user.token, "profile": user.imageUrl},
 				success: function(result) {
 					switch (result) {
 						case "0":
@@ -31,6 +31,7 @@ class Header extends Component {
 							break;
 						case "1":
 							console.log("Account not exist");
+							window.location.replace("/signup/" + user.firstname);
 							break;
 						case "2":
 							console.log("Can't validate Google account");
@@ -89,10 +90,10 @@ class Header extends Component {
 		}
 	}
 	logOut() {
+		FB.logout();
 		let auth2 = gapi.auth2.getAuthInstance();
 		let self = this;
 		auth2.signOut();
-		FB.logout();
 		reqwest({
 			url: "/account/logOut",
 			method: "POST",

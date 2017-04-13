@@ -7,16 +7,15 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "GPL",
+  "license": "BSD 3-clause",
   "dependencies": {
     "inline-animation": "0.0.1",
     "openlayers": "^4.0.1",
-    "react": "^15.4.2",
+    "react": "^15.5.3",
     "react-avatar-editor": "^8.0.0",
-    "react-dom": "^15.4.2",
-    "react-lazyload": "^2.2.5",
+    "react-dom": "^15.5.3",
     "reqwest": "^2.0.5",
-    "thousanday-react": "^0.8.0"
+    "thousanday-react": "^0.9.0"
   },
   "devDependencies": {
     "babel-core": "^6.21.0",

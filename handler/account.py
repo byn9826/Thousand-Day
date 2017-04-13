@@ -17,7 +17,6 @@ def checkGoogle(googleId, cnx):
         googleCursor.close()
 
 #check facebook account
-#check google account
 def checkFacebook(facebookId, cnx):
     facebookQuery = 'SELECT user_id, user_name FROM user WHERE facebook_id = %s'
     try:
@@ -30,3 +29,19 @@ def checkFacebook(facebookId, cnx):
         return str(0)
     finally:
         facebookCursor.close()
+
+#register a new account for login user
+def addAccount(facebook, google, name, cnx):
+    addQuery = 'INSERT INTO user (google_id, facebook_id, user_name, user_term) VALUES (%s, %s, %s, 1)'
+    try:
+        addCursor = cnx.cursor()
+        addCursor.execute(addQuery, (google, facebook, name))
+        cnx.commit()
+        newId = addCursor.lastrowid
+        return str(newId)
+    except mysql.connector.Error as err:
+        print('Something went wrong: {}'.format(err))
+        cnx.rollback()
+        return None
+    finally:
+        addCursor.close()

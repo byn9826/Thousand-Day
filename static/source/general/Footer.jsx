@@ -18,7 +18,8 @@ class Footer extends Component {
 		return(
 			<footer style={footerStyle}>
 				<h6 style={footerInfoStyle}>© 2017 Thousanday</h6>
-				<h6 style={footerInfoStyle}><a href="http://thousanday.com/react" target="__blank">Thousanday-React</a></h6>
+				<h6 style={footerInfoStyle}><a href="https://github.com/byn9826/thousanday/issues" target="__blank">Report</a></h6>
+				<h6 style={footerInfoStyle}><a href="https://github.com/byn9826/Thousanday-React" target="__blank">Thousanday-React</a></h6>
 				<h6 style={footerInfoStyle}><a href="http://glyphicons.com" target="__blank">Glyphicons</a></h6>
 			</footer>
 		);

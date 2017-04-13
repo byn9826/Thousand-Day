@@ -65,7 +65,9 @@ def petName():
             return str(0)
         userId = session['userId']
         petId = session['petId']
-        petName = request.form['name'][:10]
+        petName = request.form['name'][:10].strip()
+        if petName == '':
+            return str(3)
         cnx = mysql.connector.connect(**config)
         try:
             result = updateName(petName, petId, userId, cnx)

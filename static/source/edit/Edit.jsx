@@ -80,6 +80,10 @@ class Edit extends Component {
 								this.refs.petName.setState({content: this.state.petName});
 								console.log("Can't connect to db");
 								break;
+							case "3":
+								this.refs.petName.setState({content: this.state.petName});
+								console.log("Name can't be empty");
+								break;
 						}
 					}.bind(this),
 					error: function (err) {
