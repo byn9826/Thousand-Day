@@ -253,7 +253,7 @@ class Edit extends Component {
 							refine[i] = [];
 							refine[i][0] = result[i].user_name;
 							refine[i][1] = "/img/user/" + result[i].user_id + ".jpg";
-							refine[i][2] = "Pets + 10% " + noGetAbility(result[i].user_aura);
+							refine[i][2] = result[i].user_aura?"Pets + 10% " + noGetAbility(result[i].user_aura):"No Aura Selected";
 							refine[i][3] = result[i].user_id;
 						}
 						this.setState({showAdd: true, relOption: refine});

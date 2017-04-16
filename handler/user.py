@@ -67,3 +67,20 @@ def userList(userList, cnx):
         return str(0)
     finally:
         userCursor.close()
+
+#update user's name
+def setName(userName, userId, cnx):
+    #get all user info for friends options
+    userQuery = 'UPDATE user set user_name = %s WHERE user_id = %s'
+    try:
+        userCursor = cnx.cursor()
+        userCursor.execute(userQuery, (userName, userId))
+        cnx.commit()
+        return str(1)
+    except mysql.connector.Error as err:
+        print('Something went wrong: {}'.format(err))
+        cnx.rollback()
+        return str(2)
+    finally:
+        userCursor.close()
+        

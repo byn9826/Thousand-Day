@@ -17,6 +17,9 @@ class Header extends Component {
 	}
 	//user click google login button
 	googleLogin(user) {
+		FB.logout();
+		let auth2 = gapi.auth2.getAuthInstance();
+		auth2.signOut();
 		//react only when user not login
 		if (this.state.loginName == "Login") {
 			//check google user token
@@ -53,6 +56,9 @@ class Header extends Component {
 		}
     }
 	fLogin(response, token) {
+		FB.logout();
+		let auth2 = gapi.auth2.getAuthInstance();
+		auth2.signOut();
 		//react only when user not login
 		if (this.state.loginName == "Login") {
 			//check google user token

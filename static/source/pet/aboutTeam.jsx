@@ -7,7 +7,7 @@ class Team extends Component {
         let relatives = this.props.owner.map((relative, index) =>
             <h6 key={"petowner" + index}>
                 <a href={"/user/" + relative.user_id}>
-                    {relative.user_name + " + 10% " + noGetAbility(relative.user_aura)}
+                    {relative.user_aura?relative.user_name + " + 10% " + noGetAbility(relative.user_aura):relative.user_name + " with no aura"}
                 </a>
             </h6>
         );

@@ -101,7 +101,7 @@
 }
 
 .main-action{
-    position: fixed;
+    position: absolute;
     width: 45%;
     top: 150px;
     margin-left: 25%;
@@ -138,7 +138,7 @@
 }
 
 .main-trans{
-    position: fixed;
+    position: absolute;
     width: 45%;
     top: 150px;
     margin-left: 25%;
@@ -160,7 +160,7 @@
 }
 
 .main-team{
-    position: fixed;
+    position: absolute;
     width: 55%;
     top: 100px;
     margin-left: 20%;
@@ -193,8 +193,6 @@
     display: block;
     height: 45px;
 }
-
-
 
 
 .pop-back{
