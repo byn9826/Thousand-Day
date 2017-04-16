@@ -1,2 +1,2 @@
 # Thousanday
-Socail website for your pets and you
+An image sharing social website for your pets and you.
