@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import noGetAbility from "../../js/noGetAbility.js";
 import Updateprofile from "../snippet/button/Updateprofile";
 import Inputbox from "../snippet/input/Inputbox";
+import Droplist from "../snippet/box/Droplist";
 import reqwest from "reqwest";
 class Profile extends Component {
     constructor(props) {
@@ -11,10 +12,16 @@ class Profile extends Component {
             relation: parseInt(this.props.relation),
             //store user name
             userName: this.props.user.user_name,
+            //store user about
+            userAbout: this.props.user.user_about || "",
             //show edit box or not
             pop: false,
             //for user type in empty user name
-            nameError: null
+            nameError: null,
+            //store profile image
+            image: "/img/user/" + this.props.user.user_id + ".jpg",
+            //store user aura
+            userAura: this.props.user.user_aura
 		};
 	}
     beFriend() {
@@ -90,8 +97,40 @@ class Profile extends Component {
 				this.setState({nameError: "Name can't be empty!"});
             }
         }
-
     }
+    //save user about
+    saveAbout() {
+        let userAbout = this.refs.userAbout.state.content.trim();
+        if (userAbout != this.state.userAbout) {
+            reqwest({
+                url: "/profile/profileAbout",
+                method: "POST",
+                data: {"about": userAbout},
+                success: function(result) {
+                    switch (result) {
+                        case "0":
+                            this.refs.userAbout.setState({content: this.state.userAbout});
+                            console.log("Please login first");
+                            break;
+                        case "1":
+                            console.log("Success");
+                            //Update about in record
+                            this.setState({userAbout: userAbout});
+                            break;
+                        case "2":
+                            this.refs.userAbout.setState({content: this.state.userAbout});
+                            console.log("Can't connect to db");
+                            break;
+                    }
+                }.bind(this),
+                error: function (err) {
+                    this.refs.userAbout.setState({content: this.state.userAbout});
+                    console.log("can't connect to server");
+                }.bind(this)
+            });
+        }
+    }
+    //save user image
     saveProfile(finalUrl) {
         console.log(finalUrl);
         let formData = new FormData();
@@ -101,8 +140,51 @@ class Profile extends Component {
             method: "POST",
             data: formData,
             contentType: false,
-            processData: false
+            processData: false,
+            success: function(result) {
+                switch (result) {
+                    case "0":
+                        console.log("Please login first");
+                        break;
+                    case "1":
+                        console.log("File not support");
+                        break;
+                    case "3":
+                        this.setState({image: URL.createObjectURL(finalUrl)});
+                        break;
+                }
+            }.bind(this)
         });
+    }
+    //update user aura
+    updateAura(value) {
+        console.log(value);
+        //update only when different
+        if (parseInt(value) != parseInt(this.state.userAura)) {
+            reqwest({
+                url: "/profile/profileAura",
+                method: "POST",
+                data: {"aura": value},
+                success: function(result) {
+                    switch (result) {
+                        case "0":
+                            console.log("Please login first");
+                            break;
+                        case "1":
+                            console.log("Success");
+                            //Update name in record
+                            this.setState({userAura: value});
+                            break;
+                        case "2":
+                            console.log("Can't connect to db");
+                            break;
+                    }
+                }.bind(this),
+                error: function (err) {
+                    console.log("can't connect to server");
+                }.bind(this)
+            });
+        }
     }
     render() {
         let watchStyle;
@@ -151,19 +233,32 @@ class Profile extends Component {
                 <section id="pop-edit">
                     <h5 onClick={this.closeEdit.bind(this)}>✗</h5>
                     <h4>Edit Profile</h4>
-                    <Inputbox id="user-name" ref="userName" content={this.state.userName} max="10" width="200px" fontFamily="'Rubik', sans-serif" />
-                    <h6>{this.state.nameError}</h6>
-                    <input className="pop-edit-button" type="button" value="Update Name" onClick={this.saveName.bind(this)} />
+                    <div className="pop-edit-section">
+                        <label htmlFor="user-name">Update your name:</label>
+                        <Inputbox id="user-name" ref="userName" content={this.state.userName} max="10" width="200px" fontFamily="'Rubik', sans-serif" />
+                        <h6>{this.state.nameError}</h6>
+                        <input className="pop-edit-button" type="button" value="Save" onClick={this.saveName.bind(this)} />
+                    </div>
+                    <div className="pop-edit-section">
+                        <label htmlFor="user-about">Something fun?</label>
+                        <Inputbox id="user-about" ref="userAbout" content={this.state.userAbout} max="30" width="200px" fontFamily="'Rubik', sans-serif" />
+                        <input className="pop-edit-button" type="button" value="Save" onClick={this.saveAbout.bind(this)} />
+                    </div>
                     <Updateprofile alt="User Profile" src={"/img/user/" + this.props.user.user_id + ".jpg"} format="image/jpg" width="200" saveProfile={this.saveProfile.bind(this)} indicate="Update Image" fontFamily="'Rubik', sans-serif" />
+                    <div className="pop-edit-section">
+                        <label htmlFor="user-aura">Update your aura:</label>
+                        <Droplist id="user-aura" width="80%" default={this.state.userAura} options={["Pets +10% Attack", "Pets +10% Defend", "Pets +10% Health", "Pets +10% Swift", "Pets +10% Lucky"]} title="Choose your aura" showTitle="true" changeValue={this.updateAura.bind(this)} fontFamily="'Rubik', sans-serif" />
+                    </div>
+                    <input id="pop-edit-close" type="button" value="Close" onClick={this.closeEdit.bind(this)} />
                 </section>
             )
         }
         return(
             <main id="main">
-                <img id="main-profile" alt={this.state.userName} src={"/img/user/" + this.props.user.user_id + ".jpg"} />
+                <img id="main-profile" alt={this.state.userName} src={this.state.image} />
                 <h1 className="main-name">{this.state.userName}</h1>
-                <h5 className="main-name"> - {this.props.user.user_about}</h5>
-                <h5 id="main-aura">{this.props.user.user_aura?"Aura: Pets +10% " + noGetAbility(this.props.user.user_aura):"No aura selected"}</h5>
+                <h5 className="main-name"> - {this.state.userAbout}</h5>
+                <h5 id="main-aura">{this.state.userAura?"Aura: Pets +10% " + noGetAbility(this.state.userAura):"No aura selected"}</h5>
                 {edit}
                 <h5 className={watchStyle} onClick={this.beFriend.bind(this)}>{friend}</h5>
                 <h5 id="main-relative">Relative:</h5>

@@ -7,5 +7,9 @@ export default function noGetNature(value) {
         case 1:
             return "strong";
             break;
+        case 2:
+            return "smart";
+        case 3:
+            return "beauty";
     }
 }

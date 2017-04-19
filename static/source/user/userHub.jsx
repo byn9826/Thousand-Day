@@ -4,6 +4,11 @@ import noGetGender from "../../js/noGetGender.js";
 import noGetType from "../../js/noGetType.js";
 import noGetNature from "../../js/noGetNature.js";
 import Waterfall from "../snippet/display/Waterfall";
+import Inputbox from "../snippet/input/Inputbox";
+import Updateprofile from "../snippet/button/Updateprofile";
+import Droplist from "../snippet/box/Droplist";
+import Getlocation from "../snippet/display/Getlocation";
+import Pickgender from "../snippet/box/Pickgender";
 class Profile extends Component {
     constructor(props) {
         super(props);
@@ -13,9 +18,23 @@ class Profile extends Component {
             //store start point of moment pictures
             showMore: 1,
             //store load moment button message
-            showMessage: (this.props.moment.length < 20)? "No more moments": "Click to load more ..."
-		};
+            showMessage: (this.props.moment.length < 20)? "No more moments": "Click to load more ...",
+            //show pop container or not
+            showPop: false,
+            //add new pet name error
+            addError: null,
+            //init coordinate of map for create new
+            initLocation: [-31.687500000000043, 41.81736507297239]
+        };
 	}
+    //click add new pet button, show pop up box
+    addPet() {
+        this.setState({showPop: true});
+    }
+    //close pop box for add new pet
+    closeNew() {
+        this.setState({showPop: false});
+    }
     //load more picture
     loadMore() {
         //only response when there's more picture
@@ -53,6 +72,14 @@ class Profile extends Component {
                 }
             });
         }
+    }
+    //save location for a pet
+    saveLocation(coordinate) {
+        console.log(coordinate);
+    }
+    //result of choose gender
+    chooseGender(choice) {
+        console.log(choice);
     }
     render() {
         //show cursor when could load more moment
@@ -99,12 +126,14 @@ class Profile extends Component {
                                         Potential: {pet.pet_potential}<br />
                                     </h6>
                                 </div>
+                                {/*
                                 <div className="hub-pet-belong-info-ability">
                                     <img alt="ability-icon" src="/img/icon/glyphicons-win.png" />
                                     <h6>
                                         Win: {pet.pet_win}<br />
                                     </h6>
                                 </div>
+                                */}
                             </div>
                         </div>
                     </div>
@@ -135,12 +164,14 @@ class Profile extends Component {
                                         Potential: {pet.pet_potential}<br />
                                     </h6>
                                 </div>
+                                {/*
                                 <div className="hub-pet-belong-info-ability">
                                     <img alt="ability-icon" src="/img/icon/glyphicons-win.png" />
                                     <h6>
                                         Win: {pet.pet_win}<br />
                                     </h6>
                                 </div>
+                                */}
                             </div>
                         </div>
                     </div>
@@ -154,11 +185,44 @@ class Profile extends Component {
             allImages[i][1] = this.state.moment[i].moment_message;
             allImages[i][2] = "/moment/" + this.state.moment[i].moment_id;
         }
+        //show add new button when user login
+        let addNew;
+        if (this.props.visitorId == this.props.user.user_id) {
+            addNew = (
+                <h6 onClick={this.addPet.bind(this)}>+ New</h6>
+            );
+        }
+        //show pop container for add new pet
+        let popContainer;
+        let popEdit;
+        if (this.state.showPop) {
+            popContainer = (<div className="pop-background"></div>);
+            popEdit = (
+                <section id="pop-new">
+                    <h5 onClick={this.closeNew.bind(this)}>✗</h5>
+                    <h4>Register New Pet</h4>
+                    <div className="pop-edit-section">
+                        <label htmlFor="pet-name">His/Her name:</label>
+                        <Inputbox id="pet-name" ref="petName" content="" max="10" width="200px" fontFamily="'Rubik', sans-serif" />
+                        <label>Choose gender:</label>
+                        <Pickgender chooseGender={this.chooseGender.bind(this)} fontFamily="'Rubik', sans-serif" />
+                    </div>
+                    <div className="pop-edit-section">
+                        <label htmlFor="pet-type">About Him/Her:</label>
+                        <Droplist id="pet-type" width="80%" options={["dog", "cat", "bird", "fish", "other"]} title="His/Her type" showTitle="true" changeValue={null} fontFamily="'Rubik', sans-serif" />
+                        <Droplist id="pet-nature" width="80%" options={["cute", "strong", "smart", "beauty"]} title="His/Her nature" showTitle="true" changeValue={null} fontFamily="'Rubik', sans-serif" />
+                    </div>
+                    <Updateprofile alt="Pet Profile" format="image/png" width="200" saveProfile={null} indicate="Upload Image" fontFamily="'Rubik', sans-serif" />
+                    <Getlocation center={this.state.initLocation} indicate="Save Location" zoom="1" setZoom="2" saveLocation={this.saveLocation.bind(this)} fontFamily="'Rubik', sans-serif" />
+                </section>
+            )
+        }
         return (
             <section id="hub">
                 <div className="hub-header">
                     <img alt="hub-icon" src="/img/icon/glyphicons-hub.png" />
                     <h4>Pets in hub</h4>
+                    {addNew}          
                 </div>
                 {pets}
                 <div className="hub-header">
@@ -167,6 +231,8 @@ class Profile extends Component {
                 </div>
                 <Waterfall column="4" image={allImages} link="true" fontFamily="'Rubik', sans-serif" />
                 <h5 className={loadStyle} onClick={this.loadMore.bind(this)}>{this.state.showMessage}</h5>
+                {popEdit}
+                {popContainer}
             </section>
         );
     }

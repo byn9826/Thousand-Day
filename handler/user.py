@@ -84,3 +84,34 @@ def setName(userName, userId, cnx):
     finally:
         userCursor.close()
         
+#update user's about
+def setAbout(userAbout, userId, cnx):
+    #get all user info for friends options
+    userQuery = 'UPDATE user set user_about = %s WHERE user_id = %s'
+    try:
+        userCursor = cnx.cursor()
+        userCursor.execute(userQuery, (userAbout, userId))
+        cnx.commit()
+        return str(1)
+    except mysql.connector.Error as err:
+        print('Something went wrong: {}'.format(err))
+        cnx.rollback()
+        return str(2)
+    finally:
+        userCursor.close()
+
+#update user's aura
+def setAura(userAura, userId, cnx):
+    #get all user info for friends options
+    userQuery = 'UPDATE user set user_aura = %s WHERE user_id = %s'
+    try:
+        userCursor = cnx.cursor()
+        userCursor.execute(userQuery, (userAura, userId))
+        cnx.commit()
+        return str(1)
+    except mysql.connector.Error as err:
+        print('Something went wrong: {}'.format(err))
+        cnx.rollback()
+        return str(2)
+    finally:
+        userCursor.close()

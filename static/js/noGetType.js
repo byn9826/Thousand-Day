@@ -4,8 +4,17 @@ export default function noGetType(value) {
         case 0:
             return "dog";
             break;
-        default:
-            return "unKnown";
+        case 1:
+            return "cat";
+            break;
+        case 2:
+            return "bird";
+            break;
+        case 3:
+            return "fish";
+            break;
+        case 4:
+            return "other";
             break;
     }
 }
