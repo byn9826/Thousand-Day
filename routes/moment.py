@@ -44,3 +44,19 @@ def momentView():
         return jsonify([moment, result, userId, comment])
     else:
         abort(404)
+
+#Load more comment
+@moment_routes.route('/moment/commentLoad', methods = ['GET', 'POST'])
+def commentLoad():
+    #only response to post
+    if request.method == 'POST':
+        pin = int(request.form['pin'])
+        id = int(request.form['id'])
+        cnx = mysql.connector.connect(**config)
+        try:
+            comment = searchComment(id, pin, cnx)
+        finally:
+            cnx.close()
+        return jsonify(comment)
+    else:
+        abort(404)    

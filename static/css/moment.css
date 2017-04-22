@@ -21,6 +21,12 @@
     height: 500px;
     width: 35%;
 }
+#aside h7{
+    display: block;
+    margin-top: -5px;
+    color: red;
+    text-align: center;
+}
 
 #aside-talk{
     display: block;

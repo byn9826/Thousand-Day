@@ -19,9 +19,10 @@ def searchLike(momentId, cnx):
 #search all comment for a moment
 def searchComment(momentId, startPoint, cnx):
     commentQuery = 'SELECT * FROM moment_comment WHERE moment_id = %s ORDER BY comment_id DESC LIMIT %s, 5'
+    pin = startPoint * 5
     try:
         commentCursor = cnx.cursor(dictionary=True)
-        commentCursor.execute(commentQuery, (momentId, startPoint))
+        commentCursor.execute(commentQuery, (momentId, pin))
         return commentCursor.fetchall()
     #return 0 for db error
     except mysql.connector.Error as err:

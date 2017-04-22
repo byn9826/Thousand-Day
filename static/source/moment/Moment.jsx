@@ -15,18 +15,44 @@ class Moment extends Component {
             visitorId: this.props.visitorId,
             //store all comments
             comment: this.props.comment,
-            //load more moment or not
-            noLoad: "off"
+            //load more moment or no
+            noLoad: this.props.comment.length <5?"on":"off",
+            //store load comment for how many times
+            loadPin: 1,
+            //store error for load comment
+            loadError: null
 		};
 	}
     //if user click like button
     changeAgree(action) {
         console.log(action);
-
     }
     //if user click load more
     loadComment() {
-        this.setState({noLoad: "on"});
+        reqwest({
+            url: "/moment/commentLoad",
+            method: "POST",
+            data: {"pin": this.state.loadPin, "id": window.location.pathname.split("/").pop()},
+            success: function(result) {
+                switch(result) {
+                    case "0":
+                        this.setState({loadError: "Connection error, try later."})
+                        break;
+                    default:
+                        if (result.length === 0) {
+                            this.setState({noLoad: "on", loadPin: this.state.loadPin + 1, loadError: null});
+                        } else if (result.length < 5) {
+                            let comment = this.state.comment.concat(result);
+                            this.setState({noLoad: "on", loadPin: this.state.loadPin + 1, loadError: null, comment: comment});
+                        } else {
+                            this.setState({loadPin: this.state.loadPin + 1, loadError: null, comment: comment});
+                        }
+                }
+            }.bind(this),
+            error: function (err) {
+                this.setState({loadError: "Can't connect to server, try later."});
+            }.bind(this)
+        });
     }
     render() {
         //check user liked it before or not
@@ -72,6 +98,7 @@ class Moment extends Component {
                         </div>
                     </section>
                     <Commentlist data={comments} locker={this.state.noLoad} loadMore={this.loadComment.bind(this)} fontFamily="'Rubik', sans-serif" />
+                    <h7>{this.state.loadError}</h7>
                 </aside>
                 <Footer />
             </div>
