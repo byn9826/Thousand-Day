@@ -8,6 +8,7 @@ from routes.user import user_routes
 from routes.edit import edit_routes
 from routes.signup import signup_routes
 from routes.profile import profile_routes
+from routes.moment import moment_routes
 
 
 app = Flask(__name__, static_folder='static', static_url_path='')
@@ -18,6 +19,7 @@ app.register_blueprint(user_routes)
 app.register_blueprint(edit_routes)
 app.register_blueprint(signup_routes)
 app.register_blueprint(profile_routes)
+app.register_blueprint(moment_routes)
 
 
 @app.route('/react')

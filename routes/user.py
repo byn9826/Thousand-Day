@@ -5,8 +5,9 @@ import mysql.connector
 import secret
 from handler.relation import checkRelation, requestRelation
 from handler.user import checkUser, searchRelative
-from handler.pet import searchBelong
+from handler.pet import searchBelong, newPet
 from handler.moment import petsMoment
+from handler.upload import uploadPet
 
 
 user_routes = Blueprint('user_routes', __name__, template_folder = 'templates')
@@ -119,3 +120,52 @@ def loadMoment():
         return jsonify(moments)
     else:
         abort(404)
+
+#create new pet
+@user_routes.route('/user/createPet', methods = ['GET', 'POST'])
+def createPet():
+    #only response to post
+    if request.method == 'POST':
+        #must login
+        if session.get('userId') is None:
+            return str(0)
+        #name can't be empty
+        name = request.form['name'][:10].strip()
+        if name == '':
+            return str(1)
+        gender = int(request.form['gender'])
+        # gender must be 0 or 1
+        if gender != 0 and gender != 1:
+            return str(1)
+        # type must be 0,1,2,3,4
+        petType = int(request.form['type'])
+        if petType != 0 and petType != 1 and petType != 2 and petType != 3 and petType != 4:
+            return str(1)
+        nature = int(request.form['nature'])
+        #nature must be 0,1,2,3
+        if nature != 0 and nature != 1 and nature != 2 and nature != 3:
+            return str(1)
+        lon = float(request.form['lon'])
+        lat = float(request.form['lat'])
+        #file must exist
+        if 'file' not in request.files:
+            return str(1)
+        file = request.files['file']
+        cnx = mysql.connector.connect(**config)
+        try:
+            create = newPet(session['userId'], name, gender, petType, nature, lon, lat, cnx)
+        #row create success, save image
+            if create is not None:
+                upload = uploadPet(file, int(create))
+            else:
+                return str(2)
+        finally:
+            cnx.close()
+        #error with the file uploaded
+        if upload == '1':
+            return str(1)
+        #success
+        else:
+            return str(3)
+    else:
+        abort(404)  

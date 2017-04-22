@@ -249,7 +249,7 @@ class Profile extends Component {
                         <label htmlFor="user-aura">Update your aura:</label>
                         <Droplist id="user-aura" width="80%" default={this.state.userAura} options={["Pets +10% Attack", "Pets +10% Defend", "Pets +10% Health", "Pets +10% Swift", "Pets +10% Lucky"]} title="Choose your aura" showTitle="true" changeValue={this.updateAura.bind(this)} fontFamily="'Rubik', sans-serif" />
                     </div>
-                    <input id="pop-edit-close" type="button" value="Close" onClick={this.closeEdit.bind(this)} />
+                    <input className="pop-edit-close" type="button" value="Close" onClick={this.closeEdit.bind(this)} />
                 </section>
             )
         }

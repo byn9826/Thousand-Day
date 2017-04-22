@@ -1,0 +1,58 @@
+/*moment page*/
+#main{
+    display: inline-block;
+    width: 42%;
+    margin-left: 10%;
+    margin-top: 100px;
+    vertical-align: top;
+}
+#main img{
+    display: block;
+    width: 100%;
+    border-radius: 5px;
+}
+
+
+#aside{
+    display: inline-block;
+    margin-left: 3%;
+    margin-top: 100px;
+    vertical-align: top;
+    height: 500px;
+    width: 35%;
+}
+
+#aside-talk{
+    display: block;
+    background-color: black;
+    border-radius: 5px;
+    padding: 5px 0;
+}
+#aside-talk img{
+    display: inline-block;
+    width: 12%;
+    vertical-align: top;
+    border-radius: 3px;
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-top: 5px;
+}
+#aside-talk h4{
+    display: inline-block;
+    vertical-align: top;
+    color: white;
+    width: 80%;
+    padding: 3px 2%;
+}
+
+.aside-social{
+    margin-top: 10px;
+    display: block;
+    padding-left: 3%;
+}
+
+.fb-share-button{
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 5%;
+}

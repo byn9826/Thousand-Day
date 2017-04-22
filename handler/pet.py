@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import mysql.connector
+import datetime
 
 #search pet info based on pet id 
 def searchPet(petId, cnx):
@@ -173,3 +174,27 @@ def transferPet(ownerId, relativeId, petId, cnx):
         return str(2)
     finally:
         transCursor.close()
+
+#create new pet
+def newPet(userId, petName, petGender, petType, petNature, petLon, petLat, cnx):
+    petReg = datetime.datetime.now().date()
+    potential = 10
+    win = 0
+    addQuery = (
+        'INSERT INTO pet (pet_name, pet_gender, pet_type, pet_nature, location_lon, location_lat, '
+        'pet_reg, ability_attack, ability_defend, ability_health, ability_swift, ability_lucky, '
+        'pet_potential, owner_id, pet_win) VALUES (%s, %s, %s, %s, %s, %s, %s, 50, 50, 50, 50, '
+        '50, 10, %s, 0)'
+    )
+    try:
+        addCursor = cnx.cursor()
+        addCursor.execute(addQuery, (petName, petGender, petType, petNature, petLon, petLat, petReg, userId))
+        cnx.commit()
+        newId = addCursor.lastrowid
+        return str(newId)
+    except mysql.connector.Error as err:
+        cnx.rollback()
+        print('Something went wrong: {}'.format(err))
+        return None
+    finally:
+        addCursor.close()

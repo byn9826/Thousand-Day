@@ -24,7 +24,17 @@ class Profile extends Component {
             //add new pet name error
             addError: null,
             //init coordinate of map for create new
-            initLocation: [-31.687500000000043, 41.81736507297239]
+            initLocation: [-31.687500000000043, 41.81736507297239],
+            //error for create pet
+            createError: null,
+            //store create pet gener
+            createGender: 2,
+            //store create type
+            createType: null,
+            //store create nature
+            createNature: null,
+            //store create profile
+            createProfile: null
         };
 	}
     //click add new pet button, show pop up box
@@ -75,11 +85,82 @@ class Profile extends Component {
     }
     //save location for a pet
     saveLocation(coordinate) {
-        console.log(coordinate);
+        this.setState({initLocation: coordinate});
     }
     //result of choose gender
     chooseGender(choice) {
-        console.log(choice);
+        this.setState({createGender: choice});
+    }
+    //result of choose type
+    chooseType(value) {
+        this.setState({createType: value});
+    }
+    //result of choose nature
+    chooseNature(value) {
+        this.setState({createNature: value});
+    }
+    //result of choose profile
+    chooseProfile(value) {
+        this.setState({createProfile: value});
+    }
+    //click create new pet button
+    createPet() {
+        let petName = this.refs.petName.state.content.trim();
+        let petGender = parseInt(this.state.createGender);
+        let petType = parseInt(this.state.createType);
+        let petNature = parseInt(this.state.createNature);
+        let petProfile = this.state.createProfile;
+        let petLocation = this.state.initLocation;
+        if (petName.length === 0) {
+            this.setState({createError: "Pet name can't be empty !"});
+        } else if (petGender !== 0 && petGender !== 1) {
+            this.setState({createError: "Please choose pet gender !"});
+        } else if (petType !== 0 && petType !== 1 && petType !== 2 && petType !== 3 && petType !== 4) {
+            this.setState({createError: "Please choose pet type !"});
+        } else if (petNature !== 0 && petNature !== 1 && petNature !== 2 && petNature !== 3) {
+            this.setState({createError: "Please choose pet nature !"});
+        } else if (!petProfile) {
+            this.setState({createError: "Please upload a pet image !"});
+        } else {
+            let fileData = new FormData();
+    	    fileData.append("file", petProfile, "0.png");
+            fileData.append("name", petName);
+            fileData.append("gender", petGender);
+            fileData.append("type", petType);
+            fileData.append("nature", petNature);
+            fileData.append("lon", petLocation[0]);
+            fileData.append("lat", petLocation[1]);
+            //create new row for pet first
+            reqwest({
+                url: "/user/createPet",
+				method: "POST",
+                cache: false,
+                contentType: false,
+                processData: false,
+				data: fileData,
+                success: function(result) {
+                     console.log(result);
+                    switch (parseInt(result)) {
+                        case 0:
+                            this.setState({createError: "Please login first !"});
+                            break;
+                        case 1:
+                            this.setState({createError: "Please check all fields !"});
+                            break;
+                        case 2:
+                            this.setState({createError: "Can't connect to database, try later !"});
+                            break;
+                        //success refresh page
+                        case 3:
+                            location.reload();
+                            break;
+                    }
+                }.bind(this),
+                error: function (err) {
+				    this.setState({createError: "Can't connect to server, try later !"});
+			    }.bind(this)
+            });
+        }
     }
     render() {
         //show cursor when could load more moment
@@ -205,15 +286,19 @@ class Profile extends Component {
                         <label htmlFor="pet-name">His/Her name:</label>
                         <Inputbox id="pet-name" ref="petName" content="" max="10" width="200px" fontFamily="'Rubik', sans-serif" />
                         <label>Choose gender:</label>
+                        <h7>Can't change gender after create</h7>
                         <Pickgender chooseGender={this.chooseGender.bind(this)} fontFamily="'Rubik', sans-serif" />
                     </div>
                     <div className="pop-edit-section">
                         <label htmlFor="pet-type">About Him/Her:</label>
-                        <Droplist id="pet-type" width="80%" options={["dog", "cat", "bird", "fish", "other"]} title="His/Her type" showTitle="true" changeValue={null} fontFamily="'Rubik', sans-serif" />
-                        <Droplist id="pet-nature" width="80%" options={["cute", "strong", "smart", "beauty"]} title="His/Her nature" showTitle="true" changeValue={null} fontFamily="'Rubik', sans-serif" />
+                        <h7>Can't change type and nature after create</h7>
+                        <Droplist id="pet-type" width="80%" options={["dog", "cat", "bird", "fish", "other"]} title="His/Her type" showTitle="true" changeValue={this.chooseType.bind(this)} fontFamily="'Rubik', sans-serif" />
+                        <Droplist id="pet-nature" width="80%" options={["cute", "strong", "smart", "beauty"]} title="His/Her nature" showTitle="true" changeValue={this.chooseNature.bind(this)} fontFamily="'Rubik', sans-serif" />
                     </div>
-                    <Updateprofile alt="Pet Profile" format="image/png" width="200" saveProfile={null} indicate="Upload Image" fontFamily="'Rubik', sans-serif" />
+                    <Updateprofile alt="Pet Profile" format="image/png" width="200" saveProfile={this.chooseProfile.bind(this)} indicate="Upload Image" fontFamily="'Rubik', sans-serif" />
                     <Getlocation center={this.state.initLocation} indicate="Save Location" zoom="1" setZoom="2" saveLocation={this.saveLocation.bind(this)} fontFamily="'Rubik', sans-serif" />
+                    <h6>{this.state.createError}</h6>
+                    <input className="pop-edit-close" type="button" value="Create" onClick={this.createPet.bind(this)} />
                 </section>
             )
         }

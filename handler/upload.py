@@ -19,7 +19,7 @@ def uploadMoment(file, petId):
         #name time with special time span
         fileName = str(time.time()).replace('.', '-') + '.' + secure_filename(file.filename)
         #store into pet id folder
-        foldPath = '../static/img/pet/' + petId + '/moment/'
+        foldPath = '../static/img/pet/' + str(petId) + '/moment/'
         try:
             file.save(os.path.join(os.path.dirname(os.path.abspath(__file__)), foldPath, fileName))
         except Exception as err:
@@ -46,6 +46,10 @@ def uploadPet(file, petId):
     if file and allowedPet(file.filename):
         fileName = secure_filename(file.filename)
         foldPath = '../static/img/pet/' + str(petId) + '/cover/'
+        #create folder path if not exist
+        dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), foldPath)
+        if not os.path.exists(dir):
+            os.makedirs(dir)
         try:
             #save profile image
             file.save(os.path.join(os.path.dirname(os.path.abspath(__file__)), foldPath, fileName))

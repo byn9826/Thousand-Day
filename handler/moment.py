@@ -2,6 +2,20 @@
 # -*- coding: utf-8 -*-
 import mysql.connector
 
+#read information of one moment
+def readMoment(momentId, cnx):
+    momentQuery = 'SELECT * FROM moment WHERE moment_id = %s'
+    try:
+        momentCursor = cnx.cursor(dictionary=True)
+        momentCursor.execute(momentQuery, (momentId, ))
+        return momentCursor.fetchone()
+    #return 0 for db error
+    except mysql.connector.Error as err:
+        print('Something went wrong: {}'.format(err))
+        return str(0)
+    finally:
+        momentCursor.close()
+
 #add moment to moment table
 def addMoment(name, message, petId, cnx):
     momentQuery = 'INSERT INTO moment (image_name, moment_message, pet_id) VALUES (%s, %s, %s)'
