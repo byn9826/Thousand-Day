@@ -5,6 +5,7 @@ import Header from "../general/Header";
 import Footer from "../general/Footer";
 import Like from "../snippet/attitude/Like";
 import Commentlist from "../snippet/attitude/Commentlist";
+import Inputarea from '../snippet/input/Inputarea';
 class Moment extends Component {
     constructor(props) {
         super(props);
@@ -20,19 +21,42 @@ class Moment extends Component {
             //store load comment for how many times
             loadPin: 1,
             //store error for load comment
-            loadError: null
+            loadError: null,
+            //store comment error
+            commentError: null,
+            //visitorName if user logged in
+            visitorName: this.props.name,
+            //if visitor added one comment
+            commentAdd: 0
 		};
 	}
     //if user click like button
     changeAgree(action) {
-        console.log(action);
+        reqwest({
+            url: "/moment/changeLike",
+            method: "POST",
+            data: {"id": window.location.pathname.split("/").pop(), "statues": action},
+            success: function(result) {
+                switch(result) {
+                    case "1":
+                        let likeArray = this.state.like.slice();
+                        if (action == 1) {
+                            likeArray.push(this.state.visitorId);
+                        } else {
+                            likeArray.splice(likeArray.indexOf(this.state.visitorId), 1);
+                        }
+                        this.setState({like: likeArray});
+                        break;
+                }
+            }.bind(this)
+        });
     }
     //if user click load more
     loadComment() {
         reqwest({
             url: "/moment/commentLoad",
             method: "POST",
-            data: {"pin": this.state.loadPin, "id": window.location.pathname.split("/").pop()},
+            data: {"pin": this.state.loadPin, "id": window.location.pathname.split("/").pop(), "add": this.state.commentAdd},
             success: function(result) {
                 switch(result) {
                     case "0":
@@ -45,6 +69,7 @@ class Moment extends Component {
                             let comment = this.state.comment.concat(result);
                             this.setState({noLoad: "on", loadPin: this.state.loadPin + 1, loadError: null, comment: comment});
                         } else {
+                            let comment = this.state.comment.concat(result);
                             this.setState({loadPin: this.state.loadPin + 1, loadError: null, comment: comment});
                         }
                 }
@@ -54,20 +79,71 @@ class Moment extends Component {
             }.bind(this)
         });
     }
-    render() {
-        //check user liked it before or not
-        let liked;
-        if (this.state.like.indexOf(this.state.visitorId) === -1) {
-            liked = "false";
+    //if user click leave comment
+    leaveComment() {
+        //comment content can't be empty
+        let content = this.refs.newComment.state.content.trim();
+        if (content == "") {
+            this.setState({commentError: "Comment can't be empty"});
         } else {
-            liked = "true";
+            reqwest({
+                url: "/moment/createComment",
+                method: "POST",
+                data: {"content": content, "id": window.location.pathname.split("/").pop()},
+                success: function(result) {
+                    switch (result) {
+                        case "0":
+                            this.setState({commentError: "Please login first"});
+                            this.refs.newComment.setState({content: ""});
+                            break;
+                        case "1":
+                            let newComment = {
+                                comment_content: content,
+                                user_id: this.state.visitorId,
+                                comment_time: new Date()
+                            };
+                            let comments = this.state.comment.slice();
+                            comments.unshift(newComment);
+                            this.setState({comment: comments, commentError: null, commentAdd: this.state.commentAdd + 1});
+                            this.refs.newComment.setState({content: ""});
+                            break;
+                        case "2":
+                            this.setState({commentError: "Can't leave a comment, try later"});
+                            this.refs.newComment.setState({content: ""});
+                            break;
+                    }
+                }.bind(this),
+                error: function (err) {
+                    this.setState({commentError: "Can't connect to server, try later"});
+                    this.refs.newComment.setState({content: ""});
+                }.bind(this)
+            });
         }
-        //display like or interact
-        let likeAct;
+    }
+    //update visitor id after user login successfully
+	loginSuccess(id) {
+		this.setState({visitorId: id});
+	}
+    logOut() {
+		this.setState({visitorId: null, visitorName: null});
+	}
+    render() {
+        //mode of like component
+        let likeComment;
         if (!this.state.visitorId) {
-            likeAct = "false";
+            likeComment = (
+                <Like key="like1" interact="false" agree={this.state.like.length} liked="false" newTotal={this.changeAgree.bind(this)}/>
+            )
         } else {
-            likeAct = "true";
+            if (this.state.like.indexOf(this.state.visitorId) === -1) {
+                likeComment = (
+                    <Like key="like2" interact="true" agree={this.state.like.length} liked="false" newTotal={this.changeAgree.bind(this)}/>
+                )
+            } else {
+                likeComment = (
+                    <Like key="like3" interact="true" agree={this.state.like.length} liked="true" newTotal={this.changeAgree.bind(this)}/>
+                )
+            }
         }
         //process content for comments
         let comments = [];
@@ -78,9 +154,20 @@ class Moment extends Component {
             comments[i][2] = "/user/" + this.state.comment[i].user_id;
             comments[i][3] = new Date(this.state.comment[i].comment_time).toISOString().substring(0, 10);
         }
+        //login user to show create comment area
+        let createComment;
+        if (this.state.visitorId) {
+            createComment = (
+                <div>
+                    <Inputarea ref="newComment" content="" max="150" />
+                    <h7>{this.state.commentError}</h7>
+                    <h6 id="aside-leave" onClick={this.leaveComment.bind(this)}>Comment</h6>
+                </div>
+            );
+        }
         return (
             <div id="react-root">
-                <Header loginSuccess={null} logOut={null} />
+                <Header visitorName={this.state.visitorName} loginSuccess={this.loginSuccess.bind(this)} logOut={this.logOut.bind(this)} />
                 <main id="main">
                     <img alt="moment" src={"/img/pet/" + this.props.data.pet_id + "/moment/" + this.props.data.image_name} />
                 </main>
@@ -90,7 +177,7 @@ class Moment extends Component {
                         <h4>{this.props.data.moment_message}</h4>
                     </section>
                     <section className="aside-social">
-                        <Like interact={likeAct} agree={this.state.like.length} liked={liked} newTotal={this.changeAgree.bind(this)}/>
+                        {likeComment}
                         <div className="fb-share-button" data-href={location.href} data-layout="button" data-size="small" data-mobile-iframe="true">
                             <a className="fb-xfbml-parse-ignore" target="_blank" href={"https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A5000%2Fmoment%2F" + this.props.data.moment_id + "&amp;src=sdkpreparse"}>
                                 Share
@@ -99,6 +186,7 @@ class Moment extends Component {
                     </section>
                     <Commentlist data={comments} locker={this.state.noLoad} loadMore={this.loadComment.bind(this)} fontFamily="'Rubik', sans-serif" />
                     <h7>{this.state.loadError}</h7>
+                    {createComment}
                 </aside>
                 <Footer />
             </div>
@@ -110,7 +198,6 @@ reqwest({
 	method: "POST",
 	data: {"id": window.location.pathname.split("/").pop()},
 	success: function(result) {
-        console.log(result);
 		switch(result) {
 			case "0":
 				console.log("Can't connect to db");
@@ -126,7 +213,7 @@ reqwest({
                         like.push(result[1][i][0]);
                     }
                 }
-				ReactDOM.render(<Moment data={result[0]} like={like} visitorId={result[2]} comment={result[3]} />, document.getElementById("root"));
+				ReactDOM.render(<Moment data={result[0]} like={like} visitorId={result[2]} comment={result[3]} name={result[4]} />, document.getElementById("root"));
 				break;
 		}
 	},
