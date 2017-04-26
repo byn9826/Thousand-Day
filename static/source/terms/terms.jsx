@@ -33,6 +33,8 @@ class Terms extends Component {
                     <h5>Thousanday may revise these terms of service for its website at any time without notice. By using this website you are agreeing to be bound by the then current version of these terms of service.</h5>
                     <h4>8. Governing Law</h4>
                     <h5>These terms and conditions are governed by and construed in accordance with the laws of CA and you irrevocably submit to the exclusive jurisdiction of the courts in that State or location.</h5>
+                    <h4>9. Google reCAPTCHA</h4>
+                    <h5>This website have implemented the Invisible reCAPTCHA and that their use of the Invisible reCAPTCHA is subject to the Google <a href="https://www.google.com/intl/en/policies/privacy/">Privacy Policy</a> and <a href="https://www.google.com/intl/en/policies/terms/">Terms of Use</a>.</h5>
                     <h2>Privacy Policy</h2>
                     <h5>Your privacy is important to us.</h5>
                     <h5>It is Thousanday's policy to respect your privacy regarding any information we may collect while operating our website. Accordingly, we have developed this privacy policy in order for you to understand how we collect, use, communicate, disclose and otherwise make use of personal information. We have outlined our privacy policy below.</h5>

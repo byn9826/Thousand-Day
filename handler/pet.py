@@ -198,3 +198,17 @@ def newPet(userId, petName, petGender, petType, petNature, petLon, petLat, cnx):
         return None
     finally:
         addCursor.close()
+
+#filter pet for explore
+def filterPet(type, nature, cnx):
+    filterQuery = 'SELECT pet_id FROM pet WHERE pet_type = %s AND pet_nature = %s'
+    try:
+        filterCursor = cnx.cursor()
+        filterCursor.execute(filterQuery, (type, nature))
+        return filterCursor.fetchall()
+    #return 0 for db error
+    except mysql.connector.Error as err:
+        print('Something went wrong: {}'.format(err))
+        return str(0)
+    finally:
+        filterCursor.close()
