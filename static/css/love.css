@@ -1,0 +1,9 @@
+/*love page*/
+#main{
+    display: inline-block;
+    vertical-align: top;
+    width: 54%;
+    margin-left: 10%;
+    padding-top: 100px;
+    min-height: 650px;
+}
