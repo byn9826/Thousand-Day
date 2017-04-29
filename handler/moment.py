@@ -65,3 +65,17 @@ def singleMoment(petId, startPoint, cnx):
         return str(0)
     finally:
         momentCursor.close()
+
+#search 20 newest moment from all pets
+def newMoment(startPoint, cnx):
+    newQuery = 'SELECT * FROM moment ORDER BY moment_id DESC LIMIT %s, 20'
+    try:
+        newCursor = cnx.cursor()
+        newCursor.execute(newQuery, (startPoint, ))
+        return newCursor.fetchall()
+    #return 0 for db error
+    except mysql.connector.Error as err:
+        print('Something went wrong: {}'.format(err))
+        return str(0)
+    finally:
+        newCursor.close()

@@ -7,21 +7,64 @@ class Love extends Component {
 	constructor(props) {
         super(props);
 		this.state = {
-
+			moments: this.props.petMoment
         }
     }
-	
 	render() {
+		//pets with most watchers
+		let rank = this.props.petRank.map((pet, index) =>
+			<div key={"thousandaylove" + index} className="aside-list">
+				<img className="aside-list-profile" alt={pet.pet_name} src={"/img/pet/" + pet.pet_id + "/cover/0.png"} />
+				<img className="aside-list-icon" alt="watcher" src="/img/icon/glyphicons-watch.png" />
+				<h7>{pet.count}</h7>
+				<h5>{pet.pet_name}</h5>
+			</div>
+		);
+		//newest 20 moments
+		let moments = this.state.moments.map((moment, index) =>
+			<div className="main-moment">
+				123
+			</div>
+		);
 		return (
 			<div  id="react-root">
 				<Header />
 				<main id="main">
-					
+					{moments}
 				</main>
+				<aside id="aside">
+					<h4>Most Popular Pets</h4>
+					{rank}
+				</aside>
 				<Footer />
 			</div>
 		);
 	}
 }
-//get defaultdata
-ReactDOM.render(<Love />, document.getElementById("root"));
+reqwest({
+	url: "/love/view",
+	method: "POST",
+	success: function(result) {
+		//get default data
+		switch (result) {
+			case "0":
+				console.log("Can't connet to server, try later");
+				break;
+			default:
+				//combine pet name with count
+				for (let i = 0; i < result[0].length; i++) {
+					for (let j = 0; j < result[1].length; j ++) {
+						if (result[0][i].pet_id === result[1][j].pet_id) {
+							result[0][i].count = result[1][j].count;
+						}
+					}
+				}
+				console.log(result[0]);
+				console.log(result[2]);
+				ReactDOM.render(<Love petRank={result[0]} petMoment={result[2]} />, document.getElementById("root"));
+		}
+	},
+	error: function (err) {
+		console.log("Can't connect to the server");
+	}
+});

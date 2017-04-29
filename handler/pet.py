@@ -212,3 +212,19 @@ def filterPet(type, nature, cnx):
         return str(0)
     finally:
         filterCursor.close()
+
+#get all pet info from a list of id
+def listPet(petList, cnx):
+    listQuery = 'SELECT pet_id, pet_name FROM pet WHERE pet_id IN (%s)'
+    listHolder = ', '.join(list(map(lambda x: '%s', petList)))
+    try:
+        #Get all pet info
+        listQuery = listQuery % (listHolder)
+        listCursor = cnx.cursor(dictionary=True)
+        listCursor.execute(listQuery, petList)
+        return listCursor.fetchall()
+    except mysql.connector.Error as err:
+        print('Something went wrong: {}'.format(err))
+        return str(0)
+    finally:
+        listCursor.close()

@@ -26,7 +26,7 @@ def updateWatch(visitorId, petId, addWatch, cnx):
         watchQuery = 'DELETE FROM pet_watch WHERE pet_id = %s AND user_id = %s'
     try:
         watchCursor = cnx.cursor()
-        watchCursor.execute(watchQuery, (visitorId, petId))
+        watchCursor.execute(watchQuery, (petId, visitorId))
         cnx.commit()
         return str(1)
     except mysql.connector.Error as err:
@@ -35,3 +35,16 @@ def updateWatch(visitorId, petId, addWatch, cnx):
         return str(2)
     finally:
         watchCursor.close()
+
+#top 10 watch pets
+def topWatch(cnx):
+    topQuery = 'SELECT pet_id, COUNT(*) AS count FROM pet_watch GROUP BY pet_id ORDER BY count DESC LIMIT 10'
+    try:
+        topCursor = cnx.cursor(dictionary=True)
+        topCursor.execute(topQuery)
+        return topCursor.fetchall()
+    except mysql.connector.Error as err:
+        print('Something went wrong: {}'.format(err))
+        return str(0)
+    finally:
+        topCursor.close()

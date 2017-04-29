@@ -7,3 +7,64 @@
     padding-top: 100px;
     min-height: 650px;
 }
+
+.main-moment{
+    display: block;
+    width: 100%;
+    background-color: #f7f9fc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+#aside{
+    display: inline-block;
+    vertical-align: top;
+    padding-top: 100px;
+    margin-left: 5%;
+    width: 21%;
+}
+#aside h4{
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    background-color: #052456;
+    color: white;
+}
+
+.aside-list{
+    display: block;
+    width: 100%;
+    background-color: #f7d7b4;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+.aside-list-profile{
+    width: 22%;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    margin-left: 3%;
+    margin-right: 5%;
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 5px;
+}
+.aside-list-icon{
+    display: inline-block;
+    vertical-align: middle;
+}
+.aside-list h7{
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 5%;
+}
+.aside-list h5{
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 6%;
+    padding: 5px 10px;
+    font-weight: bold;
+    color: #052456;
+}
