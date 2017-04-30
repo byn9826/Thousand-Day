@@ -8,6 +8,8 @@ class Header extends Component {
 		this.state = {
 			//store username or login
             loginName: this.props.visitorName || "Login",
+			//store user id
+			loginId: this.props.visitorId || null,
 			//indicate show loginbox or not
 			showDrop: false,
 			//hide name or not
@@ -42,7 +44,7 @@ class Header extends Component {
 						default:
 							if (this.state.loginName == "Login") {
 								//get username, close dropdown box
-								this.setState({loginName: result[1], showDrop: false});
+								this.setState({loginName: result[1], loginId:result[0], showDrop: false});
 								//pass user id back to parent
 								this.props.loginSuccess(result[0]);
 							}
@@ -82,7 +84,7 @@ class Header extends Component {
 						default:
 							if (this.state.loginName == "Login") {
 								//get username, close dropdown box
-								this.setState({loginName: result[1], showDrop: false});
+								this.setState({loginName: result[1], loginId: result[0], showDrop: false});
 								//pass user id back to parent
 								this.props.loginSuccess(result[0]);
 							}
@@ -160,7 +162,7 @@ class Header extends Component {
 			if (this.state.showDrop && this.state.loginName != "Login") {
 				logout = (
 					<div className="header-drop">
-						<a><h5>Digital Home</h5></a>
+						<a href={"/user/" + this.state.loginId}><h5>Digital Home</h5></a>
 						<input type="button" value="Log Out" onClick={this.logOut.bind(this)} />
 					</div>
 				)

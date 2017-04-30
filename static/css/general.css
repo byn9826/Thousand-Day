@@ -97,3 +97,31 @@
     line-height: 30px;
     font-weight: bold;
 }
+
+/*Footer style*/
+#footer{
+    display: block;
+	width: 80%;
+	background-color: black;
+	padding: 5px 10%;
+	margin-top: 70px;
+	clear: both;
+}
+
+#footer h6{
+    display: inline-block;
+	vertical-align: middle;
+	margin-right: 3%;
+	color: white;
+}
+
+@media only screen and (max-width: 948px) {
+    #header-logo{
+        margin-left: 5%;
+    }
+
+    #footer{
+        width: 90%;
+        padding: 5px 5%;
+    }
+}

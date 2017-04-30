@@ -37,9 +37,11 @@ def loveView():
         finally:
             cnx.close()
         if session.get('userName') is not None:
-            visitor = session['userName']
+            visitorName = session['userName']
+            visitorId = session['userId']
         else:
-            visitor = None
-        return jsonify([info, watcher, new, comments, visitor])
+            visitorName = None
+            visitorId = None
+        return jsonify([info, watcher, new, comments, visitorName, visitorId])
     else:
         abort(404)

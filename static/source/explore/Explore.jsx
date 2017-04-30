@@ -114,9 +114,14 @@ class Explore extends Component {
 		if (userName == "None") {
 			userName = null;
 		}
+		//get user Id
+		let userId = document.getElementById("user-id").innerHTML.trim();
+		if (userName == "None") {
+			userName = null;
+		}
 		return (
 			<div id="react-root">
-				<Header visitorName={userName} loginSuccess={()=>{}} logOut={()=>{}} />
+				<Header visitorId={userId} visitorName={userName} loginSuccess={()=>{}} logOut={()=>{}} />
 				<main id="main">
 					<section className="main-filter">
 						<div className="main-filter-title">

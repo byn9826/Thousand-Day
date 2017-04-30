@@ -167,7 +167,7 @@ class Moment extends Component {
         }
         return (
             <div id="react-root">
-                <Header visitorName={this.state.visitorName} loginSuccess={this.loginSuccess.bind(this)} logOut={this.logOut.bind(this)} />
+                <Header visitorId={this.props.visitorId} visitorName={this.state.visitorName} loginSuccess={this.loginSuccess.bind(this)} logOut={this.logOut.bind(this)} />
                 <main id="main">
                     <img alt="moment" src={"/img/pet/" + this.props.data.pet_id + "/moment/" + this.props.data.image_name} />
                 </main>

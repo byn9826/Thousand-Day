@@ -21,7 +21,7 @@ class Pet extends Component {
 	render() {
 		return (
 			<div id="react-root">
-				<Header visitorName={this.props.visitorName} loginSuccess={this.loginSuccess.bind(this)} logOut={this.logOut.bind(this)} />
+				<Header visitorId={this.props.visitorId} visitorName={this.props.visitorName} loginSuccess={this.loginSuccess.bind(this)} logOut={this.logOut.bind(this)} />
 				<About visitorId={this.state.visitorId} pet={this.props.pet} owner={this.props.owner} watcher={this.props.watcher} companion={this.props.companion} />
 				<Display visitorId={this.state.visitorId} pet={this.props.pet} moment={this.props.moment} />
 				<Footer />

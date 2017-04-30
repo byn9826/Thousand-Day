@@ -19,13 +19,20 @@ class Moment extends Component {
         } else {
             loadStyle = "moment-load-not"
         }
+        //4 column for 948 screen, 3 for smaller one
+        let gallery;
+        if (window.innerWidth > 948) {
+            gallery = <Waterfall column="4" image={allImages} link="true" fontFamily="'Rubik', sans-serif" />
+        } else {
+            gallery = <Waterfall column="3" image={allImages} link="true" fontFamily="'Rubik', sans-serif" />
+        }
         return (
             <section id="moment">
                 <div id="moment-title">
                     <img alt="moment-icon" src="/img/icon/glyphicons-moment.png" / >
                     <h4>Moments</h4>
                 </div>
-                <Waterfall column="4" image={allImages} link="true" fontFamily="'Rubik', sans-serif" />
+                {gallery}
                 <h5 className={loadStyle} onClick={this.props.loadMore.bind(null)}>{this.props.showMessage}</h5>
             </section>
         );

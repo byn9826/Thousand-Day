@@ -295,7 +295,7 @@
     display: inline-block;
     width: 23%;
     margin: 0 1%;
-    vertical-align: bottom;
+    vertical-align: middle;
     border-top: 2px solid #f7f9fc;
 }
 .skill-one h5{
@@ -366,4 +366,81 @@
     text-align: center;
     padding: 6px 0;
     border-radius: 5px;
+}
+
+@media only screen and (max-width: 948px) {
+    #main{
+        margin-left: 5%;
+        width: 23%;
+    }
+
+    #display{
+        width: 60%;
+    }
+}
+
+
+@media only screen and (max-width: 612px) {
+    #main{
+        width: 90%;
+    }
+
+    #main-profile{
+        width: 50%;
+        margin-left: 25%;
+    }
+
+    #main-name{
+        text-align: center;
+    }
+
+    #main-watch{
+        width: 50%;
+        margin-left: 25%;
+    }
+
+    #main-nature{
+        text-align: center;
+    }
+
+    .main-title{
+        text-align: center;
+    }
+
+    #team-relative h5{
+        text-align: center;
+    }
+
+    #team-title{
+        display: none;
+    }
+
+    .team-companion{
+        display: none;
+    }
+
+    #ability{
+        display: none;
+    }
+
+    #display{
+        width: 90%;
+        margin-left: 5%;
+        margin-top: 0px;
+    }
+
+    #publish{
+        width: 95%;
+    }
+
+}
+
+@media only screen and (max-width: 446px) {
+    #skill{
+        display: none;
+    }
+
+    #publish{
+        margin-top: 0;
+    }
 }

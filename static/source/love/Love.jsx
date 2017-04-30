@@ -69,7 +69,7 @@ class Love extends Component {
 		}
 		return (
 			<div  id="react-root">
-				<Header visitorName={this.props.visitorName} loginSuccess={()=>{}} logOut={()=>{}} />
+				<Header visitorId={this.props.visitorId} visitorName={this.props.visitorName} loginSuccess={()=>{}} logOut={()=>{}} />
 				<main id="main">
 					<header id="main-header">
 						<img alt="Share Moment" src="/img/icon/glyphicons-moment.png" />
@@ -115,7 +115,7 @@ reqwest({
 						}
 					}
 				}
-				ReactDOM.render(<Love petRank={result[0]} petMoment={result[2]} visitorName={result[4]} />, document.getElementById("root"));
+				ReactDOM.render(<Love petRank={result[0]} petMoment={result[2]} visitorName={result[4]} visitorId={result[5]} />, document.getElementById("root"));
 		}
 	},
 	error: function (err) {

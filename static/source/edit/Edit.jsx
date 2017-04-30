@@ -701,7 +701,7 @@ class Edit extends Component {
 		}
 		return (
 			<div id="react-root">
-				<Header visitorName={this.props.userName} loginSuccess={null} logOut={this.logOut.bind(this)} />
+				<Header visitorId={this.props.userId} visitorName={this.props.userName} loginSuccess={null} logOut={this.logOut.bind(this)} />
 				<main id="main">
 					<section id="main-header">
 						<h4 id="main-header-left">
