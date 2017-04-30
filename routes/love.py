@@ -6,15 +6,10 @@ import secret
 from handler.watch import topWatch
 from handler.pet import listPet
 from handler.moment import newMoment
+from handler.like import relateComment
 
 love_routes = Blueprint('love_routes', __name__, template_folder = 'templates')
 config = secret.mysql()
-
-
-#Get love
-@love_routes.route('/love')
-def loveHome():
-    return render_template('love.html')
 
 #Init love page
 @love_routes.route('/love/view', methods = ['GET', 'POST'])
@@ -35,8 +30,12 @@ def loveView():
             new = newMoment(0, cnx)
             if new == 0:
                 return str(0)
+            #get all moments id
+            moments = [n['moment_id'] for n in new]
+            #get first two comment for every moments
+            comments = relateComment(moments, cnx)
         finally:
             cnx.close()
-        return jsonify([info, watcher, new])
+        return jsonify([info, watcher, new, comments])
     else:
         abort(404)
