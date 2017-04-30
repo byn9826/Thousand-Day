@@ -109,7 +109,6 @@
     border: 1px solid black;
     z-index: 5;
     border-radius: 4px;
-    height: 280px;
     padding-bottom: 10px;
     text-align: center;
 }
@@ -127,6 +126,7 @@
     margin-top: 20px;
     font-weight: bold;
     margin-bottom: 20px;
+    padding: 0 5%;
 }
 .main-action-warn{
     display: block;
@@ -146,7 +146,6 @@
     border: 1px solid black;
     z-index: 5;
     border-radius: 4px;
-    height: 320px;
     padding-bottom: 10px;
     text-align: center;
 }
@@ -202,4 +201,84 @@
     height: 100%;
     background-color: white;
     opacity: 0.95;	
+}
+
+@media only screen and (max-width: 1010px) {
+    #main{
+        width: 90%;
+        margin-left: 5%;
+    }
+}
+
+@media only screen and (max-width: 900px) {
+    .main-section{
+        margin-left: 50px;
+        margin-right: 50px;
+    }
+}
+
+@media only screen and (max-width: 772px) {
+    .main-section{
+        margin-left: 0px;
+        margin-right: 50px;
+    }
+}
+
+@media only screen and (max-width: 661px) {
+    .main-section{
+        margin-left: 0px;
+        margin-right: 25px;
+    }
+
+    .main-trans{
+        width: 70%;
+        margin-left: 15%;
+    }
+
+    .main-action{
+        width: 70%;
+        margin-left: 15%;
+    }
+
+    .main-team{
+        width: 70%;
+        margin-left: 15%;
+    }
+
+    .main-trans-img{
+        margin-left: 40%;
+    }
+}
+
+@media only screen and (max-width: 605px) {
+    .main-section{
+        margin-left: 25px;
+        margin-right: 0px;
+    }
+}
+
+@media only screen and (max-width: 374px) {
+    .main-section{
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+    
+    #main-header-left{
+        margin-bottom: 10px;
+    }
+
+    .main-trans{
+        width: 90%;
+        margin-left: 5%;
+    }
+
+    .main-action{
+        width: 90%;
+        margin-left: 5%;
+    }
+
+    .main-team{
+        width: 90%;
+        margin-left: 5%;
+    }
 }

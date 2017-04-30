@@ -267,7 +267,7 @@ class Edit extends Component {
 	//close add relative box, update db
 	closeAdd(result, changed) {
 		//Only update when change made
-		if (changed && result) {
+		if (changed && result && this.state.relOption[result[0]]) {
 			//get relative id
 			let choice = this.state.relOption[result[0]][3];
 			reqwest({

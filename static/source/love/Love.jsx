@@ -58,7 +58,7 @@ class Love extends Component {
 					</a>
 					<div className="main-moment-container">
 						<a href={"/moment/" + this.props.petMoment[i].moment_id}>
-							<img alt="Pet" src={"/img/pet/" + this.props.petMoment[i].pet_id + "/cover/0.png"} />
+							<img className="main-moment-container-pet" alt="Pet" src={"/img/pet/" + this.props.petMoment[i].pet_id + "/cover/0.png"} />
 							<h5>{this.props.petMoment[i].moment_message}</h5>
 						</a>
 						{first}

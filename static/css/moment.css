@@ -72,3 +72,28 @@
     vertical-align: middle;
     margin-left: 5%;
 }
+
+@media only screen and (max-width: 948px) {
+    #main{
+        margin-left: 5%;
+        width: 47%;
+    }
+
+    #aside{
+        width: 40%;
+    }
+}
+
+@media only screen and (max-width: 651px) {
+    #main{
+        width: 50%;
+        margin-left: 25%;
+        min-height: 0;
+    }
+
+    #aside{
+        margin-top: 50px;
+        width: 90%;
+        margin-left: 5%;
+    }
+}

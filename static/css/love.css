@@ -149,3 +149,35 @@
     font-weight: bold;
     color: #052456;
 }
+
+@media only screen and (max-width: 948px) {
+    #main{
+        width: 59%;
+        margin-left: 5%;
+    }
+
+    #aside{
+        width: 26%;
+    }
+}
+
+@media only screen and (max-width: 651px) {
+    #main{
+        width: 90%;
+        margin-left: 5%;
+    }
+
+    #aside{
+        width: 80%;
+        margin-left: 10%;
+        padding-top: 50px;
+    }
+
+    .main-moment-container-pet{
+        display: none !important;
+    }
+
+    .main-moment-container h5{
+        width: 96%;
+    }
+}

@@ -302,6 +302,13 @@ class Profile extends Component {
                 </section>
             )
         }
+        let gallery;
+        //show 3 column when screen less than 948 width
+        if (window.innerWidth > 948) {
+            gallery = <Waterfall column="4" image={allImages} link="true" fontFamily="'Rubik', sans-serif" />
+        } else {
+            gallery = <Waterfall column="3" image={allImages} link="true" fontFamily="'Rubik', sans-serif" />
+        }
         return (
             <section id="hub">
                 <div className="hub-header">
@@ -314,7 +321,7 @@ class Profile extends Component {
                     <img alt="moment-icon" src="/img/icon/glyphicons-moment.png" />
                     <h4>Moments</h4>
                 </div>
-                <Waterfall column="4" image={allImages} link="true" fontFamily="'Rubik', sans-serif" />
+                {gallery}
                 <h5 className={loadStyle} onClick={this.loadMore.bind(this)}>{this.state.showMessage}</h5>
                 {popEdit}
                 {popContainer}

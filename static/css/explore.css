@@ -86,3 +86,25 @@
     margin-left: 5%;
     padding-top: 100px;
 }
+
+@media only screen and (max-width: 948px) {
+    #main{
+        margin-left: 5%;
+        width: 59%;
+    }
+
+    #banner{
+        width: 26%;
+    }
+}
+
+@media only screen and (max-width: 651px) {
+    #main{
+        margin-left: 5%;
+        width: 90%;
+    }
+
+    #banner{
+        display: none;
+    }
+}

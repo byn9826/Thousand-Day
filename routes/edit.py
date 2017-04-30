@@ -113,10 +113,13 @@ def searchTeam():
             #return 1 for db not working
             if relations == '0':
                 return str(1)
-            friends = friendPets(relations, petId, cnx)
-            #return 1 for db error
-            if friends == '0':
-                return str(1)
+            if len(relations) == 0:
+                friends = []
+            else:
+                friends = friendPets(relations, petId, cnx)
+                #return 1 for db error
+                if friends == '0':
+                    return str(1)
         finally:
             cnx.close()
         return jsonify(friends)
@@ -188,10 +191,13 @@ def searchRelative():
             #return 1 for db error
             if friends == '0':
                 return str(1)
-            users = userList(friends, cnx)
-            #return 1 for db error
-            if users == '0':
-                return str(1)
+            if len(friends) == 0:
+                users = []
+            else:
+                users = userList(friends, cnx)
+                #return 1 for db error
+                if users == '0':
+                    return str(1)
         finally:
             cnx.close()
         return jsonify(users)

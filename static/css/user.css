@@ -392,3 +392,83 @@
 #pet-nature{
     margin-top: 10px;
 }
+
+
+@media only screen and (max-width: 948px) {
+    #main{
+        margin-left: 5%;
+        width: 23%;
+    }
+    
+    #hub{
+        width: 60%;
+    }
+
+}
+
+@media only screen and (max-width: 651px) {
+    #main{
+        width: 90%;
+    }
+
+    #main-profile{
+        width: 50%;
+        margin-left: 25%;
+    }
+
+    .main-watch{
+        width: 50%;
+        margin-left: 25%;
+    }
+
+    .main-watch-active{
+        width: 50%;
+        margin-left: 25%;
+    }
+
+    #hub{
+        width: 90%;
+        margin-top: 0;
+    }
+
+    .hub-header{
+        text-align: center;
+    }
+
+    .pop-back{
+        width: 110%;
+    }
+
+    #pop-edit{
+        margin-left: 20%;
+    }
+
+    .pop-background{
+        width: 145%;
+    }
+
+}
+
+@media only screen and (max-width: 590px) {
+    .hub-pet-belong-info{
+        margin-bottom: 5px;
+    }
+
+    .hub-pet-belong-info-ability{
+        width: 60%;
+    }
+
+    #main{
+        min-height: 0;
+    }
+
+    #pop-edit{
+        margin-left: 10%;
+    }
+}
+
+@media only screen and (max-width: 430px) {
+    #pop-edit{
+        margin-left: 0;
+    }
+}
