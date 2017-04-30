@@ -44,7 +44,9 @@ class Love extends Component {
 				}
 			} else {
 				first = (
-					<div className="main-moment-container-first"></div>
+					<div className="main-moment-container-first">
+						<h6>Share love, be the first to leave a comment !</h6>
+					</div>
 				);
 				second = null;
 			}
@@ -67,7 +69,7 @@ class Love extends Component {
 		}
 		return (
 			<div  id="react-root">
-				<Header />
+				<Header visitorName={this.props.visitorName} loginSuccess={()=>{}} logOut={()=>{}} />
 				<main id="main">
 					<header id="main-header">
 						<img alt="Share Moment" src="/img/icon/glyphicons-moment.png" />
@@ -113,7 +115,7 @@ reqwest({
 						}
 					}
 				}
-				ReactDOM.render(<Love petRank={result[0]} petMoment={result[2]} />, document.getElementById("root"));
+				ReactDOM.render(<Love petRank={result[0]} petMoment={result[2]} visitorName={result[4]} />, document.getElementById("root"));
 		}
 	},
 	error: function (err) {

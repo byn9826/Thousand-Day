@@ -14,7 +14,11 @@ config = secret.mysql()
 #Get explore
 @explore_routes.route('/explore')
 def exploreHome():
-    return render_template('explore.html')
+    if session.get('userName') is not None:
+        visitor = session['userName']
+    else:
+        visitor = None
+    return render_template('explore.html', name = visitor)
 
 #load 20 moments
 @explore_routes.route('/explore/getMoment', methods = ['GET', 'POST'])

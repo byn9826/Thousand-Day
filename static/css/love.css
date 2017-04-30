@@ -32,7 +32,7 @@
     width: 100%;
     background-color: #f7f9fc;
     border-radius: 5px;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 .main-moment-img{
     display: inline-block;
@@ -52,7 +52,7 @@
 .main-moment-container img{
     display: inline-block;
     vertical-align: middle; 
-    border-radius: 50%;
+    border-radius: 5px;
     width: 12%;
     margin-right: 5%;
 }
@@ -87,7 +87,7 @@
     vertical-align: middle;
     width: 8%;
     margin-right: 0 !important;
-    border-radius: 5px !important;
+    border-radius: 50% !important;
 }
 .main-moment-container-second{
     margin-top: 10px;
@@ -110,7 +110,7 @@
     text-align: center;
     padding: 5px 0;
     border-radius: 5px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     background-color: #052456;
     color: white;
 }
@@ -118,7 +118,7 @@
 .aside-list{
     display: block;
     width: 100%;
-    background-color: #f7d7b4;
+    background-color: #e5e5e5;
     margin-bottom: 10px;
     border-radius: 5px;
 }

@@ -160,6 +160,7 @@ class Header extends Component {
 			if (this.state.showDrop && this.state.loginName != "Login") {
 				logout = (
 					<div className="header-drop">
+						<a><h5>Digital Home</h5></a>
 						<input type="button" value="Log Out" onClick={this.logOut.bind(this)} />
 					</div>
 				)
@@ -167,8 +168,16 @@ class Header extends Component {
 		}
 		return (
 			<header id="header">
-				<img id="header-logo" src="/img/logo.png" alt="logo" />
+				<a href="/">
+					<img id="header-logo" src="/img/logo.png" alt="logo" />
+				</a>
 				{user}
+				<a className="header-navi" href="/explore">
+					<h5>Explore</h5>
+				</a>
+				<a className="header-navi" href="/">
+					<h5>Love</h5>
+				</a>
 				{login}
 				{logout}
 			</header>

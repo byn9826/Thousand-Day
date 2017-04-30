@@ -17,7 +17,7 @@ def signUp(name):
     if session.get('google') is not None:
         return render_template('signup.html', google = session['google'], profile = session['googleProfile'] )
     elif session.get('facebook') is not None:
-        return render_template('signup.html', facebook = session['facebook'] )
+        return render_template('signup.html', facebook = session['facebook'])
     else:
         abort(404)
         

@@ -36,6 +36,10 @@ def loveView():
             comments = relateComment(moments, cnx)
         finally:
             cnx.close()
-        return jsonify([info, watcher, new, comments])
+        if session.get('userName') is not None:
+            visitor = session['userName']
+        else:
+            visitor = None
+        return jsonify([info, watcher, new, comments, visitor])
     else:
         abort(404)

@@ -109,9 +109,14 @@ class Explore extends Component {
 		} else if (this.state.moment.length > 0 && !this.state.more) {
 			load = (<h5 className="main-lock" >No more moments</h5>);
 		}
+		//if user have login
+		let userName = document.getElementById("user-name").innerHTML.trim();
+		if (userName == "None") {
+			userName = null;
+		}
 		return (
-			<div  id="react-root">
-				<Header />
+			<div id="react-root">
+				<Header visitorName={userName} loginSuccess={()=>{}} logOut={()=>{}} />
 				<main id="main">
 					<section className="main-filter">
 						<div className="main-filter-title">
