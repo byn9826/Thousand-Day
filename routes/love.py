@@ -31,6 +31,7 @@ def loveView():
             info = listPet(pet, cnx)
             if info == 0:
                 return str(0)
+            #get 10 newest moments
             new = newMoment(0, cnx)
             if new == 0:
                 return str(0)

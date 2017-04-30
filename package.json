@@ -1,12 +1,12 @@
 {
-  "name": "petinhub",
+  "name": "thousand-day",
   "version": "1.0.0",
-  "description": "",
+  "description": "An image sharing social website&app for your pets and you.",
   "main": "server.py",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Baozier",
   "license": "BSD 3-clause",
   "dependencies": {
     "inline-animation": "0.0.1",

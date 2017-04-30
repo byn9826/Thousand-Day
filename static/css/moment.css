@@ -5,6 +5,7 @@
     margin-left: 10%;
     margin-top: 100px;
     vertical-align: top;
+    min-height: 600px;
 }
 #main img{
     display: block;

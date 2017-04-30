@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import Random from "../snippet/display/Random";
 import reqwest from "reqwest";
 import Googlelogin from '../snippet/social/Googlelogin';
 import Facebooklogin from '../snippet/social/Facebooklogin';
@@ -166,17 +165,9 @@ class Header extends Component {
 				)
 			}
 		}
-		//random content show for slogan
-		let randomContent = [
-			"The site is still under development",
-			//"Your pets and you",
-			//"Meet with love",
-			//"Share your cutes"
-		];
 		return (
 			<header id="header">
 				<img id="header-logo" src="/img/logo.png" alt="logo" />
-				<Random style={randomStyle} content={randomContent} font="h5" />
 				{user}
 				{login}
 				{logout}

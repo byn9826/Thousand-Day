@@ -13,7 +13,7 @@ class Love extends Component {
 	render() {
 		//pets with most watchers
 		let rank = this.props.petRank.map((pet, index) =>
-			<div key={"thousandaylove" + index} className="aside-list">
+			<div key={"thousandayloverank" + index} className="aside-list">
 				<img className="aside-list-profile" alt={pet.pet_name} src={"/img/pet/" + pet.pet_id + "/cover/0.png"} />
 				<img className="aside-list-icon" alt="watcher" src="/img/icon/glyphicons-watch.png" />
 				<h7>{pet.count}</h7>
@@ -22,9 +22,13 @@ class Love extends Component {
 		);
 		//newest 20 moments
 		let moments = this.state.moments.map((moment, index) =>
-			<div className="main-moment">
-				123
-			</div>
+			<section key={"thousandaylovemoment" + index} className="main-moment">
+				<div className="main-moment-img" style={{backgroundImage: "url(/img/pet/" + moment.pet_id + "/moment/" + moment.image_name + ")"}}></div>
+				<div className="main-moment-container">
+					<img alt="Pet" src={"/img/pet/" + moment.pet_id + "/cover/0.png"} />
+					<h6>{moment.moment_message}</h6>
+				</div>
+			</section>
 		);
 		return (
 			<div  id="react-root">

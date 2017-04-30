@@ -66,11 +66,11 @@ def singleMoment(petId, startPoint, cnx):
     finally:
         momentCursor.close()
 
-#search 20 newest moment from all pets
+#search 10 newest moment from all pets
 def newMoment(startPoint, cnx):
-    newQuery = 'SELECT * FROM moment ORDER BY moment_id DESC LIMIT %s, 20'
+    newQuery = 'SELECT * FROM moment ORDER BY moment_id DESC LIMIT %s, 10'
     try:
-        newCursor = cnx.cursor()
+        newCursor = cnx.cursor(dictionary=True)
         newCursor.execute(newQuery, (startPoint, ))
         return newCursor.fetchall()
     #return 0 for db error
