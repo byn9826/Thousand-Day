@@ -305,9 +305,9 @@ class Profile extends Component {
         let gallery;
         //show 3 column when screen less than 948 width
         if (window.innerWidth > 948) {
-            gallery = <Waterfall column="4" image={allImages} link="true" fontFamily="'Rubik', sans-serif" />
+            gallery = <Waterfall column="4" image={allImages} fontFamily="'Rubik', sans-serif" />
         } else {
-            gallery = <Waterfall column="3" image={allImages} link="true" fontFamily="'Rubik', sans-serif" />
+            gallery = <Waterfall column="3" image={allImages} fontFamily="'Rubik', sans-serif" />
         }
         return (
             <section id="hub">

@@ -22,9 +22,9 @@ class Moment extends Component {
         //4 column for 948 screen, 3 for smaller one
         let gallery;
         if (window.innerWidth > 948) {
-            gallery = <Waterfall column="4" image={allImages} link="true" fontFamily="'Rubik', sans-serif" />
+            gallery = <Waterfall column="4" image={allImages} fontFamily="'Rubik', sans-serif" />
         } else {
-            gallery = <Waterfall column="3" image={allImages} link="true" fontFamily="'Rubik', sans-serif" />
+            gallery = <Waterfall column="3" image={allImages} fontFamily="'Rubik', sans-serif" />
         }
         return (
             <section id="moment">

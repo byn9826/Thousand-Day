@@ -141,7 +141,7 @@ class Explore extends Component {
 						<img alt="Moment" src="/img/icon/glyphicons-moment.png" />
 						<h3>Explore moments in the world</h3>
 					</div>
-					<Waterfall column="4" image={allImages} link="true" fontFamily="'Rubik', sans-serif" />
+					<Waterfall column="4" image={allImages} fontFamily="'Rubik', sans-serif" />
 					{load}
 				</main>
 				<img id="banner" alt="Banner" src="/img/other/banner.jpg" />
