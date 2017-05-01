@@ -36,11 +36,6 @@ def reactHome():
     return render_template('react.html')
 
 
-@app.route('/animation')
-def animationHome():
-    return render_template('animation.html')
-
-
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
