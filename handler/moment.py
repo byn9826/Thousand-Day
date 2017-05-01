@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import mysql.connector
+import datetime
 
 #read information of one moment
 def readMoment(momentId, cnx):
@@ -18,10 +19,11 @@ def readMoment(momentId, cnx):
 
 #add moment to moment table
 def addMoment(name, message, petId, cnx):
-    momentQuery = 'INSERT INTO moment (image_name, moment_message, pet_id) VALUES (%s, %s, %s)'
+    momentQuery = 'INSERT INTO moment (image_name, moment_message, pet_id, moment_date) VALUES (%s, %s, %s, %s)'
+    moment = datetime.datetime.now().date()
     try:
         momentCursor = cnx.cursor()
-        momentCursor.execute(momentQuery, (name, message, petId))
+        momentCursor.execute(momentQuery, (name, message, petId, moment))
         cnx.commit()
         newId = momentCursor.lastrowid
         return str(newId)
@@ -79,3 +81,18 @@ def newMoment(startPoint, cnx):
         return str(0)
     finally:
         newCursor.close()
+
+#delete one moment
+def delMoment(moment, pet, cnx):
+    delQuery = 'DELETE FROM moment WHERE moment_id = %s AND pet_id = %s'
+    try:
+        delCursor = cnx.cursor()
+        delCursor.execute(delQuery, (moment, pet))
+        cnx.commit()
+        return str(1)
+    except mysql.connector.Error as err:
+        print('Something went wrong: {}'.format(err))
+        cnx.rollback()
+        return str(2)
+    finally:
+        delCursor.close()

@@ -11,6 +11,27 @@
     display: block;
     width: 100%;
     border-radius: 5px;
+    margin-bottom: 10px;
+}
+#main h5{
+    display: inline-block;
+    margin-left: 2%;
+    vertical-align: middle;
+}
+#main h6{
+    display: inline-block;
+    color: red;
+    cursor: pointer;
+    margin-left: 5%;
+}
+#main input{
+    border: 1px solid #ef8513;
+    outline: none;
+    background-color: #ef8513;
+    color: white;
+    cursor: pointer;
+    border-radius: 3px;
+    margin-left: 3%;
 }
 
 

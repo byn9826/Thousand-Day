@@ -3,8 +3,10 @@
 from flask import Blueprint, session, render_template, abort, request, jsonify
 import mysql.connector
 import secret
-from handler.moment import readMoment
+from handler.moment import readMoment, delMoment
 from handler.like import searchLike, searchComment, insertComment, newLike
+from handler.pet import searchPet
+from handler.upload import removeMoment
 
 moment_routes = Blueprint('moment_routes', __name__, template_folder = 'templates')
 config = secret.mysql()
@@ -34,6 +36,9 @@ def momentView():
             comment = searchComment(momentId, 0, 0, cnx)
             if comment == '0':
                 return str(0)
+            pet = searchPet(moment['pet_id'], cnx)
+            if pet == '0':
+                return str(0)
         finally:
             cnx.close()
         #id of current visitor
@@ -43,7 +48,7 @@ def momentView():
         else:
             userId = None
             userName = None
-        return jsonify([moment, result, userId, comment, userName])
+        return jsonify([moment, result, userId, comment, userName, [pet['owner_id'], pet['relative_id']]])
     else:
         abort(404)
 
@@ -103,3 +108,34 @@ def changeLike():
         return str(result)
     else:
         abort(404) 
+
+#delete moment
+@moment_routes.route('/moment/deleteMoment', methods = ['GET', 'POST'])
+def deleteMoment():
+    #only response to post
+    if request.method == 'POST':
+        #must login
+        if session.get('userId') is None:
+            return str(0)
+        userId = session['userId']
+        petId = int(request.form['pet'])
+        momentId = int(request.form['moment'])
+        imageName = request.form['image']
+        #delete moment row first
+        cnx = mysql.connector.connect(**config)
+        try:
+            pet = searchPet(petId, cnx)
+            if pet == '0':
+                return str(2)
+            #check user privilege
+            if pet['owner_id'] != userId and pet['relative_id'] != userId:
+                return str(0)
+            result = delMoment(momentId, petId, cnx)
+            #delete success, remove file
+            if result == '1':
+                delete = removeMoment(petId, imageName)
+        finally:
+            cnx.close()
+        return result
+    else:
+        abort(404)

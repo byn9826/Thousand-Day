@@ -20,8 +20,12 @@ def uploadMoment(file, petId):
         fileName = str(time.time()).replace('.', '-') + '.' + secure_filename(file.filename)
         #store into pet id folder
         foldPath = '../static/img/pet/' + str(petId) + '/moment/'
+        #create folder path if not exist
+        dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), foldPath)
+        if not os.path.exists(dir):
+            os.makedirs(dir)
         try:
-            file.save(os.path.join(os.path.dirname(os.path.abspath(__file__)), foldPath, fileName))
+            file.save(os.path.join(dir, fileName))
         except Exception as err:
             print('Something went wrong: {}'.format(err))
             return str(2)
@@ -52,7 +56,7 @@ def uploadPet(file, petId):
             os.makedirs(dir)
         try:
             #save profile image
-            file.save(os.path.join(os.path.dirname(os.path.abspath(__file__)), foldPath, fileName))
+            file.save(os.path.join(dir, fileName))
             return str(2)
         except Exception as err:
             print('Something went wrong: {}'.format(err))
@@ -75,9 +79,13 @@ def uploadSkillimg(file, petId):
     if file and allowedSkill(file.filename):
         fileName = secure_filename(file.filename)
         foldPath = '../static/img/pet/' + str(petId) + '/cover/'
+        #create folder path if not exist
+        dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), foldPath)
+        if not os.path.exists(dir):
+            os.makedirs(dir)
         try:
             #save profile image
-            file.save(os.path.join(os.path.dirname(os.path.abspath(__file__)), foldPath, fileName))
+            file.save(os.path.join(dir, fileName))
             return str(2)
         except Exception as err:
             print('Something went wrong: {}'.format(err))
@@ -95,9 +103,22 @@ def allowedUser(filename):
 def initUser(file, userId):
     fileName = userId + '.jpg'
     foldPath = '../static/img/user/'
+    #create folder path if not exist
+    dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), foldPath)
+    if not os.path.exists(dir):
+        os.makedirs(dir)
     try:
         #save profile image
-        file.save(os.path.join(os.path.dirname(os.path.abspath(__file__)), foldPath, fileName))
+        file.save(os.path.join(dir, fileName))
     except Exception as err:
             print('Something went wrong: {}'.format(err))
     return str(3)
+
+#remove moment image
+def removeMoment(petId, imageName):
+    foldPath = '../static/img/pet/' + str(petId) + '/moment/'
+    try:
+        os.remove(os.path.join(os.path.dirname(os.path.abspath(__file__)), foldPath, imageName))
+    except Exception as err:
+            print('Something went wrong: {}'.format(err))
+    return str(1)

@@ -178,7 +178,7 @@ class Header extends Component {
 					<h5>Explore</h5>
 				</a>
 				<a className="header-navi" href="/">
-					<h5>Love</h5>
+					<h5>New</h5>
 				</a>
 				{login}
 				{logout}

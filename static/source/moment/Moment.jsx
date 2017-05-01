@@ -27,7 +27,12 @@ class Moment extends Component {
             //visitorName if user logged in
             visitorName: this.props.name,
             //if visitor added one comment
-            commentAdd: 0
+            commentAdd: 0,
+            //show confirm delete button
+            confirmDel: false,
+            //store content show on delete button
+            delButton: "Confirm Delete?"
+
 		};
 	}
     //if user click like button
@@ -120,6 +125,34 @@ class Moment extends Component {
             });
         }
     }
+    //user click delete moment button
+    showDel() {
+        this.setState({confirmDel: true});
+    }
+    //user confirm delete moment
+    confirmDel() {
+        reqwest({
+            url: "/moment/deleteMoment",
+            method: "POST",
+            data: {"moment": window.location.pathname.split("/").pop(), "pet": this.props.data.pet_id, "image": this.props.data.image_name},
+            success: function(result) {
+                switch(result) {
+                    case "0":
+                        this.setState({delButton: "No right to delete"});
+                        break;
+                    case "1":
+                        window.location.replace("/pet/" + this.props.data.pet_id);
+                        break;
+                    case "2":
+                        this.setState({delButton: "Internal Error, try later"});
+                        break;
+                }
+            }.bind(this),
+            error: function (err) {
+                this.setState({delButton: "Can't connect to server"});
+            }.bind(this)
+        });
+    }
     //update visitor id after user login successfully
 	loginSuccess(id) {
 		this.setState({visitorId: id});
@@ -165,11 +198,26 @@ class Moment extends Component {
                 </div>
             );
         }
+        //delete user button
+        let deleteMoment;
+        if (this.state.visitorId && (this.state.visitorId === this.props.privilege[0] || this.state.visitorId === this.props.privilege[1])) {
+            deleteMoment = "Delete";
+        }
+        //confirm delete button
+        let confirmDelete;
+        if (this.state.visitorId && this.state.confirmDel) {
+            confirmDelete = (
+                <input type="button" value={this.state.delButton} onClick={this.confirmDel.bind(this)} />
+            );
+        }
         return (
             <div id="react-root">
                 <Header visitorId={this.props.visitorId} visitorName={this.state.visitorName} loginSuccess={this.loginSuccess.bind(this)} logOut={this.logOut.bind(this)} />
                 <main id="main">
                     <img alt="moment" src={"/img/pet/" + this.props.data.pet_id + "/moment/" + this.props.data.image_name} />
+                    <h5>{new Date(this.props.data.moment_date).toISOString().substring(0, 10)}</h5>
+                    <h6 onClick={this.showDel.bind(this)}>{deleteMoment}</h6>
+                    {confirmDelete}
                 </main>
                 <aside id="aside">
                     <section id="aside-talk">
@@ -213,7 +261,7 @@ reqwest({
                         like.push(result[1][i][0]);
                     }
                 }
-				ReactDOM.render(<Moment data={result[0]} like={like} visitorId={result[2]} comment={result[3]} name={result[4]} />, document.getElementById("root"));
+				ReactDOM.render(<Moment data={result[0]} like={like} visitorId={result[2]} comment={result[3]} name={result[4]} privilege={result[5]} />, document.getElementById("root"));
 				break;
 		}
 	},
