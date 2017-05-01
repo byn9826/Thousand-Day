@@ -59,15 +59,20 @@ class Display extends Component {
         let addOne = this.state.addOne + 1;
         this.setState({moment: oldMoment, addOne: addOne});
     }
+    //update potent when submit image first time per day
+    upPotent() {
+        let newNumber = this.refs.displayAbility.state.potential + 1;
+        this.refs.displayAbility.setState({potential: newNumber, prevPotential: newNumber});
+    }
     render() {
         //show publish image section when visitor is pet owner or relative
         let publish;
         if (this.props.visitorId == this.props.pet.owner_id || this.props.visitorId == this.props.pet.relative_id) {
-            publish = <Publish uploadNew={this.uploadNew.bind(this)} />;
+            publish = <Publish uploadNew={this.uploadNew.bind(this)} potent={this.props.potent} upPotent={this.upPotent.bind(this)} />;
         }
         return (
             <section id="display">
-                <Ability visitorId={this.props.visitorId} pet={this.props.pet} />
+                <Ability ref="displayAbility" visitorId={this.props.visitorId} pet={this.props.pet} />
                 <Skill pet={this.props.pet} />
                 {publish}
                 <Moment petId={this.props.pet.pet_id} moment={this.state.moment} showMessage={this.state.showMessage} loadMore={this.loadMore.bind(this)} />

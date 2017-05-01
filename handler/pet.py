@@ -228,3 +228,22 @@ def listPet(petList, cnx):
         return str(0)
     finally:
         listCursor.close()
+
+#add 1 potential for a pet
+def addPotent(pet, cnx):
+    addQuery = (
+        'UPDATE pet SET potential_date = %s, pet_potential = pet_potential + 1 '
+        'WHERE pet_id = %s AND (potential_date != %s OR potential_date is NULL)'
+    )
+    today = datetime.datetime.now().date()
+    try:
+        addCursor = cnx.cursor()
+        addCursor.execute(addQuery, (today, int(pet), today))
+        cnx.commit()
+        return str(1)
+    except mysql.connector.Error as err:
+        cnx.rollback()
+        print('Something went wrong: {}'.format(err))
+        return str(2)
+    finally:
+        addCursor.close()

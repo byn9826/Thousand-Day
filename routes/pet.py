@@ -3,12 +3,13 @@
 from flask import Blueprint, session, render_template, abort, request, jsonify
 import mysql.connector
 import secret
-from handler.pet import searchPet, searchCompanion
+from handler.pet import searchPet, searchCompanion, addPotent
 from handler.user import searchOwner
 from handler.watch import searchWatch, updateWatch
 from handler.moment import singleMoment, addMoment
 from handler.ability import updateAbility
 from handler.upload import uploadMoment
+import datetime
 
 
 pet_routes = Blueprint('pet_routes', __name__, template_folder = 'templates')
@@ -45,6 +46,12 @@ def petView():
             #get owner and relative id
             petOwner = pet['owner_id']
             petRelative = pet['relative_id']
+            lastDate = pet['potential_date']
+            todayDate = datetime.datetime.now().date()
+            if lastDate == todayDate:
+                newPotential = 0
+            else:
+                newPotential = 1
             owner = searchOwner(petOwner, petRelative, cnx)
             #return 1 if pet not exist
             if not owner:
@@ -76,7 +83,7 @@ def petView():
             if (session['userId'] == petOwner or session['userId'] == petRelative):
                 session['petId'] = petId
         #return all infos
-        result = [pet, owner, watch, companion, moment, currentId, currentName]
+        result = [pet, owner, watch, companion, moment, currentId, currentName, newPotential]
         return jsonify(result)    
     else:
         abort(404)
@@ -97,10 +104,14 @@ def newMoment(message):
         #return error code
         if upload == '1' or upload == '2':
             return upload
+        #if update potent or not
+        potent = int(request.form['potent'])
         #update moment table
         cnx = mysql.connector.connect(**config)
         try:
             row = addMoment(upload, message, session['petId'], cnx)
+            if potent == 1:
+                result = addPotent(session['petId'], cnx)
         finally:
             cnx.close()
         if not row:

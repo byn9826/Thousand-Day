@@ -319,6 +319,13 @@
     width: 100%;
     margin-top: 40px;
 }
+#publish-potent{
+    display: block;
+    margin-bottom: 10px;
+    padding-left: 2%;
+    font-weight: bold;
+    border-left: 3px solid #ef8513;
+}
 
 /*pet-display moment page*/
 #moment{

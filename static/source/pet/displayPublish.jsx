@@ -7,6 +7,8 @@ class Publish extends Component {
 		this.state = {
             //use to trigger reset Postimg
             reset: 0,
+            //if pet could get a potential by upload image
+            potent: parseInt(this.props.potent)
 		};
 	}
     submitImg(message, img) {
@@ -17,6 +19,7 @@ class Publish extends Component {
         //store image file
         let fileData = new FormData();
     	fileData.append("file", img, type);
+        fileData.append("potent", this.state.potent);
 		reqwest({
         	url: "/pet/uploadMoment/" + message,
         	method: "POST",
@@ -39,8 +42,12 @@ class Publish extends Component {
                         break;
                     default:
                         //upLoad success
+                        //if should add 1 potential
+                        if (this.state.potent === 1) {
+                            this.props.upPotent();
+                        }
                         this.props.uploadNew(result);
-				        this.setState({reset: this.state.reset + 1});
+				        this.setState({reset: this.state.reset + 1, potent: 0});
                         break;     
                 }
 			}.bind(this),
@@ -51,8 +58,13 @@ class Publish extends Component {
 		});
     }
     render() {
+        let potent;
+        if (this.state.potent === 1) {
+            potent = <h5 id="publish-potent">Sharing to get 1 potential point for you pet now !</h5>
+        }
         return (
             <section id="publish">
+                {potent}
                 <Postimg content="" max="120" title="Share new moment" submitImg={this.submitImg.bind(this)} fontFamily="'Rubik', sans-serif" reset={this.state.reset} />
             </section>
         );
