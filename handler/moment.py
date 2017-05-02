@@ -70,6 +70,7 @@ def singleMoment(petId, startPoint, cnx):
 
 #search 10 newest moment from all pets
 def newMoment(startPoint, cnx):
+    startPoint = startPoint * 10
     newQuery = 'SELECT * FROM moment ORDER BY moment_id DESC LIMIT %s, 10'
     try:
         newCursor = cnx.cursor(dictionary=True)
