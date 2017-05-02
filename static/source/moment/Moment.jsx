@@ -221,7 +221,9 @@ class Moment extends Component {
                 </main>
                 <aside id="aside">
                     <section id="aside-talk">
-                        <img alt="Pet" src={"/img/pet/" + this.props.data.pet_id + "/cover/0.png"} />
+                        <a href={"/pet/" + this.props.data.pet_id}>
+                            <img alt="Pet" src={"/img/pet/" + this.props.data.pet_id + "/cover/0.png"} />
+                        </a>
                         <h4>{this.props.data.moment_message}</h4>
                     </section>
                     <section className="aside-social">

@@ -643,7 +643,7 @@ class Edit extends Component {
 					<h5 className="main-action-close" onClick={this.closeTrans.bind(this)}>✗</h5>
 					<h4 className="main-action-title">Are you sure you want to transfer ownership to {this.state.transRelative.user_name}?</h4>
 					<img className="main-trans-img" alt={this.state.transRelative.user_name} src={"/img/user/" + this.state.transRelative.user_id + ".jpg" }/>
-					<h5 className="main-action-warn">Once you transfer your ownership, you won't be able to resume it by yourself.</h5>
+					<h5 className="main-action-warn">Once you confirmed transfer, you won't be able to resume it.</h5>
 					<Confirmdel message="Transfer Ownership" confirmDel={this.confirmTrans.bind(this)} fontFamily="'Rubik', sans-serif"/>
 				</section>
 			);

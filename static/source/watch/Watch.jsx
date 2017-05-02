@@ -119,7 +119,9 @@ class Watch extends Component {
 				</a>
 				<div className="main-moment-container">
 					<h4>{recent.moment_message}</h4>
-					<img alt="Pet" src={"/img/pet/" + recent.pet_id + "/cover/0.png"} />
+					<a href={"/pet/" + recent.pet_id}>
+						<img alt="Pet" src={"/img/pet/" + recent.pet_id + "/cover/0.png"} />
+					</a>
 					<h7>{new Date(recent.moment_date).toISOString().substring(0, 10)}</h7>
 				</div>
 			</section>
