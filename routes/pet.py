@@ -131,7 +131,7 @@ def loadMoment():
         startPin = loadTimes * 20 + addTimes
         cnx = mysql.connector.connect(**config)
         try:
-            result = singleMoment(petId, 0, cnx)
+            result = singleMoment(petId, startPin, cnx)
         finally:
             cnx.close()
         #return 0 for db error

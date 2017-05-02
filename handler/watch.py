@@ -37,14 +37,14 @@ def updateWatch(visitorId, petId, addWatch, cnx):
         watchCursor.close()
 
 #top 10 watch pets
-def topWatch(cnx):
-    topQuery = 'SELECT pet_id, COUNT(*) AS count FROM pet_watch GROUP BY pet_id ORDER BY count DESC LIMIT 10'
-    try:
-        topCursor = cnx.cursor(dictionary=True)
-        topCursor.execute(topQuery)
-        return topCursor.fetchall()
-    except mysql.connector.Error as err:
-        print('Something went wrong: {}'.format(err))
-        return str(0)
-    finally:
-        topCursor.close()
+#def topWatch(cnx):
+#    topQuery = 'SELECT pet_id, COUNT(*) AS count FROM pet_watch GROUP BY pet_id ORDER BY count DESC LIMIT 10'
+#    try:
+#        topCursor = cnx.cursor(dictionary=True)
+ #       topCursor.execute(topQuery)
+#        return topCursor.fetchall()
+#    except mysql.connector.Error as err:
+ #       print('Something went wrong: {}'.format(err))
+ #       return str(0)
+ #   finally:
+  #      topCursor.close()

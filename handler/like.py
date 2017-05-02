@@ -68,18 +68,3 @@ def insertComment(content, moment, user, cnx):
         return str(2)
     finally:
         insertCursor.close()
-
-#get two newest comment for momment list
-def relateComment(moments, cnx):
-    commentsQuery = 'SELECT * FROM moment_comment WHERE moment_id IN (%s) ORDER BY comment_id DESC LIMIT 2'
-    commentsHolder = ', '.join(list(map(lambda x: '%s', moments)))
-    try:
-        commentsQuery = commentsQuery % (commentsHolder)
-        commentsCursor = cnx.cursor(dictionary=True)
-        commentsCursor.execute(commentsQuery, moments)
-        return commentsCursor.fetchall()
-    except mysql.connector.Error as err:
-        print('Something went wrong: {}'.format(err))
-        return str(0)
-    finally:
-        commentsCursor.close()

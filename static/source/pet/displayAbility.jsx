@@ -127,7 +127,7 @@ class Ability extends Component {
         //Show save button when edit panel is show
         if (this.state.showEdit) {
             editButton = (<h6 onClick={this.clickButton.bind(this)}>SAVE</h6>);
-        } else if ((this.props.visitorId == this.props.pet.owner_id || this.props.visitorId == this.props.pet.relative_id) && !this.state.showEdit) {
+        } else if ((this.props.visitorId == this.props.pet.owner_id || this.props.visitorId == this.props.pet.relative_id) && !this.state.showEdit && this.props.visitorId) {
             //Show edit button when edit panel is not show, current user is pet owner/relative
             editButton = (<h6 onClick={this.clickButton.bind(this)}>SET</h6>);
         }

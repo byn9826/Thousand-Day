@@ -328,6 +328,7 @@
     padding: 6px 0;
     border-radius: 5px;
     cursor: pointer;
+    margin-top: 20px;
 }
 .hub-load-hide{
     display: block;
@@ -338,6 +339,7 @@
     text-align: center;
     padding: 6px 0;
     border-radius: 5px;
+    margin-top: 20px;
 }
 
 .pop-background{

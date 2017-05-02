@@ -3,7 +3,7 @@ class Waterfall extends Component {
     constructor(props) {
         super(props);
 		this.state = {
-            height: this.props.height || "180px",
+            height: this.props.height || "160px",
             width: (parseInt(100 / this.props.column) -2) + "%",
             active: null,
             fontFamily: this.props.fontFamily || "Times New Roman"

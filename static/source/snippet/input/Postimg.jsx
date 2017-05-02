@@ -3,7 +3,7 @@ class Inputarea extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			width: this.props.width || "100%",
+			width: this.props.width || "94%",
       		border: this.props.border || "2px solid #f7d7b4",
       		fontSize: this.props.fontSize || "14px",
      		content: this.props.content || "",

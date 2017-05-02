@@ -67,7 +67,7 @@ class Display extends Component {
     render() {
         //show publish image section when visitor is pet owner or relative
         let publish;
-        if (this.props.visitorId == this.props.pet.owner_id || this.props.visitorId == this.props.pet.relative_id) {
+        if ((this.props.visitorId === this.props.pet.owner_id || this.props.visitorId === this.props.pet.relative_id) && this.props.visitorId) {
             publish = <Publish uploadNew={this.uploadNew.bind(this)} potent={this.props.potent} upPotent={this.upPotent.bind(this)} />;
         }
         return (

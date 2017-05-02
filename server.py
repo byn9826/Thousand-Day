@@ -10,7 +10,7 @@ from routes.signup import signup_routes
 from routes.profile import profile_routes
 from routes.moment import moment_routes
 from routes.explore import explore_routes
-from routes.love import love_routes
+from routes.watch import watch_routes
 
 
 app = Flask(__name__, static_folder='static', static_url_path='')
@@ -23,12 +23,12 @@ app.register_blueprint(signup_routes)
 app.register_blueprint(profile_routes)
 app.register_blueprint(moment_routes)
 app.register_blueprint(explore_routes)
-app.register_blueprint(love_routes)
+app.register_blueprint(watch_routes)
 
 
 @app.route('/')
-def indexHome():
-    return render_template('love.html')
+def watchHome():
+    return render_template('watch.html')
 
 
 @app.route('/react')
