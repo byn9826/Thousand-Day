@@ -8,11 +8,11 @@ class SelectboxEG extends Component {
             second: "",
             options: [
                 ["member0", "/img/pet/1/cover/0.png", "I'm member 0"],
-                ["member1", "/img/pet/2/cover/0.png", "I'm member 1"],
+                ["member1", "/img/pet/1/cover/0.png", "I'm member 1"],
                 ["member2", "/img/pet/1/cover/0.png", "I'm member 2"],
-                ["member3", "/img/pet/2/cover/0.png", "I'm member 3"],
+                ["member3", "/img/pet/1/cover/0.png", "I'm member 3"],
                 ["member4", "/img/pet/1/cover/0.png", "I'm member 4"],
-                ["member5", "/img/pet/2/cover/0.png", "I'm member 5"]
+                ["member5", "/img/pet/1/cover/0.png", "I'm member 5"]
             ]
 		};
 	}

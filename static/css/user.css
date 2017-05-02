@@ -107,7 +107,7 @@
     z-index: 998;
     background-color: #e5e5e5;
     border-radius: 5px;
-    margin-bottom: 20px;
+    margin-bottom: 50px;
 }
 #pop-edit h4{
     font-weight: bold;
@@ -173,7 +173,7 @@
 .pop-back{
     position: fixed;
     top: 50px;
-    width: 100%;
+    width: 110%;
     height: 100%;
     margin-left: -10%;
     background-color: white;

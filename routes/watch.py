@@ -63,7 +63,7 @@ def loadMoment():
                     return str(0)
                 #didn't watch a pet return 2
                 elif len(list) == 0:
-                    return jsonnify([])
+                    return jsonify([])
                 #get recent 20 moment from pet list
                 pin = times * 20
                 new = petsMoment(list, pin, cnx)

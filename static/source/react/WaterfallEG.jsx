@@ -12,13 +12,13 @@ class WaterfallEG extends Component {
     }
     render() {
         let images = [
-            ["/img/pet/1/moment/0.jpg", "I'm a beauty guy with long legs", "#"],
-            ["/img/pet/1/moment/1.jpg", "Boring, sleep", "#"],
-            ["/img/pet/1/moment/2.jpg", "Unhappy", "#"],
-            ["/img/pet/1/moment/3.jpg", "I'm sunflower", "#"],
-            ["/img/pet/1/moment/4.jpg", "Love the bed", "#"],
-            ["/img/pet/1/moment/5.jpg", "Leave me alone", "#"],
-            ["/img/pet/1/moment/0.jpg", "I'm a beauty guy with long legs", "#"]
+            ["/img/example/1.jpeg", "I'm a beauty guy with long legs", "#"],
+            ["/img/example/2.jpeg", "Boring, sleep", "#"],
+            ["/img/example/3.jpeg", "Unhappy", "#"],
+            ["/img/example/4.jpeg", "I'm sunflower", "#"],
+            ["/img/example/5.jpeg", "Love the bed", "#"],
+            ["/img/example/1.jpeg", "Leave me alone", "#"],
+            ["/img/example/2.jpeg", "I'm a beauty guy with long legs", "#"]
         ];
         return (
             <section id = "waterfall" className = "example">
