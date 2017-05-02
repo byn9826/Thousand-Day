@@ -1,2 +1,1 @@
-static/source/bundle/* linguist-vendored
-*.jsx linguist-language=HTML
+static/* linguist-vendored
