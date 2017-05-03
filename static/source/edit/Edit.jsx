@@ -701,7 +701,7 @@ class Edit extends Component {
 		}
 		return (
 			<div id="react-root">
-				<Header visitorId={this.props.userId} visitorName={this.props.userName} loginSuccess={null} logOut={this.logOut.bind(this)} />
+				<Header visitorId={this.props.userId} visitorName={this.props.userName} loginSuccess={null} logOut={this.logOut.bind(this)} unread={this.props.unread} />
 				<main id="main">
 					<section id="main-header">
 						<h4 id="main-header-left">
@@ -771,7 +771,7 @@ reqwest({
 				console.log("You are not pet owner");
 				break;
 			default:
-				ReactDOM.render(<Edit pet={result[0]} userId={result[1]} userName={result[2]} />, document.getElementById("root"));
+				ReactDOM.render(<Edit pet={result[0]} userId={result[1]} userName={result[2]} unread={result[3]} />, document.getElementById("root"));
 		}
 	},
 	error: function (err) {

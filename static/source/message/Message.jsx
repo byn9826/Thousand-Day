@@ -20,8 +20,18 @@ class Message extends Component {
             //store apply list
             applyList: this.props.applys,
             //store accept error
-            acceptError: null
+            acceptError: null,
+            //store message list
+            messageList: this.props.messages,
+            //store message error
+            messageError: null,
+            //store target message id
+            messageTarget: null
 		};
+	}
+    //if user logout
+    logOut() {
+		window.location.replace("/user/" + this.props.visitorId);
 	}
     //if user want to delete one friend
     wantDel(id) {
@@ -127,9 +137,105 @@ class Message extends Component {
         let newLength = ((this.state.friendLength + 5) < this.state.friendList.length)?(this.state.friendLength + 5):this.state.friendList.length;
         this.setState({friendLength: newLength});
     }
+    //if user click delete message
+    delMessage(index) {
+        let delMessages = this.state.messageList;
+        reqwest({
+            url: "/message/delMessage",
+            method: "POST",
+            data: {"message": delMessages[index].message_id},
+            success: function(result) {
+                switch(result) {
+                    case "0":
+                        this.setState({messageError: "Please Login first", messageTarget: index});
+                        break;
+                    case "1":
+                        delMessages.splice(index, 1);
+                        this.setState({messageList: delMessages, messageTarget: null, messageError: null});
+                        break;
+                    case "2":
+                        this.setState({messageError: "Can't delete message, try later", messageTarget: index});
+                        break;
+                }
+            }.bind(this),
+            error: function (err) {
+                this.setState({messageError: "Can't connect to server", messageTarget: index});
+            }.bind(this)
+        });
+    }
+    //if user click read Message
+    readMessage(index) {
+        let readMessages = this.state.messageList;
+        reqwest({
+            url: "/message/readMessage",
+            method: "POST",
+            data: {
+                "message": readMessages[index].message_id,
+                "read": readMessages[index].message_read
+            },
+            success: function(result) {
+                switch(result) {
+                    case "0":
+                        this.setState({messageError: "Please Login first", messageTarget: index});
+                        break;
+                    case "1":
+                        if (readMessages[index].message_read === 1) {
+                            readMessages[index].message_read = 0;
+                        } else {
+                            readMessages[index].message_read = 1;
+                        }
+                        this.setState({messageList: readMessages, messageTarget: null, messageError: null});
+                        break;
+                    case "2":
+                        this.setState({messageError: "Can't update info, try later", messageTarget: index});
+                        break;
+                }
+            }.bind(this),
+            error: function (err) {
+                this.setState({messageError: "Can't connect to server", messageTarget: index});
+            }.bind(this)
+        });
+    }
 	render() {
-        let applys = [];
         let i;
+        //show all messages
+        let messages = [];
+        for (i = 0; i < this.state.messageList.length; i++) {
+            //show apply for friends message
+            if (this.state.messageList[i].user_id) {
+                if (this.state.messageList[i].message_read === 0) {
+                    messages[i] = (
+                        <div key={"thousandaymessagelist" + i} style={{backgroundColor:"white"}} className="main-message">
+                            <div className="main-message-content">
+                                <a href={"/user/" + this.state.messageList[i].user_id}>
+                                    <img alt={this.state.messageList[i].user_name} src={"/img/user/" + this.state.messageList[i].user_id + ".jpg"} />
+                                </a>
+                                <h5>{this.state.messageList[i].user_name} wants to be your friends.</h5>
+                            </div>
+                            <h6>
+                                {new Date(this.state.messageList[i].message_date).toISOString().substring(0, 10)}
+                            </h6>
+                            <h6 onClick={this.readMessage.bind(this, i)} className="main-message-action">Archive</h6>
+                            <h6 onClick={this.delMessage.bind(this, i)} className="main-message-action">Delete</h6>
+                            <h6 className="main-message-action">{(this.state.messageTarget === i)?this.state.messageError:null}</h6>
+                        </div>
+                    )
+                } else {
+                    messages[i] = (
+                        <div key={"thousandaymessagelist" + i} style={{backgroundColor:"gray"}} className="main-message">
+                            <div className="main-message-content">
+                                <h5>{this.state.messageList[i].user_name} wants to be your friends.</h5>
+                            </div>
+                            <h6 onClick={this.readMessage.bind(this, i)} className="main-message-back">Unread</h6>
+                            <h6 onClick={this.delMessage.bind(this, i)} className="main-message-back">Delete</h6>
+                            <h6 className="main-message-back">{(this.state.messageTarget === i)?this.state.messageError:null}</h6>
+                        </div>
+                    )
+                }
+            }
+        }
+        //show friends appliancts
+        let applys = [];
         for (i = 0; i < this.state.applyList.length; i++) {
             if (this.state.friendList.length < 50) {
                 applys[i] = (
@@ -192,8 +298,9 @@ class Message extends Component {
         }
 		return (
 			<div id="react-root">
-				<Header visitorId={this.props.visitorId} visitorName={this.props.visitorName} loginSuccess={()=>{}} logOut={()=>{}} />
+				<Header visitorId={this.props.visitorId} visitorName={this.props.visitorName} loginSuccess={()=>{}} logOut={this.logOut.bind(this)} unread={this.props.unread} />
                 <main id="main">
+                    {messages}
                 </main>
                 <aside id="aside">
                     <h4 id="aside-apply">Friend Requests</h4>
@@ -212,13 +319,13 @@ reqwest({
 	url: "/message/view",
 	method: "POST",
 	success: function(result) {
-        console.log(result[3]);
+        console.log(result[4]);
 		switch (result) {
 			case "0":
 				console.log("Can't connect to db");
 				break;
 			default:
-				ReactDOM.render(<Message visitorId={result[0]} visitorName={result[1]} friends={result[2]} applys={result[3]} />, document.getElementById("root"));
+				ReactDOM.render(<Message visitorId={result[0]} visitorName={result[1]} friends={result[2]} applys={result[3]} messages={result[4]} unread={result[5]} />, document.getElementById("root"));
 		}
 	},
 	error: function (err) {

@@ -3,18 +3,63 @@
     display: inline-block;
     width: 45%;
     margin-left: 10%;
-    margin-top: 100px;
+    margin-top: 120px;
     vertical-align: top;
-    min-height: 600px;
+    background-color: #f7d7b4;
+    border-radius: 5px;
+    height: 500px;
+    padding-top: 20px;
+}
+.main-message{
+    display: block;
+    margin-bottom: 20px;
+    margin-left: 5%;
+    width: 84%;
+    padding: 5px 3%;
+    border-radius: 5px;
+}
+.main-message-content{
+    display: block;
+    width: 100%;
+    border-bottom: 1px solid #052456;
+    padding-bottom: 5px;
+    margin-top: 5px;
+}
+.main-message-content img{
+    display: inline-block;
+    vertical-align: middle;
+    width: 40px;
+    border-radius: 5px;
+}
+.main-message-content h5{
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 2%;
+}
+.main-message h6{
+    display: inline-block;
+    vertical-align: middle;
+    padding: 5px 0;
+}
+.main-message-action{
+    color: red;
+    margin-left: 3%;
+    cursor: pointer;
+}
+.main-message-back{
+    color: #efefdc;
+    margin-left: 3%;
+    cursor: pointer;
 }
 
 
 #aside{
     display: inline-block;
     margin-left: 5%;
-    margin-top: 150px;
+    margin-top: 120px;
     vertical-align: top;
     width: 30%;
+    min-height: 600px;
 }
 #aside-apply{
     display: block;

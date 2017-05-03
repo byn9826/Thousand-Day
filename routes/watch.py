@@ -5,6 +5,7 @@ import mysql.connector
 import secret
 from handler.moment import newMoment, petsMoment
 from handler.watch import userWatch
+from handler.message import numNew
 
 
 watch_routes = Blueprint('watch_routes', __name__, template_folder = 'templates')
@@ -21,15 +22,20 @@ def watchView():
             new = newMoment(0, cnx)
             if new == '0':
                 return str(0)
+            if session.get('userName') is not None:
+                num = numNew(session['userId'], cnx)
+            else:
+                num = None
         finally:
             cnx.close()
         if session.get('userName') is not None:
             visitorName = session['userName']
             visitorId = session['userId']
+            num = num[0]
         else:
             visitorName = None
             visitorId = None
-        return jsonify([new, visitorName, visitorId])
+        return jsonify([new, visitorName, visitorId, num])
     else:
         abort(404)
 

@@ -21,7 +21,7 @@ class Pet extends Component {
 	render() {
 		return (
 			<div id="react-root">
-				<Header visitorId={this.props.visitorId} visitorName={this.props.visitorName} loginSuccess={this.loginSuccess.bind(this)} logOut={this.logOut.bind(this)} />
+				<Header visitorId={this.props.visitorId} visitorName={this.props.visitorName} unread={this.props.unread} loginSuccess={this.loginSuccess.bind(this)} logOut={this.logOut.bind(this)} />
 				<About visitorId={this.state.visitorId} pet={this.props.pet} owner={this.props.owner} watcher={this.props.watcher} companion={this.props.companion} />
 				<Display visitorId={this.state.visitorId} pet={this.props.pet} moment={this.props.moment} potent={this.props.newPotent} />
 				<Footer />
@@ -42,7 +42,7 @@ reqwest({
 				console.log("Pet not exist");
 				break;
 			default:
-				ReactDOM.render(<Pet pet={result[0]} owner={result[1]} watcher={result[2]} companion={result[3]} moment={result[4]} visitorId={result[5]} visitorName={result[6]} newPotent={result[7]} />, document.getElementById("root"));
+				ReactDOM.render(<Pet pet={result[0]} owner={result[1]} watcher={result[2]} companion={result[3]} moment={result[4]} visitorId={result[5]} visitorName={result[6]} newPotent={result[7]} unread={result[8]} />, document.getElementById("root"));
 				break;
 		}
 	},

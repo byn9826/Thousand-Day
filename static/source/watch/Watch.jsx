@@ -128,7 +128,7 @@ class Watch extends Component {
 		)
 		return (
 			<div  id="react-root">
-				<Header visitorId={this.props.visitorId} visitorName={this.props.visitorName} loginSuccess={this.loginSuccess.bind(this)} logOut={this.logOut.bind(this)}  />
+				<Header visitorId={this.props.visitorId} visitorName={this.props.visitorName} loginSuccess={this.loginSuccess.bind(this)} logOut={this.logOut.bind(this)} unread={this.props.unread} />
 				<aside id="aside">
 					<h2>Welcome</h2>
 					<h4>Watch love Moments ⇋</h4>
@@ -162,7 +162,7 @@ reqwest({
 				console.log("Can't connet to server, try later");
 				break;
 			default:
-				ReactDOM.render(<Watch recentTen={result[0]} visitorName={result[1]} visitorId={result[2]} />, document.getElementById("root"));
+				ReactDOM.render(<Watch recentTen={result[0]} visitorName={result[1]} visitorId={result[2]} unread={result[3]} />, document.getElementById("root"));
 		}
 	},
 	error: function (err) {

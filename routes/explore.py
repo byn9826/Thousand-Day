@@ -5,6 +5,7 @@ import mysql.connector
 import secret
 from handler.pet import filterPet
 from handler.moment import petsMoment
+from handler.message import numNew
 
 
 explore_routes = Blueprint('explore_routes', __name__, template_folder = 'templates')
@@ -17,10 +18,17 @@ def exploreHome():
     if session.get('userName') is not None:
         visitorName = session['userName']
         visitorId = session['userId']
+        cnx = mysql.connector.connect(**config)
+        try:
+            num = numNew(visitorId, cnx)
+            num = num[0]
+        finally:
+            cnx.close()
     else:
          visitorName = None
          visitorId = None
-    return render_template('explore.html', name = visitorName, id = visitorId)
+         num = None
+    return render_template('explore.html', name = visitorName, id = visitorId, num = num)
 
 #load 20 moments
 @explore_routes.route('/explore/getMoment', methods = ['GET', 'POST'])

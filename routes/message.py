@@ -5,6 +5,7 @@ import mysql.connector
 import secret
 from handler.relation import allRelation, delRelation, checkRelation, numFriends, cleanRequest, doFriends
 from handler.user import userList
+from handler.message import getMessages, statueMessage, removeMessage, numNew
 
 
 message_routes = Blueprint('message_routes', __name__, template_folder = 'templates')
@@ -57,9 +58,15 @@ def messageView():
                     applys = []
                 else:
                     applys = userList(list(set(apply)), cnx)
+            messages = getMessages(userId, 0, 20, cnx)
+            if messages == '0':
+                return str(0)
+            num = numNew(userId, cnx)
+            if num == '0':
+                return str(0)
         finally:
             cnx.close()
-        return jsonify([userId, userName, friends, applys])
+        return jsonify([userId, userName, friends, applys, messages, num[0]])
     else:
         abort(404)
 
@@ -116,6 +123,47 @@ def addFriend():
                 return str(1)
             #return 4 for success
             return str(4)
+        finally:
+            cnx.close()
+    else:
+        abort(404)
+
+#read message or unread message
+@message_routes.route('/message/readMessage', methods = ['GET', 'POST'])
+def readMessage():
+    #only response to post
+    if request.method == 'POST':
+        #user must login
+        if session.get('userId') is None:
+            return str(0)
+        messageId = int(request.form['message'])
+        readStatue = int(request.form['read'])
+        userId = session['userId']
+        if readStatue == 0:
+            newStatue = 1
+        else:
+            newStatue = 0
+        cnx = mysql.connector.connect(**config)
+        try:
+            return statueMessage(messageId, newStatue, userId, cnx)
+        finally:
+            cnx.close()
+    else:
+        abort(404)
+
+#delete one message
+@message_routes.route('/message/delMessage', methods = ['GET', 'POST'])
+def delMessage():
+    #only response to post
+    if request.method == 'POST':
+        #user must login
+        if session.get('userId') is None:
+            return str(0)
+        messageId = int(request.form['message'])
+        userId = session['userId']
+        cnx = mysql.connector.connect(**config)
+        try:
+            return removeMessage(messageId, userId, cnx)
         finally:
             cnx.close()
     else:

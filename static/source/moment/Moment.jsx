@@ -211,7 +211,7 @@ class Moment extends Component {
         }
         return (
             <div id="react-root">
-                <Header visitorId={this.props.visitorId} visitorName={this.state.visitorName} loginSuccess={this.loginSuccess.bind(this)} logOut={this.logOut.bind(this)} />
+                <Header visitorId={this.props.visitorId} visitorName={this.state.visitorName} loginSuccess={this.loginSuccess.bind(this)} logOut={this.logOut.bind(this)} unread={this.props.unread} />
                 <main id="main">
                     <img alt="moment" src={"/img/pet/" + this.props.data.pet_id + "/moment/" + this.props.data.image_name} />
                     <h5>{new Date(this.props.data.moment_date).toISOString().substring(0, 10)}</h5>
@@ -262,7 +262,7 @@ reqwest({
                         like.push(result[1][i][0]);
                     }
                 }
-				ReactDOM.render(<Moment data={result[0]} like={like} visitorId={result[2]} comment={result[3]} name={result[4]} privilege={result[5]} />, document.getElementById("root"));
+				ReactDOM.render(<Moment data={result[0]} like={like} visitorId={result[2]} comment={result[3]} name={result[4]} privilege={result[5]} unread={result[6]} />, document.getElementById("root"));
 				break;
 		}
 	},

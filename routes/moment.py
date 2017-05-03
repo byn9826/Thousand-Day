@@ -7,6 +7,8 @@ from handler.moment import readMoment, delMoment
 from handler.like import searchLike, searchComment, insertComment, newLike
 from handler.pet import searchPet
 from handler.upload import removeMoment
+from handler.message import numNew
+
 
 moment_routes = Blueprint('moment_routes', __name__, template_folder = 'templates')
 config = secret.mysql()
@@ -39,16 +41,20 @@ def momentView():
             pet = searchPet(moment['pet_id'], cnx)
             if pet == '0':
                 return str(0)
+            if session.get('userId') is not None:
+                num = numNew(session['userId'], cnx)
         finally:
             cnx.close()
         #id of current visitor
         if session.get('userId') is not None:
             userId = session['userId']
             userName = session['userName']
+            num = num[0]
         else:
             userId = None
             userName = None
-        return jsonify([moment, result, userId, comment, userName, [pet['owner_id'], pet['relative_id']]])
+            num = None
+        return jsonify([moment, result, userId, comment, userName, [pet['owner_id'], pet['relative_id']], num])
     else:
         abort(404)
 

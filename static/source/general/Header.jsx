@@ -13,7 +13,9 @@ class Header extends Component {
 			//indicate show loginbox or not
 			showDrop: false,
 			//hide name or not
-			hideName: this.props.hideName || false
+			hideName: this.props.hideName || false,
+			//number of unread message
+			newNum: this.props.unread || 0
 		};
 	}
 	//user click google login button
@@ -44,7 +46,7 @@ class Header extends Component {
 						default:
 							if (this.state.loginName == "Login") {
 								//get username, close dropdown box
-								this.setState({loginName: result[1], loginId:result[0], showDrop: false});
+								this.setState({loginName: result[1], loginId:result[0], newNum: result[2], showDrop: false});
 								//pass user id back to parent
 								this.props.loginSuccess(result[0]);
 							}
@@ -84,7 +86,7 @@ class Header extends Component {
 						default:
 							if (this.state.loginName == "Login") {
 								//get username, close dropdown box
-								this.setState({loginName: result[1], loginId: result[0], showDrop: false});
+								this.setState({loginName: result[1], loginId: result[0], newNum: result[2], showDrop: false});
 								//pass user id back to parent
 								this.props.loginSuccess(result[0]);
 							}
@@ -162,6 +164,7 @@ class Header extends Component {
 			if (this.state.showDrop && this.state.loginName != "Login") {
 				logout = (
 					<div className="header-drop">
+						<a id="header-drop-message" href="/message"><h6>You have {this.state.newNum} unread messages</h6></a>
 						<a href={"/user/" + this.state.loginId}><h5>Digital Home</h5></a>
 						<input type="button" value="Log Out" onClick={this.logOut.bind(this)} />
 					</div>
@@ -173,6 +176,7 @@ class Header extends Component {
 				<a href="/">
 					<img id="header-logo" src="/img/logo.png" alt="logo" />
 				</a>
+				<h5 id="header-desc">Your pets and you</h5>
 				{user}
 				<a className="header-navi" href="/explore">
 					<h5>Explore</h5>

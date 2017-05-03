@@ -54,7 +54,7 @@ class User extends Component {
 	render() {
 		return (
 			<div id="react-root">
-				<Header visitorId={this.props.visitorId} visitorName={this.props.visitorName} loginSuccess={this.loginSuccess.bind(this)} logOut={this.logOut.bind(this)} />
+				<Header visitorId={this.props.visitorId} visitorName={this.props.visitorName} loginSuccess={this.loginSuccess.bind(this)} logOut={this.logOut.bind(this)} unread={this.props.unread} />
                 <Profile user={this.props.user} relative={this.props.relative} relation={this.state.relation} sendRequest={this.sendRequest.bind(this)} />
 				<Hub user={this.props.user} pet={this.props.pet} moment={this.props.moment} visitorId={this.state.visitorId} petsList={this.props.petsList} />
 				<Footer />
@@ -76,7 +76,7 @@ reqwest({
 				console.log("User not exist");
 				break;
 			default:
-				ReactDOM.render(<User user={result[0]} relative={result[1]} relation={result[2]} pet={result[3]} moment={result[4]} visitorId={result[5]} visitorName={result[6]} petsList={result[7]} />, document.getElementById("root"));
+				ReactDOM.render(<User user={result[0]} relative={result[1]} relation={result[2]} pet={result[3]} moment={result[4]} visitorId={result[5]} visitorName={result[6]} petsList={result[7]} unread={result[8]} />, document.getElementById("root"));
 		}
 	},
 	error: function (err) {

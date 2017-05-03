@@ -7,6 +7,7 @@ import mysql.connector
 import secret
 from handler.relation import checkRelation
 from handler.account import checkGoogle, checkFacebook
+from handler.message import numNew
 
 
 account_routes = Blueprint('account_routes', __name__)
@@ -34,15 +35,19 @@ def facebookLogin():
             return str(2)
         #search user's information
         cnx = mysql.connector.connect(**config)
-        result = checkFacebook(userId, cnx)
-        cnx.close()
-        if result is not None and result != '0':
-            #write into session
-            session['userId'] = result[0]
-            session['userName'] = result[1]
-            #return user name and id for user exist
-            return jsonify(result);
-        elif result == '0':
+        try:
+            result = checkFacebook(userId, cnx)
+            if result is not None and result != '0':
+                #write into session
+                session['userId'] = result[0]
+                session['userName'] = result[1]
+                #get unread messages
+                num = numNew(session['userId'], cnx)
+                #return user name and id for user exist
+                return jsonify([result[0], result[1], num[0]]);
+        finally:
+            cnx.close()
+        if result == '0':
             #return 0 for db error
             return str(0)
         else:
@@ -76,15 +81,19 @@ def googleLogin():
         googleId = idInfo['sub']
         #search user's information
         cnx = mysql.connector.connect(**config)
-        result = checkGoogle(googleId, cnx)
-        cnx.close()
-        if result is not None and result != '0':
-            #write into session
-            session['userId'] = result[0]
-            session['userName'] = result[1]
-            #return user name and id for user exist
-            return jsonify(result);
-        elif result == '0':
+        try:
+            result = checkGoogle(googleId, cnx)
+            if result is not None and result != '0':
+                #write into session
+                session['userId'] = result[0]
+                session['userName'] = result[1]
+                #get unread messages
+                num = numNew(session['userId'], cnx)
+                #return user name and id for user exist
+                return jsonify([result[0], result[1], num[0]]);
+        finally:
+            cnx.close()
+        if result == '0':
             #return 0 for db error
             return str(0)
         else:

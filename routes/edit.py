@@ -9,6 +9,7 @@ from handler.user import userList, checkUser
 from handler.upload import uploadPet, uploadSkillimg
 from handler.location import changeLocation
 from handler.skill import updateSkillname
+from handler.message import numNew
 
 
 edit_routes = Blueprint('edit_routes', __name__, template_folder = 'templates')
@@ -35,6 +36,8 @@ def petView():
         cnx = mysql.connector.connect(**config)
         try:
             pet = searchPet(petId, cnx)
+            num = numNew(userId, cnx)
+            num = num[0]
         finally:
             cnx.close()
         if not pet:
@@ -51,7 +54,7 @@ def petView():
                 session['otherId'] = None
         elif userId == pet['relative_id']:
             session['otherId'] = pet['owner_id']
-        return jsonify([pet, userId, session['userName']])
+        return jsonify([pet, userId, session['userName'], num])
     else:
         abort(404)
 

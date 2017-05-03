@@ -8,6 +8,7 @@ from handler.user import checkUser, searchRelative
 from handler.pet import searchBelong, newPet
 from handler.moment import petsMoment
 from handler.upload import uploadPet
+from handler.message import numNew
 
 
 user_routes = Blueprint('user_routes', __name__, template_folder = 'templates')
@@ -44,6 +45,10 @@ def userView():
                 #return 0 for db error
                 if relations == "0":
                     return str(0)
+                num = numNew(visitorId, cnx)
+                #return 0 for db error
+                if num == "0":
+                    return str(0)
             #Not login, return code 3
             else:
                 relations = "3"
@@ -66,10 +71,10 @@ def userView():
             cnx.close()
         #when visitor have login
         if session.get('userId') is not None:
-            result = [user, relative, relations, pets, moments, session['userId'], session['userName'], allId]
+            result = [user, relative, relations, pets, moments, session['userId'], session['userName'], allId, num[0]]
         #when visitor not login
         else:
-            result = [user, relative, relations, pets, moments, None, None, allId]
+            result = [user, relative, relations, pets, moments, None, None, allId, None]
         return jsonify(result)
     else:
         abort(404)

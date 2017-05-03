@@ -10,6 +10,12 @@
     z-index: 999;
     vertical-align: middle;
 }
+#header-desc{
+    display: inline-block;
+    vertical-align: middle;
+    color: white;
+    margin-left: 2%;
+}
 .header-navi{
     color: white;
     float: right;
@@ -52,6 +58,14 @@
     margin-top: 3px;
     border-radius: 5px;
     visibility: visible;
+}
+#header-drop-message{
+    border: 1px solid #ef8513 !important;
+    color: black !important;
+    background-color: white !important;
+    padding: 8px 2% !important;
+    width: 76% !important;
+    margin-bottom: 15px !important;
 }
 .header-drop a{
     margin-top: 10px;

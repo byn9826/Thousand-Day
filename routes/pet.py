@@ -9,6 +9,7 @@ from handler.watch import searchWatch, updateWatch
 from handler.moment import singleMoment, addMoment
 from handler.ability import updateAbility
 from handler.upload import uploadMoment
+from handler.message import numNew
 import datetime
 
 
@@ -76,6 +77,11 @@ def petView():
             #return 0 for db error
             if moment == "0":
                 return str(0)
+            if session.get('userId') is not None:
+                num = numNew(session['userId'], cnx)
+                num = num[0]
+            else:
+                num = None
         finally:
             cnx.close()
         #store pet id into session if pet belong to current user
@@ -83,7 +89,7 @@ def petView():
             if (session['userId'] == petOwner or session['userId'] == petRelative):
                 session['petId'] = petId
         #return all infos
-        result = [pet, owner, watch, companion, moment, currentId, currentName, newPotential]
+        result = [pet, owner, watch, companion, moment, currentId, currentName, newPotential, num]
         return jsonify(result)    
     else:
         abort(404)
