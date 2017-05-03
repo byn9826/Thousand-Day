@@ -32,7 +32,6 @@ class Moment extends Component {
             confirmDel: false,
             //store content show on delete button
             delButton: "Confirm Delete?"
-
 		};
 	}
     //if user click like button

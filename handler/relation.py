@@ -89,7 +89,7 @@ def stopRelation(ownerId, userId, petId, cnx):
 
 
 #check all friends of one user
-def oneRelation(userId, cnx):
+def oneRelation(userId, relation, cnx):
     #search all friends id list
     searchQuery = (
         'SELECT applicant_id, receiver_id FROM user_relation '
@@ -97,7 +97,7 @@ def oneRelation(userId, cnx):
     ) 
     try:
         searchCursor = cnx.cursor()
-        searchCursor.execute(searchQuery, (userId, userId, 1))
+        searchCursor.execute(searchQuery, (userId, userId, relation))
         options = searchCursor.fetchall()
         combine = []
         #combine all ids
@@ -115,6 +115,7 @@ def oneRelation(userId, cnx):
         return str(0)
     finally:
         searchCursor.close()
+
 
 #check all friends of one pet's owner and relative
 def twoRelation(userId, otherId, cnx):
@@ -139,3 +140,40 @@ def twoRelation(userId, otherId, cnx):
         s += r
     #return user id list
     return list(set(s))
+
+
+#get all relation of one user, friends or not friends
+def allRelation(userId, cnx):
+    #search all friends id list
+    searchQuery = (
+        'SELECT * FROM user_relation '
+        'WHERE (applicant_id = %s OR receiver_id = %s)'
+    ) 
+    try:
+        searchCursor = cnx.cursor(dictionary=True)
+        searchCursor.execute(searchQuery, (userId, userId))
+        return searchCursor.fetchall()
+    #return 0 for db error
+    except mysql.connector.Error as err:
+        print('Something went wrong: {}'.format(err))
+        return str(0)
+    finally:
+        searchCursor.close()
+
+#delete relation for two user
+def delRelation(userId, friendId, cnx):
+    delQuery = (
+        'DELETE FROM user_relation WHERE (applicant_id = %s AND receiver_id = %s) '
+        'OR (applicant_id = %s AND receiver_id = %s)'
+    )
+    try:
+        delCursor = cnx.cursor()
+        delCursor.execute(delQuery, (userId, friendId, friendId, userId))
+        cnx.commit()
+        return str(1)
+    except mysql.connector.Error as err:
+        cnx.rollback()
+        print('Something went wrong: {}'.format(err))
+        return str(2)
+    finally:
+        delCursor.close()

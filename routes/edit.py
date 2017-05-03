@@ -187,7 +187,7 @@ def searchRelative():
         ownerId = session['userId']
         cnx = mysql.connector.connect(**config)
         try:
-            friends = oneRelation(ownerId, cnx)
+            friends = oneRelation(ownerId, 1, cnx)
             #return 1 for db error
             if friends == '0':
                 return str(1)

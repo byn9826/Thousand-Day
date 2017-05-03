@@ -11,6 +11,7 @@ from routes.profile import profile_routes
 from routes.moment import moment_routes
 from routes.explore import explore_routes
 from routes.watch import watch_routes
+from routes.message import message_routes
 
 
 app = Flask(__name__, static_folder='static', static_url_path='')
@@ -24,6 +25,7 @@ app.register_blueprint(profile_routes)
 app.register_blueprint(moment_routes)
 app.register_blueprint(explore_routes)
 app.register_blueprint(watch_routes)
+app.register_blueprint(message_routes)
 
 
 @app.route('/')
