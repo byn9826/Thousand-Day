@@ -85,6 +85,9 @@ def addFriend():
             return str(3)
         receiverId = int(request.form['receiver'])
         applicantId = int(session['userId'])
+        #request to be friend with oneself, return 2
+        if receiverId == applicantId:
+            return str(2)
         cnx = mysql.connector.connect(**config)
         try:
             result = requestRelation(applicantId, receiverId, cnx)

@@ -12,19 +12,22 @@ def checkRelation(visitorId, pageId, cnx):
     try:
         relationCursor = cnx.cursor()
         relationCursor.execute(relationQuery, (pageId, visitorId, visitorId, pageId))
-        relation = relationCursor.fetchone()
+        relation = relationCursor.fetchall()
         #return 1 for not friend
         if not relation:
             return str(1)
-        #return 4 for request sent
-        elif relation[1] == pageId and relation[2] == 0:
+        if len(relation) == 1:
+            #return 4 for request sent
+            if relation[0][1] == pageId and relation[0][2] == 0:
+                return str(4)
+            #return 5 for friends relation
+            elif relation[0][2] == 1:
+                return str(5)
+            #not friend return 1
+            else:
+                return str(1)
+        elif len(relation) == 2:
             return str(4)
-        #return 1 for page user send request to visitor before
-        elif relation[0] == pageId and relation[2] == 0:
-            return str(1)
-        #return 5 for friends relation
-        elif relation[2] == 1:
-            return str(5)
     #return 0 for db error
     except mysql.connector.Error as err:
         print('Something went wrong: {}'.format(err))
@@ -34,42 +37,18 @@ def checkRelation(visitorId, pageId, cnx):
 
 #send become friend request
 def requestRelation(visitorId, pageId, cnx):
-    #request to be friend with oneself, return 2
-    if visitorId == pageId:
-        return str(2)
-    #check if there's friend request from page id to visitor before
-    searchQuery = ('SELECT * From user_relation WHERE applicant_id = %s AND receiver_id = %s '
-                    'AND friend_statue = %s ')
-    #directly become friends if there are request before
-    confirmQuery = 'UPDATE user_relation SET friend_statue = %s WHERE applicant_id = %s AND receiver_id = %s'
-    #create send request for not friends and no request before
     requestQuery = 'INSERT INTO user_relation (applicant_id, receiver_id, friend_statue) VALUES (%s, %s, %s)'
     try:
-        searchCursor = cnx.cursor()
-        searchCursor.execute(searchQuery, (pageId, visitorId, 0))
-        search = searchCursor.fetchone()
-        #no past requirement exist, insert new one
-        if not search:
-            requestCursor = cnx.cursor()
-            requestCursor.execute(requestQuery, (visitorId, pageId, 0))
-            cnx.commit()
-            requestCursor.close()
-            #return 4 for success send friend request
-            return str(4)
-        #return 5 for become friends
-        else:
-            confirmCursor = cnx.cursor()
-            confirmCursor.execute(confirmQuery, (1, pageId, visitorId))
-            cnx.commit()
-            confirmCursor.close()
-            return str(5)
-    #return 0 for db error
+        requestCursor = cnx.cursor()
+        requestCursor.execute(requestQuery, (visitorId, pageId, 0))
+        cnx.commit()
+        return str(4)
     except mysql.connector.Error as err:
         print('Something went wrong: {}'.format(err))
         cnx.rollback()
         return str(0)
     finally:
-        searchCursor.close()
+        requestCursor.close()
 
 #end relation with one pet
 def stopRelation(ownerId, userId, petId, cnx):
@@ -159,6 +138,54 @@ def allRelation(userId, cnx):
         return str(0)
     finally:
         searchCursor.close()
+
+#check total number of friends of one user
+def numFriends(userId, cnx):
+    searchQuery = (
+        'SELECT COUNT(*) FROM user_relation WHERE (applicant_id = %s OR receiver_id = %s) '
+        'AND friend_statue = 1'
+    )
+    try:
+        searchCursor = cnx.cursor()
+        searchCursor.execute(searchQuery, (userId, userId))
+        return searchCursor.fetchone()
+    #return 0 for db error
+    except mysql.connector.Error as err:
+        print('Something went wrong: {}'.format(err))
+        return str(0)
+    finally:
+        searchCursor.close()
+
+#clean past friend request from one user to another
+def cleanRequest(userId, targetId, cnx):
+    cleanQuery = 'DELETE FROM user_relation WHERE applicant_id = %s AND receiver_id = %s AND friend_statue = 0'
+    try:
+        cleanCursor = cnx.cursor()
+        cleanCursor.execute(cleanQuery, (userId, targetId))
+        cnx.commit()
+        return str(1)
+    except mysql.connector.Error as err:
+        cnx.rollback()
+        print('Something went wrong: {}'.format(err))
+        return str(2)
+    finally:
+        cleanCursor.close()
+
+#become friends relation
+def doFriends(targetId, userId, cnx):
+    doQuery = 'UPDATE user_relation SET friend_statue = 1 WHERE applicant_id = %s AND receiver_id = %s'
+    try:
+        doCursor = cnx.cursor()
+        doCursor.execute(doQuery, (targetId, userId))
+        cnx.commit()
+        return str(1)
+    except mysql.connector.Error as err:
+        cnx.rollback()
+        print('Something went wrong: {}'.format(err))
+        return str(2)
+    finally:
+        doCursor.close()
+
 
 #delete relation for two user
 def delRelation(userId, friendId, cnx):

@@ -16,7 +16,11 @@ class Message extends Component {
             //store show how many friends
             friendLength: (this.props.friends.length >5)?5:this.props.friends.length,
             //store delete friend error
-            delError: null
+            delError: null,
+            //store apply list
+            applyList: this.props.applys,
+            //store accept error
+            acceptError: null
 		};
 	}
     //if user want to delete one friend
@@ -53,7 +57,70 @@ class Message extends Component {
                 this.setState({delError: "Can't connect to server"});
             }.bind(this)
         });
+    }
+    //if user delete a friend request
+    delApply(index) {
+        let id = this.state.applyList[index].user_id;
+        reqwest({
+            url: "/message/delFriend",
+            method: "POST",
+            data: {"id": id},
+            success: function(result) {
+                switch (result) {
+                    case "0":
+                        this.setState({acceptError: "Please Login first"});
+                        break;
+                    case "1":
+                        let newList = this.state.applyList;
+                        newList.splice(index, 1);
+                        this.setState({applyList: newList});
+                        break;
+                    case "2":
+                        this.setState({acceptError: "Can't delete, try later"});
+                        break;
+                }
+            }.bind(this),
+            error: function (err) {
+                this.setState({acceptError: "Can't connect to server"});
+            }.bind(this)
+        });
         
+    }
+    //if user accept friend request
+    acceptApply(index) {
+        let id = this.state.applyList[index].user_id;
+        reqwest({
+            url: "/message/addFriend",
+            method: "POST",
+            data: {"id": id},
+            success: function(result) {
+                switch (result) {
+                    case "0":
+                        this.setState({acceptError: "Please Login first"});
+                        break;
+                    case "1":
+                        this.setState({acceptError: "Something wrong, try later"});
+                        break;
+                    case "2":
+                        this.setState({acceptError: "You alreay have 50 friends"});
+                        break;
+                    case "3":
+                        this.setState({acceptError: "He/She alreay have 50 friends"});
+                        break;
+                    case "4":
+                        //add to friend list
+                        let newFriends = this.state.friendList;
+                        newFriends.unshift(this.state.applyList[index]);
+                        //remove apply list
+                        let newList = this.state.applyList;
+                        newList.splice(index, 1);
+                        this.setState({applyList: newList, friendList: newFriends, friendLength: this.state.friendLength + 1});
+                }
+            }.bind(this),
+            error: function (err) {
+                this.setState({acceptError: "Can't connect to server"});
+            }.bind(this)
+        });
     }
     //if user click load more friend
     moreFriend() {
@@ -61,9 +128,36 @@ class Message extends Component {
         this.setState({friendLength: newLength});
     }
 	render() {
+        let applys = [];
+        let i;
+        for (i = 0; i < this.state.applyList.length; i++) {
+            if (this.state.friendList.length < 50) {
+                applys[i] = (
+                    <div key={"thousandaymessage" + i} className="aside-list">
+                        <a href={"/user/" + this.state.applyList[i].user_id}>
+                            <img alt="Applicant" src={"/img/user/" + this.state.applyList[i].user_id + ".jpg"} />
+                        </a>
+                        <h5>{this.state.applyList[i].user_name}</h5>
+                        <h6 onClick={this.acceptApply.bind(this, i)}>Accept</h6>
+                        <h6 onClick={this.delApply.bind(this, i)}>Delete</h6>
+                    </div>
+                )
+            } else {
+                applys[i] = (
+                    <div key={"thousandaymessage" + i} className="aside-list">
+                        <a href={"/user/" + this.state.applyList[i].user_id}>
+                            <img alt="Applicant" src={"/img/user/" + this.state.applyList[i].user_id + ".jpg"} />
+                        </a>
+                        <h5>{this.state.applyList[i].user_name}</h5>
+                        <h6 onClick={this.delApply.bind(this, i)}>Delete</h6>
+                        <h7>{this.state.delError}</h7>
+                    </div>
+                )
+            }
+        }
         //show friend list
         let friends = [];
-        for (let i = 0; i < this.state.friendLength; i++) {
+        for (i = 0; i < this.state.friendLength; i++) {
             if (this.state.friendList[i].user_id !== this.state.friendDel) {
                 friends[i] = (
                     <div key={"thousandaymessage" + i} className="aside-list">
@@ -102,6 +196,9 @@ class Message extends Component {
                 <main id="main">
                 </main>
                 <aside id="aside">
+                    <h4 id="aside-apply">Friend Requests</h4>
+                    <h7>{this.state.acceptError}</h7>
+                    {applys}
                     <h4 id="aside-friend">Your Friend List &nbsp; {this.state.friendList.length}/50</h4>
                     {friends}
                     {loadFriend}
@@ -115,13 +212,13 @@ reqwest({
 	url: "/message/view",
 	method: "POST",
 	success: function(result) {
-        console.log(result[2]);
+        console.log(result[3]);
 		switch (result) {
 			case "0":
 				console.log("Can't connect to db");
 				break;
 			default:
-				ReactDOM.render(<Message visitorId={result[0]} visitorName={result[1]} friends={result[2]} />, document.getElementById("root"));
+				ReactDOM.render(<Message visitorId={result[0]} visitorName={result[1]} friends={result[2]} applys={result[3]} />, document.getElementById("root"));
 		}
 	},
 	error: function (err) {

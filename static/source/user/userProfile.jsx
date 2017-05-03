@@ -207,6 +207,9 @@ class Profile extends Component {
         //show edit button or not
         let edit;
         switch (this.props.relation) {
+            case "0":
+                friend = "Connect error, try later";
+                break;
             case "1":
                 friend = "+ Friend";
                 break;
