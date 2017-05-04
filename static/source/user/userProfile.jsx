@@ -30,7 +30,7 @@ class Profile extends Component {
             reqwest({
                 url: "/user/addFriend",
                 method: "POST",
-                data: {"receiver": this.props.user.user_id},
+                data: {"receiver": this.props.user.user_id, "name": this.props.visitorName},
                 success: function(result) {
                     switch(result) {
                         case "0":

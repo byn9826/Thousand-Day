@@ -55,7 +55,7 @@ class User extends Component {
 		return (
 			<div id="react-root">
 				<Header visitorId={this.props.visitorId} visitorName={this.props.visitorName} loginSuccess={this.loginSuccess.bind(this)} logOut={this.logOut.bind(this)} unread={this.props.unread} />
-                <Profile user={this.props.user} relative={this.props.relative} relation={this.state.relation} sendRequest={this.sendRequest.bind(this)} />
+                <Profile visitorName={this.props.visitorName} user={this.props.user} relative={this.props.relative} relation={this.state.relation} sendRequest={this.sendRequest.bind(this)} />
 				<Hub user={this.props.user} pet={this.props.pet} moment={this.props.moment} visitorId={this.state.visitorId} petsList={this.props.petsList} />
 				<Footer />
 			</div>

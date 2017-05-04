@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import mysql.connector
 
+
 #check visitor's relationship with user of current page
 def checkRelation(visitorId, pageId, cnx):
     #visitor visit his own page, return 2

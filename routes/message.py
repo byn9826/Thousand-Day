@@ -5,7 +5,7 @@ import mysql.connector
 import secret
 from handler.relation import allRelation, delRelation, checkRelation, numFriends, cleanRequest, doFriends
 from handler.user import userList
-from handler.message import getMessages, statueMessage, removeMessage, numNew
+from handler.message import getMessages, statueMessage, removeMessage, numNew, sendSuccess
 
 
 message_routes = Blueprint('message_routes', __name__, template_folder = 'templates')
@@ -98,6 +98,7 @@ def addFriend():
             return str(0)
         addId = int(request.form['id'])
         userId = session['userId']
+        userName = request.form['name']
         cnx = mysql.connector.connect(**config)
         try:
             #check if applicant do send request before
@@ -121,6 +122,7 @@ def addFriend():
             confirm = doFriends(addId, userId, cnx)
             if confirm == '2':
                 return str(1)
+            message = sendSuccess(userId, userName, addId, cnx)
             #return 4 for success
             return str(4)
         finally:

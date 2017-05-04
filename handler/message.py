@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import mysql.connector
+import datetime
 
 #search messages related to one user
 def getMessages(userId, pin, nums, cnx):
@@ -60,3 +61,40 @@ def numNew(userId, cnx):
     finally:
         numCursor.close()
     
+#send message for friend request
+def sendFriend(userId, userName, targetId, cnx):
+    messageQuery = (
+        'INSERT INTO message (receiver_id, message_date, message_read, user_id, user_name) '
+        'VALUES (%s, %s, 0, %s, %s)'
+    )
+    current = datetime.datetime.now().date()
+    try:
+        messageCursor = cnx.cursor()
+        messageCursor.execute(messageQuery, (targetId, current, userId, userName))
+        cnx.commit()
+        return str(1)
+    except mysql.connector.Error as err:
+        print('Something went wrong: {}'.format(err))
+        cnx.rollback()
+        return str(0)
+    finally:
+        messageCursor.close()
+
+#send message for become friend success
+def sendSuccess(userId, userName, targetId, cnx):
+    messageQuery = (
+        'INSERT INTO message (receiver_id, message_date, message_read, friend_id, user_name) '
+        'VALUES (%s, %s, 0, %s, %s)'
+    )
+    current = datetime.datetime.now().date()
+    try:
+        messageCursor = cnx.cursor()
+        messageCursor.execute(messageQuery, (targetId, current, userId, userName))
+        cnx.commit()
+        return str(1)
+    except mysql.connector.Error as err:
+        print('Something went wrong: {}'.format(err))
+        cnx.rollback()
+        return str(0)
+    finally:
+        messageCursor.close()

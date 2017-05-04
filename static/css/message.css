@@ -7,8 +7,8 @@
     vertical-align: top;
     background-color: #f7d7b4;
     border-radius: 5px;
-    height: 500px;
     padding-top: 20px;
+    min-height: 300px;
 }
 .main-message{
     display: block;
@@ -27,14 +27,15 @@
 }
 .main-message-content img{
     display: inline-block;
-    vertical-align: middle;
-    width: 40px;
+    vertical-align: top;
+    width: 12%;
     border-radius: 5px;
 }
 .main-message-content h5{
     display: inline-block;
-    vertical-align: middle;
+    vertical-align: top;
     margin-left: 2%;
+    width: 76%;
 }
 .main-message h6{
     display: inline-block;
@@ -143,3 +144,40 @@
     cursor: pointer;
 }
 
+@media only screen and (max-width: 948px) {
+    #main{
+        margin-left: 5%;
+        width: 49%;
+    }
+
+    #aside{
+        width: 35%;
+    }
+}
+
+@media only screen and (max-width: 651px) {
+    #main{
+        width: 90%;
+    }
+
+    #aside{
+        width: 70%;
+        margin-left: 15%;
+        margin-top: 50px;
+        min-height: 200px;
+    }
+}
+
+@media only screen and (max-width: 420px) {
+    .main-message-content img{
+        display: block;
+        width: 30%;
+    }
+
+    .main-message-content h5{
+        display: block;
+        width: 100%;
+        margin-left: 0;
+        margin-top: 5px;
+    }
+}

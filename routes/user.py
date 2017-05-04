@@ -8,7 +8,7 @@ from handler.user import checkUser, searchRelative
 from handler.pet import searchBelong, newPet
 from handler.moment import petsMoment
 from handler.upload import uploadPet
-from handler.message import numNew
+from handler.message import numNew, sendFriend
 
 
 user_routes = Blueprint('user_routes', __name__, template_folder = 'templates')
@@ -90,12 +90,18 @@ def addFriend():
             return str(3)
         receiverId = int(request.form['receiver'])
         applicantId = int(session['userId'])
+        applicantName = request.form['name']
         #request to be friend with oneself, return 2
         if receiverId == applicantId:
             return str(2)
         cnx = mysql.connector.connect(**config)
         try:
             result = requestRelation(applicantId, receiverId, cnx)
+            if result == '0':
+                return str(0)
+            message = sendFriend(applicantId, applicantName, receiverId, cnx)
+            if message == '0':
+                return str(0)
         finally:
             cnx.close()
         return result

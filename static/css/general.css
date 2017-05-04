@@ -60,7 +60,8 @@
     visibility: visible;
 }
 #header-drop-message{
-    border: 1px solid #ef8513 !important;
+    border-left: 2px solid #052456 !important;
+    border-right: 2px solid #052456 !important;
     color: black !important;
     background-color: white !important;
     padding: 8px 2% !important;
@@ -140,7 +141,13 @@
     }
 }
 
-@media only screen and (max-width: 240px) {
+@media only screen and (max-width: 480px) {
+    #header-desc{
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 300px) {
     #header-logo{
         display: none;
     }

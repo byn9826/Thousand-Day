@@ -99,10 +99,11 @@ class Message extends Component {
     //if user accept friend request
     acceptApply(index) {
         let id = this.state.applyList[index].user_id;
+        let name = this.props.visitorName;
         reqwest({
             url: "/message/addFriend",
             method: "POST",
-            data: {"id": id},
+            data: {"id": id, "name": name},
             success: function(result) {
                 switch (result) {
                     case "0":
@@ -232,6 +233,37 @@ class Message extends Component {
                         </div>
                     )
                 }
+            } else if (this.state.messageList[i].friend_id) {
+                //for become friend message
+                if (this.state.messageList[i].message_read === 0) {
+                    messages[i] = (
+                        <div key={"thousandaymessagelist" + i} style={{backgroundColor:"white"}} className="main-message">
+                            <div className="main-message-content">
+                                <a href={"/user/" + this.state.messageList[i].friend_id}>
+                                    <img alt={this.state.messageList[i].user_name} src={"/img/user/" + this.state.messageList[i].friend_id + ".jpg"} />
+                                </a>
+                                <h5>{this.state.messageList[i].user_name} and you are friends now, you can add him/her as your pets' relative or set their pets as your pets' companion.</h5>
+                            </div>
+                            <h6>
+                                {new Date(this.state.messageList[i].message_date).toISOString().substring(0, 10)}
+                            </h6>
+                            <h6 onClick={this.readMessage.bind(this, i)} className="main-message-action">Archive</h6>
+                            <h6 onClick={this.delMessage.bind(this, i)} className="main-message-action">Delete</h6>
+                            <h6 className="main-message-action">{(this.state.messageTarget === i)?this.state.messageError:null}</h6>
+                        </div>
+                    )
+                } else {
+                    messages[i] = (
+                        <div key={"thousandaymessagelist" + i} style={{backgroundColor:"gray"}} className="main-message">
+                            <div className="main-message-content">
+                                <h5>{this.state.messageList[i].user_name} and you are friends now ...</h5>
+                            </div>
+                            <h6 onClick={this.readMessage.bind(this, i)} className="main-message-back">Unread</h6>
+                            <h6 onClick={this.delMessage.bind(this, i)} className="main-message-back">Delete</h6>
+                            <h6 className="main-message-back">{(this.state.messageTarget === i)?this.state.messageError:null}</h6>
+                        </div>
+                    )
+                }
             }
         }
         //show friends appliancts
@@ -319,7 +351,6 @@ reqwest({
 	url: "/message/view",
 	method: "POST",
 	success: function(result) {
-        console.log(result[4]);
 		switch (result) {
 			case "0":
 				console.log("Can't connect to db");
