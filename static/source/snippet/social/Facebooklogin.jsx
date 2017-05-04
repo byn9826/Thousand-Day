@@ -11,7 +11,7 @@ class Facebooklogin extends Component {
         let header = document.getElementsByTagName("head")[0];
         let script = document.createElement("script");
         script.id = "facebook-jssdk";
-        script.src = "http://connect.facebook.net/en_US/sdk.js";
+        script.src = "//connect.facebook.net/en_US/sdk.js";
         header.appendChild(script);
     }
     componentDidMount() {

@@ -1,5 +1,7 @@
 # Thousand-Day
-An image sharing social website for your pets and you.
+An image sharing social website for your pets and you. <br/><br/>
+
+[Live Site](https://thousanday.com)
 
 Stacks
 --
