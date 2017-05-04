@@ -18,8 +18,20 @@
     background-color: #f7d7b4;
     border-radius: 5px;
     padding-top: 20px;
+    padding-bottom: 20px;
     min-height: 280px;
 }
+#main-box-message{
+    display: block;
+    background-color: #abaeb2;
+    text-align: center;
+    margin-left: 10%;
+    width: 80%;
+    padding: 3px 0;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
 .main-message{
     display: block;
     margin-bottom: 20px;

@@ -70,6 +70,28 @@ def messageView():
     else:
         abort(404)
 
+#load more messages
+@message_routes.route('/message/moreMessage', methods = ['GET', 'POST'])
+def moreMessage():
+    #only response to post
+    if request.method == 'POST':
+        #user must login
+        if session.get('userId') is None:
+            return str(0)
+        userId = session['userId']
+        times = int(request.form['times'])
+        pin = times * 20
+        cnx = mysql.connector.connect(**config)
+        try:
+            messages = getMessages(userId, pin, 20, cnx)
+            if messages == '0':
+                return str(1)
+            return jsonify(messages)
+        finally:
+            cnx.close()
+    else:
+        abort(404)
+
 #Delete friend
 @message_routes.route('/message/delFriend', methods = ['GET', 'POST'])
 def delFriend():

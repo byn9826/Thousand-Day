@@ -26,7 +26,11 @@ class Message extends Component {
             //store message error
             messageError: null,
             //store target message id
-            messageTarget: null
+            messageTarget: null,
+            //store load more message button
+            loadMessage: (this.props.messages.length === 20)? "Load more ..": "No more messages ..",
+            //store user load message for how many times
+            loadTimes: 1
 		};
 	}
     //if user logout
@@ -137,6 +141,35 @@ class Message extends Component {
     moreFriend() {
         let newLength = ((this.state.friendLength + 5) < this.state.friendList.length)?(this.state.friendLength + 5):this.state.friendList.length;
         this.setState({friendLength: newLength});
+    }
+    //if user click load more message
+    moreMessage() {
+        let times = this.state.loadTimes;
+        reqwest({
+            url: "/message/moreMessage",
+            method: "POST",
+            data: {times: times},
+            success: function(result) {
+                switch (result) {
+                    case "0":
+                        this.setState({loadMessage: "Please login first"});
+                        break;
+                    case "1":
+                        this.setState({loadMessage: "Can't get data, try later"});
+                        break;
+                    default:
+                        let allMessages = this.state.messageList.concat(result);
+                        if (allMessages.length < (this.state.loadTimes + 1) * 20) {
+                            this.setState({messageList: allMessages, loadTimes: this.state.loadTimes + 1, loadMessage: "No more messages .."});
+                        } else {
+                            this.setState({messageList: allMessages, loadTimes: this.state.loadTimes + 1, loadMessage: "Load more .."});
+                        }
+                }
+            }.bind(this),
+            error: function (err) {
+                this.setState({loadMessage: "Can't connect to server"});
+            }.bind(this)
+        });
     }
     //if user click delete message
     delMessage(index) {
@@ -335,6 +368,7 @@ class Message extends Component {
                     <h2>Message Box</h2>
                     <section id="main-box">
                         {messages}
+                        <h6 onClick={(this.state.loadMessage === "Load more ..")?this.moreMessage.bind(this):()=>{}} id="main-box-message">{this.state.loadMessage}</h6>
                     </section>
                 </main>
                 <aside id="aside">
