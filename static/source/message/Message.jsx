@@ -332,7 +332,10 @@ class Message extends Component {
 			<div id="react-root">
 				<Header visitorId={this.props.visitorId} visitorName={this.props.visitorName} loginSuccess={()=>{}} logOut={this.logOut.bind(this)} unread={this.props.unread} />
                 <main id="main">
-                    {messages}
+                    <h2>Message Box</h2>
+                    <section id="main-box">
+                        {messages}
+                    </section>
                 </main>
                 <aside id="aside">
                     <h4 id="aside-apply">Friend Requests</h4>

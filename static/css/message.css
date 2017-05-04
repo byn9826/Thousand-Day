@@ -5,10 +5,20 @@
     margin-left: 10%;
     margin-top: 120px;
     vertical-align: top;
+}
+#main h2{
+    display: block;
+    margin-bottom: 15px;
+    padding-left: 3%;
+    border-left: 3px solid orange;
+}
+#main-box{
+    display: block;
+    width: 100%;
     background-color: #f7d7b4;
     border-radius: 5px;
     padding-top: 20px;
-    min-height: 300px;
+    min-height: 280px;
 }
 .main-message{
     display: block;

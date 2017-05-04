@@ -7,14 +7,20 @@ Flask + React + MySQL
 
 Pages
 --
-Digital Home for your pets<br /><br />
+<b>Digital Home for you</b><br /><br />
 ![user](https://raw.githubusercontent.com/byn9826/Thousand-Day/master/~legend/user.png)<br/>
 
-Your pets with you everyday<br /><br />
+<b>Private page for your pet</b><br /><br />
 ![pet](https://raw.githubusercontent.com/byn9826/Thousand-Day/master/~legend/pet.png)<br/>
 
-Share love moment to the world<br /><br />
+<b>Share love moment to the world</b><br /><br />
 ![moment](https://raw.githubusercontent.com/byn9826/Thousand-Day/master/~legend/moment.png)<br/>
+
+<b>Watch love moments</b><br /><br />
+![watch](https://raw.githubusercontent.com/byn9826/Thousand-Day/master/~legend/watch.png)<br/>
+
+<b>Meet new friends</b><br /><br />
+![message](https://raw.githubusercontent.com/byn9826/Thousand-Day/master/~legend/message.png)<br/>
 
 Pack
 --
