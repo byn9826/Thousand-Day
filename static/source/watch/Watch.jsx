@@ -11,8 +11,12 @@ class Watch extends Component {
 			visitorId: this.props.visitorId,
 			//store most recent 10 public moment
 			recent: this.props.recentTen,
-			//store most recent 10 watch moment
+			//store most recent 20 watch moment
 			watch: null,
+			//store most recent 20 love moment
+			love: null,
+			//store most recent 20 comments
+			comment: null,
 			//store content on load more button
 			loadContent: "Load more ..",
 			//store which list the user chosed
@@ -23,11 +27,11 @@ class Watch extends Component {
 	}
 	//login success, init everything
 	loginSuccess(id) {
-		this.setState({visitorId: id, recent: this.state.recent.slice(0, 10), watch: null, loadContent: "Load more ..", loadList: "recent", loadTimes: 1});
+		this.setState({visitorId: id, recent: this.state.recent.slice(0, 10), loadContent: "Load more ..", loadList: "recent", loadTimes: 1});
 	}
 	//logout, roll back everything
 	logOut() {
-		this.setState({visitorId: null, recent: this.state.recent.slice(0, 10), watch: null, loadContent: "Load more ..", loadList: "recent", loadTimes: 1})
+		this.setState({visitorId: null, recent: this.state.recent.slice(0, 10), watch: null, love:null, loadContent: "Load more ..", loadList: "recent", loadTimes: 1})
 	}
 	//user click load more button
 	loadMoment() {
@@ -56,6 +60,20 @@ class Watch extends Component {
 								if (result.length !== 20) {
 									this.setState({loadContent: "No more moments .."});
 								}
+							} else if (this.state.loadList === "love") {
+								let newData = this.state.love.concat(result);
+								this.setState({love: newData, loadTimes: this.state.loadTimes + 1});
+								//close load button
+								if (result.length !== 20) {
+									this.setState({loadContent: "No more moments .."});
+								}
+							} else if (this.state.loadList === "comment") {
+								let newData = this.state.comment.concat(result);
+								this.setState({comment: newData, loadTimes: this.state.loadTimes + 1});
+								//close load button
+								if (result.length !== 20) {
+									this.setState({loadContent: "No more moments .."});
+								}
 							}
 					}
 				}.bind(this),
@@ -74,7 +92,8 @@ class Watch extends Component {
 			} else if (list === "watch") {
 				//change to watch list
 				if (this.state.watch) {
-					this.setState({loadTimes: 1, loadList: "watch", watch: this.state.watch.slice(0, 20), loadContent: "Load more .."});
+					let newList = this.state.watch.slice(0, 20);
+					this.setState({loadTimes: 1, loadList: "watch", watch: newList, loadContent: (newList.length === 20)?"Load more ..": "No more moments .."});
 				} else {
 					//init watch moment for login user
 					if (this.state.visitorId) {
@@ -102,6 +121,70 @@ class Watch extends Component {
 						this.setState({loadTimes: 1, loadList: "watch", loadContent: "Please login first .."});
 					}
 				}
+			} else if (list === "love") {
+				//change to love list
+				if (this.state.love) {
+					let newList = this.state.love.slice(0, 20);
+					this.setState({loadTimes: 1, loadList: "love", love: newList, loadContent: (newList.length === 20)?"Load more ..": "No more moments .."});
+				} else {
+					//init watch moment for login user
+					if (this.state.visitorId) {
+						reqwest({
+							url: "/watch/loadMoment",
+							method: "POST",
+							data: {"type": "love", "time": 0},
+							success: function(result) {
+								switch (result) {
+									case "0":
+										this.setState({loadContent: "Can't get data, try later"});
+										break;
+									case "1":
+										this.setState({loadContent: "Please login first"});
+										break;
+									default:
+										this.setState({loadTimes: 1, loadList: "love", love: result, loadContent: (result.length === 20) ?"Load more ..": "No more moments .."});
+								}
+							}.bind(this),
+							error: function (err) {
+								this.setState({loadContent: "Can't connect to server .."});
+							}.bind(this)
+						});
+					} else {
+						this.setState({loadTimes: 1, loadList: "love", loadContent: "Please login first .."});
+					}
+				}
+			} else if (list === "comment") {
+				//change to comment list
+				if (this.state.comment) {
+					let newList = this.state.comment.slice(0, 20);
+					this.setState({loadTimes: 1, loadList: "comment", comment: newList, loadContent: (newList.length === 20)?"Load more ..": "No more moments .."});
+				} else {
+					//init watch moment for login user
+					if (this.state.visitorId) {
+						reqwest({
+							url: "/watch/loadMoment",
+							method: "POST",
+							data: {"type": "comment", "time": 0},
+							success: function(result) {
+								switch (result) {
+									case "0":
+										this.setState({loadContent: "Can't get data, try later"});
+										break;
+									case "1":
+										this.setState({loadContent: "Please login first"});
+										break;
+									default:
+										this.setState({loadTimes: 1, loadList: "comment", comment: result, loadContent: (result.length === 20) ?"Load more ..": "No more moments .."});
+								}
+							}.bind(this),
+							error: function (err) {
+								this.setState({loadContent: "Can't connect to server .."});
+							}.bind(this)
+						});
+					} else {
+						this.setState({loadTimes: 1, loadList: "comment", loadContent: "Please login first .."});
+					}
+				}
 			}
 		}
 	}
@@ -111,6 +194,10 @@ class Watch extends Component {
 			allMoment = this.state.recent;
 		} else if (this.state.loadList === "watch") {
 			allMoment = this.state.watch? this.state.watch: [];
+		} else if (this.state.loadList === "love") {
+			allMoment = this.state.love? this.state.love: [];
+		} else if (this.state.loadList === "comment") {
+			allMoment = this.state.comment? this.state.comment: [];
 		}
 		let moment = allMoment.map((recent, index) =>
 			<section key={"thousandaylovemoment" + index} className="main-moment">
@@ -130,16 +217,24 @@ class Watch extends Component {
 			<div  id="react-root">
 				<Header visitorId={this.props.visitorId} visitorName={this.props.visitorName} loginSuccess={this.loginSuccess.bind(this)} logOut={this.logOut.bind(this)} unread={this.props.unread} />
 				<aside id="aside">
-					<h2>Welcome</h2>
-					<h4>Watch love Moments ⇋</h4>
+					<h2>Welcome!</h2>
+					<h4>Choose a list to watch love Moments ⇋</h4>
 					<section>
 						<div onClick={this.changeList.bind(this, "recent")} className="aside-section" style={this.state.loadList === "recent"? {backgroundColor: "#ef8513"}: {backgroundColor: "#e5e5e5"}}>
 							<img alt="Recent" src="/img/icon/glyphicons-moment.png" />
-							<h7>Most recent moments</h7>
+							<h7>New moments in public</h7>
 						</div>
 						<div onClick={this.changeList.bind(this, "watch")} className="aside-section" style={this.state.loadList === "watch"? {backgroundColor: "#ef8513"}: {backgroundColor: "#e5e5e5"}}>
 							<img alt="Watch" src="/img/icon/glyphicons-watch.png" />
 							<h7>On your watch list</h7>
+						</div>
+						<div onClick={this.changeList.bind(this, "love")} className="aside-section" style={this.state.loadList === "love"? {backgroundColor: "#ef8513"}: {backgroundColor: "#e5e5e5"}}>
+							<img alt="Love" src="/img/icon/glyphicons-love.png" />
+							<h7>Moments you love</h7>
+						</div>
+						<div onClick={this.changeList.bind(this, "comment")} className="aside-section" style={this.state.loadList === "comment"? {backgroundColor: "#ef8513"}: {backgroundColor: "#e5e5e5"}}>
+							<img alt="Comment" src="/img/icon/glyphicons-comment.png" />
+							<h7>Where you commented</h7>
 						</div>
 					</section>
 				</aside>

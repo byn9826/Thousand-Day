@@ -97,3 +97,19 @@ def delMoment(moment, pet, cnx):
         return str(2)
     finally:
         delCursor.close()
+
+#get moments from a list of moment id
+def listMoments(mList, cnx):
+    listQuery = 'SELECT * FROM moment WHERE moment_id IN (%s) ORDER BY moment_id DESC'
+    listHolder = ', '.join(list(map(lambda x: '%s', mList)))
+    try:
+        #Get all moments info
+        listQuery = listQuery % (listHolder)
+        listCursor = cnx.cursor(dictionary=True)
+        listCursor.execute(listQuery, mList)
+        return listCursor.fetchall()
+    except mysql.connector.Error as err:
+        print('Something went wrong: {}'.format(err))
+        return str(0)
+    finally:
+        listCursor.close()

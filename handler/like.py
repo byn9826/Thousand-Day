@@ -35,6 +35,20 @@ def newLike(userId, momentId, statues, cnx):
     finally:
         addCursor.close()
 
+#search all moments for one user id
+def loveMoments(userId, cnx):
+    likeQuery = 'SELECT moment_id FROM moment_like WHERE user_id = %s ORDER by moment_id DESC'
+    try:
+        likeCursor = cnx.cursor()
+        likeCursor.execute(likeQuery, (userId, ))
+        return likeCursor.fetchall()
+    #return 0 for db error
+    except mysql.connector.Error as err:
+        print('Something went wrong: {}'.format(err))
+        return str(0)
+    finally:
+        likeCursor.close()
+
 #search all comment for a moment
 def searchComment(momentId, startPoint, addPoint, cnx):
     commentQuery = 'SELECT * FROM moment_comment WHERE moment_id = %s ORDER BY comment_id DESC LIMIT %s, 5'

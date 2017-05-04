@@ -3,10 +3,11 @@
 from flask import Blueprint, session, render_template, abort, request, jsonify
 import mysql.connector
 import secret
-from handler.moment import newMoment, petsMoment
+from handler.moment import newMoment, petsMoment, listMoments
 from handler.watch import userWatch
 from handler.message import numNew
-
+from handler.like import loveMoments
+from handler.comment import commentMoments
 
 watch_routes = Blueprint('watch_routes', __name__, template_folder = 'templates')
 config = secret.mysql()
@@ -75,6 +76,34 @@ def loadMoment():
                 new = petsMoment(list, pin, cnx)
                 if new == '0':
                     return str(0)
+            finally:
+                cnx.close()
+        elif types == 'love':
+            #must login first
+            if session.get('userId') is None:
+                return str(1)
+            starts = times * 20
+            ends = (times + 1) * 20
+            cnx = mysql.connector.connect(**config)
+            try:
+                #get all love moments id
+                love = loveMoments(session['userId'], cnx)
+                loves = [l[0] for l in love][starts:ends]
+                new = listMoments(loves, cnx)
+            finally:
+                cnx.close()
+        elif types == 'comment':
+            #must login first
+            if session.get('userId') is None:
+                return str(1)
+            starts = times * 20
+            ends = (times + 1) * 20
+            cnx = mysql.connector.connect(**config)
+            try:
+                #get all comment moments id
+                comment = commentMoments(session['userId'], cnx)
+                comments = [l[0] for l in comment][starts:ends]
+                new = listMoments(comments, cnx)
             finally:
                 cnx.close()
         return jsonify(new)
