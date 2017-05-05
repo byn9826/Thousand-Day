@@ -159,6 +159,22 @@ class Moment extends Component {
     logOut() {
 		this.setState({visitorId: null, visitorName: null});
 	}
+    //user click share to facebook
+    sharePage() {
+        FB.ui({
+            display: 'popup',
+            method: 'share_open_graph',
+            action_type: 'og.shares',
+            action_properties: JSON.stringify({
+                object : {
+                    "og:url": location.href,
+                    "og:title": '"' + this.props.data.moment_message + '"',
+                    "og:description": "Moments of your pets and you",
+                    "og:image": "https://thousanday.com/img/pet/" + this.props.data.pet_id + "/moment/" + this.props.data.image_name
+                }
+            })
+        });
+    }
     render() {
         //mode of like component
         let likeComment;
@@ -227,11 +243,7 @@ class Moment extends Component {
                     </section>
                     <section className="aside-social">
                         {likeComment}
-                        <div className="fb-share-button" data-href={location.href} data-layout="button" data-size="small" data-mobile-iframe="true">
-                            <a className="fb-xfbml-parse-ignore" target="_blank" href={"https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A5000%2Fmoment%2F" + this.props.data.moment_id + "&amp;src=sdkpreparse"}>
-                                Share
-                            </a>
-                        </div>
+                        <img id="fb-share-button" onClick={this.sharePage.bind(this)} alt="share" src="/img/icon/fb-share.png" />
                     </section>
                     <Commentlist data={comments} locker={this.state.noLoad} loadMore={this.loadComment.bind(this)} fontFamily="'Rubik', sans-serif" />
                     <h7>{this.state.loadError}</h7>

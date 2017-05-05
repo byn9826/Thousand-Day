@@ -88,10 +88,13 @@
     padding-left: 3%;
 }
 
-.fb-share-button{
+#fb-share-button{
     display: inline-block;
     vertical-align: middle;
     margin-left: 5%;
+    width: 60px;
+    border-radius: 3px;
+    cursor: pointer;
 }
 
 @media only screen and (max-width: 948px) {

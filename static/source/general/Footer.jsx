@@ -8,6 +8,7 @@ class Footer extends Component {
 				<h6><a href="https://github.com/byn9826/Thousand-Day/issues" target="__blank">Report</a></h6>
 				<h6><a href="https://github.com/byn9826/Thousanday-React" target="__blank">Thousanday-React</a></h6>
 				<h6><a href="http://glyphicons.com" target="__blank">Glyphicons</a></h6>
+				<h6><a href="/terms&privacy" target="__blank">Terms&Privacy Policy</a></h6>
 			</footer>
 		);
 	}
