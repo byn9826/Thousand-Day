@@ -1,11 +1,14 @@
 # Thousand-Day
-An image sharing social website for your pets and you. <br/><br/>
+An image sharing social website for your pets and you. <br/>
 
-[Live Site](https://thousanday.com)
+[Live Site](https://thousanday.com)<br/>
+
+Mobile version: Under development.
 
 Stacks
 --
-Flask + React + MySQL
+Flask + React + MySQL<br/>
+React-Native
 
 Pages
 --
