@@ -3,7 +3,8 @@ An image sharing social website for your pets and you. <br/>
 
 [Live Site](https://thousanday.com)<br/>
 
-Mobile version: Under development.
+Mobile version:<br/>
+[Repo](https://github.com/byn9826/Thousand-Day/tree/master/mobile)<br/>
 
 Stacks
 --

@@ -13,7 +13,13 @@ class Explore extends Component {
             //store choose of type
             type: null,
             //store choose of nature
-            nature: null
+            nature: null,
+            //store load for how many times
+            load: 0,
+            //store all moment data
+            moment: [],
+            //indicate more to load or not
+            more: true
         };
     }
     chooseType(type) {
@@ -21,6 +27,28 @@ class Explore extends Component {
             this.setState({type: null});
         } else {
             this.setState({type: type});
+            //require for info
+            if (this.state.nature) {
+                reqwest({
+					url: "https://thousanday.com/explore/getMoment",
+					method: "POST",
+					data: {"type": type, "nature": this.state.nature, "load": 0},
+					success: function(result) {
+						switch(result) {
+							case "0":
+								console.log("Can't connect to database");
+								break;
+							default:
+								let more = (result.length < 20)?false:true;
+                                console.log(result);
+								this.setState({moment: result, load: 1, more: more});
+						}
+					}.bind(this),
+					error: function (err) {
+						console.log("Can't connect to the server");
+					}
+				});
+            }
         }
     }
     chooseNature(nature) {
@@ -42,33 +70,33 @@ class Explore extends Component {
                     </View>
                     <View style={styles.headerOption}>
                         <View style={styles.optionType}>
-                            <Text onPress={this.chooseType.bind(this, "dog")} style={(this.state.type === "dog")?styles.typeChoose:styles.typeSingle}>
+                            <Text onPress={this.chooseType.bind(this, "Dog")} style={(this.state.type === "dog")?styles.typeChoose:styles.typeSingle}>
                                 Dog
                             </Text>
-                            <Text onPress={this.chooseType.bind(this, "cat")} style={(this.state.type === "cat")?styles.typeChoose:styles.typeSingle}>
+                            <Text onPress={this.chooseType.bind(this, "Cat")} style={(this.state.type === "cat")?styles.typeChoose:styles.typeSingle}>
                                 Cat
                             </Text>
-                            <Text onPress={this.chooseType.bind(this, "bird")} style={(this.state.type === "bird")?styles.typeChoose:styles.typeSingle}>
+                            <Text onPress={this.chooseType.bind(this, "Bird")} style={(this.state.type === "bird")?styles.typeChoose:styles.typeSingle}>
                                 Bird
                             </Text>
-                            <Text onPress={this.chooseType.bind(this, "fish")} style={(this.state.type === "fish")?styles.typeChoose:styles.typeSingle}>
+                            <Text onPress={this.chooseType.bind(this, "Fish")} style={(this.state.type === "fish")?styles.typeChoose:styles.typeSingle}>
                                 Fish
                             </Text>
-                            <Text onPress={this.chooseType.bind(this, "other")} style={(this.state.type === "other")?styles.typeChoose:styles.typeSingle}>
+                            <Text onPress={this.chooseType.bind(this, "Other")} style={(this.state.type === "other")?styles.typeChoose:styles.typeSingle}>
                                 Other
                             </Text>
                         </View>
                         <View style={styles.optionType}>
-                            <Text onPress={this.chooseNature.bind(this, "cute")} style={(this.state.nature === "cute")?styles.typeChoose:styles.typeSingle}>
+                            <Text onPress={this.chooseNature.bind(this, "Cute")} style={(this.state.nature === "cute")?styles.typeChoose:styles.typeSingle}>
                                 Cute
                             </Text>
-                            <Text onPress={this.chooseNature.bind(this, "strong")} style={(this.state.nature === "strong")?styles.typeChoose:styles.typeSingle}>
+                            <Text onPress={this.chooseNature.bind(this, "Strong")} style={(this.state.nature === "strong")?styles.typeChoose:styles.typeSingle}>
                                 Strong
                             </Text>
-                            <Text onPress={this.chooseNature.bind(this, "smart")} style={(this.state.nature === "smart")?styles.typeChoose:styles.typeSingle}>
+                            <Text onPress={this.chooseNature.bind(this, "Smart")} style={(this.state.nature === "smart")?styles.typeChoose:styles.typeSingle}>
                                 Smart
                             </Text>
-                            <Text onPress={this.chooseNature.bind(this, "beauty")} style={(this.state.nature === "beauty")?styles.typeChoose:styles.typeSingle}>
+                            <Text onPress={this.chooseNature.bind(this, "Beauty")} style={(this.state.nature === "beauty")?styles.typeChoose:styles.typeSingle}>
                                 Beauty
                             </Text>
                         </View>

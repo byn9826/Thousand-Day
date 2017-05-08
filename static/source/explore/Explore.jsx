@@ -14,8 +14,10 @@ class Explore extends Component {
 			moment: [],
 			//store load moment for how many time
 			load: 1,
-			//store more moment to load or not
-			more: true
+			//indicate more moment to load or not
+			more: true,
+			//error message
+			error: null
         }
     }
 	pickType(type) {
@@ -29,20 +31,20 @@ class Explore extends Component {
 					success: function(result) {
 						switch(result) {
 							case "0":
-								console.log("Can't connect to database");
+								this.setState({error: "Can't connect to database"});
 								break;
 							default:
 								let more = (result.length < 20)?false:true;
-								this.setState({moment: result, load: 1, more: more});
+								this.setState({moment: result, load: 1, more: more, error: null});
 						}
 					}.bind(this),
 					error: function (err) {
-						console.log("Can't connect to the server");
+						this.setState({error: "Can't connect to the server"});
 					}
 				});
 			}
 		} else {
-			this.setState({type: null});
+			this.setState({type: null, error: null});
 		}
 	}
 	pickNature(nature) {
@@ -56,20 +58,20 @@ class Explore extends Component {
 					success: function(result) {
 						switch(result) {
 							case "0":
-								console.log("Can't connect to database");
+								this.setState({error: "Can't connect to database"});
 								break;
 							default:
 								let more = (result.length < 20)?false:true;
-								this.setState({moment: result, load: 1, more: more});
+								this.setState({moment: result, load: 1, more: more, error: null});
 						}
 					}.bind(this),
 					error: function (err) {
-						console.log("Can't connect to the server");
+						this.setState({error: "Can't connect to the server"});
 					}
 				});
 			}
 		} else {
-			this.setState({nature: null});
+			this.setState({nature: null, error: null});
 		}
 	}
 	//load more moment
@@ -81,16 +83,16 @@ class Explore extends Component {
 			success: function(result) {
 				switch(result) {
 					case "0":
-						console.log("Can't connect to database");
+						this.setState({error: "Can't connect to database"});
 						break;
 					default:
 						let moment = this.state.moment.concat(result);
 						let more = (result.length < 20)?false:true;
-						this.setState({moment: moment, load: this.state.load + 1, more: more});
+						this.setState({moment: moment, load: this.state.load + 1, more: more, error: null});
 				}
 			}.bind(this),
 			error: function (err) {
-				console.log("Can't connect to the server");
+				this.setState({error: "Can't connect to the server"});
 			}
 		});
 	}
@@ -104,7 +106,9 @@ class Explore extends Component {
         }
 		//store load button
 		let load;
-		if (this.state.moment.length > 0 && this.state.more) {
+		if (this.state.error) {
+			load = (<h5 className="main-lock" >{this.state.error}</h5>);
+		} else if (this.state.moment.length > 0 && this.state.more) {
 			load = (<h5 className="main-load" onClick={this.loadMore.bind(this)} >Click to load more ...</h5>);
 		} else if (this.state.moment.length > 0 && !this.state.more) {
 			load = (<h5 className="main-lock" >No more moments</h5>);
