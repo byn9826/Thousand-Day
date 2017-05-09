@@ -14,7 +14,7 @@ export default class Thousanday extends Component {
         super(props);
         this.state = {
             //store info to show which page
-            route: "explore",
+            route: "watch",
             //store data show watch page image gallery
             gallery: []
         };
@@ -28,10 +28,16 @@ export default class Thousanday extends Component {
                 "Content-Type": "application/json",
             },
         })
-        .then((response) => response.text())
-        .then((responseText) => {
-            this.setState({gallery: JSON.parse(responseText)[0]});
+        .then((response) => response.json())
+        .then((result) => {
+            this.setState({gallery: result[0]});
         });
+    }
+    //change view after click
+    viewRoute(view) {
+        if (this.state.route != view) {
+            this.setState({route: view});
+        }
     }
     render() {
         //show differnt page base on route
@@ -50,7 +56,7 @@ export default class Thousanday extends Component {
                 <View style={styles.main}>
                     {route}
                 </View>
-                <Footer />
+                <Footer route={this.viewRoute.bind(this)} view={this.state.route} />
             </View>
         );
     }

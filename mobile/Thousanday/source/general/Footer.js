@@ -3,17 +3,32 @@ import {
     StyleSheet,
     Text,
     Image,
-    View
+    View,
+    TouchableOpacity
 } from "react-native";
 class Footer extends Component {
+    changeRoute(view) {
+        console.log(123);
+        console.log(view);
+    }
     render() {
         return (
             <View style={styles.footer}>
-                <Image style={styles.footerIcon} source={require("../../image/watch.png")} />
-                <Image style={styles.footerIcon} source={require("../../image/explore1.png")} />
-                <Image style={styles.footerIcon} source={require("../../image/camera1.png")} />
-                <Image style={styles.footerIcon} source={require("../../image/love1.png")} />
-                <Image style={styles.footerIcon} source={require("../../image/home1.png")} />
+                <TouchableOpacity style={styles.footerTouch} onPress={this.props.route.bind(this, "watch")}>
+                    <Image style={styles.touchIcon} source={this.props.view === "watch"?require("../../image/watch.png"):require("../../image/watch1.png")} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.footerTouch} onPress={this.props.route.bind(this, "explore")}>
+                    <Image style={styles.touchIcon} source={this.props.view === "explore"?require("../../image/explore.png"):require("../../image/explore1.png")} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.footerTouch} onPress={this.props.route.bind(this, "camera")}>
+                    <Image style={styles.touchIcon} source={require("../../image/camera1.png")} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.footerTouch} onPress={this.props.route.bind(this, "love")}>
+                    <Image style={styles.touchIcon} source={require("../../image/love1.png")} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.footerTouch} onPress={this.props.route.bind(this, "home")}>
+                    <Image style={styles.touchIcon} source={require("../../image/home1.png")} />
+                </TouchableOpacity>    
             </View>
         )
     }
@@ -30,7 +45,10 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center"
     },
-    footerIcon: {
+    footerTouch: {
+        padding: 10
+    },
+    touchIcon: {
         resizeMode: "contain"
     }
 });

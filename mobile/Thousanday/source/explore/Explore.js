@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import {
     StyleSheet,
     Text,
+    ListView,
     Image,
     View
 } from "react-native";
@@ -19,7 +20,9 @@ class Explore extends Component {
             //store all moment data
             moment: [],
             //indicate more to load or not
-            more: true
+            more: true,
+            //indicate connect error
+            error: null
         };
     }
     chooseType(type) {
@@ -29,26 +32,34 @@ class Explore extends Component {
             this.setState({type: type});
             //require for info
             if (this.state.nature) {
-                reqwest({
-					url: "https://thousanday.com/explore/getMoment",
-					method: "POST",
-					data: {"type": type, "nature": this.state.nature, "load": 0},
-					success: function(result) {
-						switch(result) {
-							case "0":
-								console.log("Can't connect to database");
-								break;
-							default:
-								let more = (result.length < 20)?false:true;
-                                console.log(result);
-								this.setState({moment: result, load: 1, more: more});
-						}
-					}.bind(this),
-					error: function (err) {
-						console.log("Can't connect to the server");
-					}
-				});
-            }
+                let data = {
+                    "type": type,
+                    "nature": this.state.nature,
+                    "load": 0
+                };
+                fetch("https://thousanday.com/explore/getMoment", {
+                    method: "POST",
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+                    },
+                    body: Object.keys(data).map((key) => {
+                        return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
+                    }).join('&')
+                })
+                .then((response) => response.json())
+                .then((result) => {
+                    console.log(result);
+                    switch(result) {
+                        case 0:
+                            this.setState({error: "Can't connect to database"});
+                            break;
+                        default:
+                            let more = (result.length < 20)?false:true;
+                            this.setState({moment: result, load: 1, more: more, error: null});
+                    }
+                });
+			}
         }
     }
     chooseNature(nature) {
@@ -59,6 +70,9 @@ class Explore extends Component {
         }
     }
     render() {
+        //data to show image gallery
+        let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+        let gallery = ds.cloneWithRows(this.state.moment);
         return (
             <View style={styles.watch}>
                 <View style={styles.watchHeader}>
@@ -70,39 +84,69 @@ class Explore extends Component {
                     </View>
                     <View style={styles.headerOption}>
                         <View style={styles.optionType}>
-                            <Text onPress={this.chooseType.bind(this, "Dog")} style={(this.state.type === "dog")?styles.typeChoose:styles.typeSingle}>
+                            <Text onPress={this.chooseType.bind(this, "0")} style={(this.state.type === "0")?styles.typeChoose:styles.typeSingle}>
                                 Dog
                             </Text>
-                            <Text onPress={this.chooseType.bind(this, "Cat")} style={(this.state.type === "cat")?styles.typeChoose:styles.typeSingle}>
+                            <Text onPress={this.chooseType.bind(this, "1")} style={(this.state.type === "1")?styles.typeChoose:styles.typeSingle}>
                                 Cat
                             </Text>
-                            <Text onPress={this.chooseType.bind(this, "Bird")} style={(this.state.type === "bird")?styles.typeChoose:styles.typeSingle}>
+                            <Text onPress={this.chooseType.bind(this, "2")} style={(this.state.type === "2")?styles.typeChoose:styles.typeSingle}>
                                 Bird
                             </Text>
-                            <Text onPress={this.chooseType.bind(this, "Fish")} style={(this.state.type === "fish")?styles.typeChoose:styles.typeSingle}>
+                            <Text onPress={this.chooseType.bind(this, "3")} style={(this.state.type === "3")?styles.typeChoose:styles.typeSingle}>
                                 Fish
                             </Text>
-                            <Text onPress={this.chooseType.bind(this, "Other")} style={(this.state.type === "other")?styles.typeChoose:styles.typeSingle}>
+                            <Text onPress={this.chooseType.bind(this, "4")} style={(this.state.type === "4")?styles.typeChoose:styles.typeSingle}>
                                 Other
                             </Text>
                         </View>
                         <View style={styles.optionType}>
-                            <Text onPress={this.chooseNature.bind(this, "Cute")} style={(this.state.nature === "cute")?styles.typeChoose:styles.typeSingle}>
+                            <Text onPress={this.chooseNature.bind(this, "0")} style={(this.state.nature === "0")?styles.typeChoose:styles.typeSingle}>
                                 Cute
                             </Text>
-                            <Text onPress={this.chooseNature.bind(this, "Strong")} style={(this.state.nature === "strong")?styles.typeChoose:styles.typeSingle}>
+                            <Text onPress={this.chooseNature.bind(this, "1")} style={(this.state.nature === "1")?styles.typeChoose:styles.typeSingle}>
                                 Strong
                             </Text>
-                            <Text onPress={this.chooseNature.bind(this, "Smart")} style={(this.state.nature === "smart")?styles.typeChoose:styles.typeSingle}>
+                            <Text onPress={this.chooseNature.bind(this, "2")} style={(this.state.nature === "2")?styles.typeChoose:styles.typeSingle}>
                                 Smart
                             </Text>
-                            <Text onPress={this.chooseNature.bind(this, "Beauty")} style={(this.state.nature === "beauty")?styles.typeChoose:styles.typeSingle}>
+                            <Text onPress={this.chooseNature.bind(this, "3")} style={(this.state.nature === "3")?styles.typeChoose:styles.typeSingle}>
                                 Beauty
                             </Text>
                         </View>
                     </View>
                 </View>
                 <View style={styles.watchDisplay}>
+                    <ListView
+                        dataSource={gallery}
+                        enableEmptySections={true}
+                        renderRow={(row) =>
+                            <View style={styles.displayRow}>
+                                <Image
+                                    source={{uri: "https://thousanday.com/img/pet/" + row.pet_id + "/moment/" + row.image_name}}
+                                    style={styles.rowImage}
+                                />
+                                <View style={styles.rowView}>
+                                    <Text
+                                        style={styles.viewMessage}
+                                        numberOfLines={4}
+                                    >
+                                        {row.moment_message}
+                                    </Text>
+                                    <Image
+                                        source={{uri: "https://thousanday.com/img/pet/" + row.pet_id + "/cover/0.png" }}
+                                        style={styles.viewImage}
+                                    />
+                                    <Text
+                                        style={styles.viewDate}
+                                        numberOfLines={2}
+                                    >
+                                        {new Date(row.moment_date).toISOString().substring(0, 10)}
+                                    </Text>
+                                </View>
+                            </View>
+                        }
+                    />
                 </View>
             </View>
         )
@@ -176,6 +220,36 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         justifyContent: "flex-start"
     },
+    displayRow: {
+        flex: 1,
+        backgroundColor: "#f7f9fc",
+        marginVertical: 5,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "flex-start"
+    },
+    rowImage: {
+        width: 250,
+        height: 250
+    },
+    rowView: {
+        flex: 1,
+        paddingHorizontal: 10,
+        paddingVertical: 5
+    },
+    viewMessage: {
+        marginVertical: 10,
+        fontSize: 16
+    },
+    viewImage: {
+        width: 40,
+        height: 40,
+        borderRadius: 3
+    },
+    viewDate: {
+        marginVertical: 5,
+        fontSize: 12
+    }
 });
 
 export default Explore;
