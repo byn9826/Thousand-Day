@@ -4,12 +4,11 @@ An image sharing social website for your pets and you. <br/>
 [Live Site](https://thousanday.com)<br/>
 
 Mobile version:<br/>
-[Repo](https://github.com/byn9826/Thousand-Day/tree/master/mobile)<br/>
+[Repo](https://github.com/byn9826/Thousanday-Mobile)<br/>
 
 Stacks
 --
 Flask + React + MySQL<br/>
-React-Native
 
 Pages
 --
