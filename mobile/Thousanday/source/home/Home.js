@@ -4,24 +4,13 @@ import {
     Text,
     View
 } from "react-native";
-class Header extends Component {
+class Home extends Component {
     render() {
-        let title;
-        switch (this.props.title) {
-            case "watch":
-                title = "Watch the world";
-                break;
-            case "explore":
-                title = "Explore the cute";
-                break;
-            case "home":
-                title = "A space for your pets";
-                break;
-        }
+        console.log(this.props.data);
         return (
             <View style={styles.header}>
                 <Text style={styles.headerBrand}>
-                    {title}
+                    1231231231
                 </Text>
             </View>
         )
@@ -42,4 +31,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Header;
+export default Home;

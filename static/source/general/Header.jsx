@@ -41,8 +41,10 @@ class Header extends Component {
 							break;
 						case "2":
 							console.log("Can't validate Google account");
+							break;
 						case "3":
 							console.log("Please logout first");
+							break;
 						default:
 							if (this.state.loginName == "Login") {
 								//get username, close dropdown box
@@ -81,8 +83,10 @@ class Header extends Component {
 							break;
 						case "2":
 							console.log("Can't validate Facebook account");
+							break;
 						case "3":
 							console.log("Please logout first");
+							break;
 						default:
 							if (this.state.loginName == "Login") {
 								//get username, close dropdown box
@@ -114,6 +118,7 @@ class Header extends Component {
 						break;
 					case "1":
 						console.log("Please try again");
+						break;
 				}
 			},
 			error: function (err) {

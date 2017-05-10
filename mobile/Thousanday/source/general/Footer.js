@@ -7,10 +7,6 @@ import {
     TouchableOpacity
 } from "react-native";
 class Footer extends Component {
-    changeRoute(view) {
-        console.log(123);
-        console.log(view);
-    }
     render() {
         return (
             <View style={styles.footer}>
@@ -27,8 +23,8 @@ class Footer extends Component {
                     <Image style={styles.touchIcon} source={require("../../image/love1.png")} />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.footerTouch} onPress={this.props.route.bind(this, "home")}>
-                    <Image style={styles.touchIcon} source={require("../../image/home1.png")} />
-                </TouchableOpacity>    
+                    <Image style={styles.touchIcon} source={this.props.view === "home"?require("../../image/home.png"):require("../../image/home1.png")} />
+                </TouchableOpacity>
             </View>
         )
     }

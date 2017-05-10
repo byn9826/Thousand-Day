@@ -30,7 +30,7 @@ class Explore extends Component {
             this.setState({type: null});
         } else {
             this.setState({type: type});
-            //require for info
+            //require info
             if (this.state.nature) {
                 let data = {
                     "type": type,
@@ -67,6 +67,35 @@ class Explore extends Component {
             this.setState({nature: null});
         } else {
             this.setState({nature: nature});
+            if (this.state.type) {
+                let data = {
+                    "type": this.state.type,
+                    "nature": nature,
+                    "load": 0
+                };
+                fetch("https://thousanday.com/explore/getMoment", {
+                    method: "POST",
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+                    },
+                    body: Object.keys(data).map((key) => {
+                        return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
+                    }).join('&')
+                })
+                .then((response) => response.json())
+                .then((result) => {
+                    console.log(result);
+                    switch(result) {
+                        case 0:
+                            this.setState({error: "Can't connect to database"});
+                            break;
+                        default:
+                            let more = (result.length < 20)?false:true;
+                            this.setState({moment: result, load: 1, more: more, error: null});
+                    }
+                });
+			}
         }
     }
     render() {
