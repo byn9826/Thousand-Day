@@ -13,6 +13,8 @@ from routes.explore import explore_routes
 from routes.watch import watch_routes
 from routes.message import message_routes
 
+from api.accounts import accounts_routes
+
 
 app = Flask(__name__, static_folder='static', static_url_path='')
 app.secret_key = secret.secretKey()
@@ -27,6 +29,7 @@ app.register_blueprint(explore_routes)
 app.register_blueprint(watch_routes)
 app.register_blueprint(message_routes)
 
+app.register_blueprint(accounts_routes)
 
 @app.route('/')
 def watchHome():
