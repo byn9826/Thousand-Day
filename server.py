@@ -14,7 +14,12 @@ from routes.watch import watch_routes
 from routes.message import message_routes
 
 from api.accounts import accounts_routes
-
+from api.users import users_routes
+from api.lists import lists_routes
+from api.moments import moments_routes
+from api.pets import pets_routes
+from api.explores import explores_routes
+from api.panels import panels_routes
 
 app = Flask(__name__, static_folder='static', static_url_path='')
 app.secret_key = secret.secretKey()
@@ -30,6 +35,12 @@ app.register_blueprint(watch_routes)
 app.register_blueprint(message_routes)
 
 app.register_blueprint(accounts_routes)
+app.register_blueprint(users_routes)
+app.register_blueprint(lists_routes)
+app.register_blueprint(moments_routes)
+app.register_blueprint(pets_routes)
+app.register_blueprint(explores_routes)
+app.register_blueprint(panels_routes)
 
 @app.route('/')
 def watchHome():
