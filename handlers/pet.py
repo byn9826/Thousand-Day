@@ -40,7 +40,23 @@ def onePet(petId, cnx):
     finally:
         petCursor.close()
 
-#search all pets id belong to one user
+#get one pet's owner and relative id
+#return 0 for error
+def getBelong(petId, cnx):
+    petQuery = 'SELECT owner_id, relative_id FROM pet WHERE pet_id = %s'
+    try:
+        #return all pets info
+        petCursor = cnx.cursor()
+        petCursor.execute(petQuery, (petId, ))
+        return petCursor.fetchone()
+    #return 0 for db error
+    except mysql.connector.Error as err:
+        print('Something went wrong: {}'.format(err))
+        return '0'
+    finally:
+        petCursor.close()
+
+#search all pets info belong to one user
 #return pets id, name, gender, nature, type list in array if success
 #return 0 for error
 def searchPets(userId, cnx):

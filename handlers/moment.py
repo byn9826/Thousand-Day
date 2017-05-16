@@ -1,6 +1,26 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import mysql.connector
+import datetime
+
+#add one new moment
+#return 0 for error
+#return moment id for success
+def addMoment(name, message, petId, cnx):
+    momentQuery = 'INSERT INTO moment (image_name, moment_message, pet_id, moment_date) VALUES (%s, %s, %s, %s)'
+    moment = datetime.datetime.now().date()
+    try:
+        momentCursor = cnx.cursor()
+        momentCursor.execute(momentQuery, (name, message, petId, moment))
+        cnx.commit()
+        newId = momentCursor.lastrowid
+        return str(newId)
+    except mysql.connector.Error as err:
+        print('Something went wrong: {}'.format(err))
+        cnx.rollback()
+        return '0'
+    finally:
+        momentCursor.close()
 
 #read information of one moment
 #return 0 for error
