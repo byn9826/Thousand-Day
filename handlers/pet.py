@@ -3,6 +3,23 @@
 import mysql.connector
 import datetime
 
+#transfer owner to relative
+#return 1 for success
+#return 0 for error
+def transferPet(petId, ownerId, relativeId, cnx):
+    petQuery = 'UPDATE pet set owner_id = %s, relative_id = %s WHERE pet_id = %s'
+    try:
+        petCursor = cnx.cursor()
+        petCursor.execute(petQuery, (relativeId, ownerId, petId))
+        cnx.commit()
+        return '1'
+    except mysql.connector.Error as err:
+        print('Something went wrong: {}'.format(err))
+        cnx.rollback()
+        return '0'
+    finally:
+        petCursor.close()
+
 #add new pet
 #return new id for success
 #return 0 for error

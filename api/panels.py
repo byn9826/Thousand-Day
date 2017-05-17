@@ -5,7 +5,7 @@ import mysql.connector
 import secret
 from handlers.file import petAvatar, momentImage, userAvatar
 from handlers.token import findUser
-from handlers.pet import addPet, getBelong, onePet, newName, deleteRelative
+from handlers.pet import addPet, getBelong, onePet, newName, deleteRelative, transferPet
 from handlers.moment import addMoment
 from handlers.user import setName, readUser
 from handlers.request import sendRequest
@@ -32,6 +32,76 @@ def searchUser():
     else:
         abort(404)
 
+#transfer owner ship from owner to relative_id
+#return 1 for success
+#return 0 for error
+#return 2 for no privilege
+@panels_routes.route('/panels/transferOwnership', methods=['GET', 'POST'])
+def transferOwnership():
+    #only response to post
+    if request.method == 'POST':
+        id = request.json['id']
+        token = request.json['token']
+        pet = request.json['pet']
+        cnx = mysql.connector.connect(**config)
+        try:
+            user = findUser(token, cnx)
+            if user == '0':
+                return '0'
+            elif user is None:
+                return '2'
+            else:
+                userId = user[0]
+            if userId != id:
+                return '2'
+            #check pet belonging
+            belong = getBelong(pet, cnx)
+            if belong == '0':
+                return '0'
+            #must be owner to transfer
+            if belong[0] != id or belong[1] is None:
+                return '2'
+            return transferPet(pet, id, belong[1], cnx)
+        finally:
+            cnx.close()
+    else:
+        abort(404)
+
+#remove one pet's relative
+#return 1 for success
+#return 0 for fail
+#return 2 for not privilege
+@panels_routes.route('/panels/removeRelative', methods=['GET', 'POST'])
+def removeRelative():
+    #only response to post
+    if request.method == 'POST':
+        id = request.json['id']
+        token = request.json['token']
+        pet = request.json['pet']
+        cnx = mysql.connector.connect(**config)
+        try:
+            user = findUser(token, cnx)
+            if user == '0':
+                return '0'
+            elif user is None:
+                return '2'
+            else:
+                userId = user[0]
+            if userId != id:
+                return '2'
+            #check pet belonging
+            belong = getBelong(pet, cnx)
+            if belong == '0':
+                return '0'
+            #must be owner to remove
+            if belong[0] != id:
+                return '2'
+            return deleteRelative(pet, cnx)
+        finally:
+            cnx.close()
+    else:
+        abort(404)
+
 #create new request
 #return 1 for success
 #retrn 0 for error
@@ -44,7 +114,6 @@ def petRequest():
         token = request.json['token']
         petId = request.json['petId']
         receiverId = request.json['receiverId']
-        print(senderId, token)
         cnx = mysql.connector.connect(**config)
         try:
             user = findUser(token, cnx)
@@ -67,7 +136,6 @@ def petRequest():
             cnx.close()
     else:
         abort(404)
-
 
 #init edit pet page
 #return 0 for error
