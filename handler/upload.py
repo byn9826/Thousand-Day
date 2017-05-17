@@ -101,18 +101,20 @@ def allowedUser(filename):
 
 #upload user profile for signup
 def initUser(file, userId):
-    fileName = userId + '.jpg'
-    foldPath = '../static/img/user/'
-    #create folder path if not exist
-    dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), foldPath)
-    if not os.path.exists(dir):
-        os.makedirs(dir)
-    try:
-        #save profile image
-        file.save(os.path.join(dir, fileName))
-    except Exception as err:
-            print('Something went wrong: {}'.format(err))
-    return str(3)
+    #check file format
+    if file and allowedUser(file.filename):
+        fileName = userId + '.jpg'
+        foldPath = '../static/img/user/'
+        #create folder path if not exist
+        dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), foldPath)
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+        try:
+            #save profile image
+            file.save(os.path.join(dir, fileName))
+        except Exception as err:
+                print('Something went wrong: {}'.format(err))
+        return str(3)
 
 #remove moment image
 def removeMoment(petId, imageName):

@@ -19,6 +19,23 @@ def readUser(userId, cnx):
     finally:
         userCursor.close()
 
+#update user name
+#return 0 for error
+#return 1 for success
+def setName(userId, userName, cnx):
+    userQuery = 'UPDATE user set user_name = %s WHERE user_id = %s'
+    try:
+        userCursor = cnx.cursor()
+        userCursor.execute(userQuery, (userName, userId))
+        cnx.commit()
+        return '1'
+    except mysql.connector.Error as err:
+        print('Something went wrong: {}'.format(err))
+        cnx.rollback()
+        return '0'
+    finally:
+        userCursor.close()
+
 #check facebook account
 #return user id if account exist
 #return 0 if not exist

@@ -40,6 +40,39 @@ def onePet(petId, cnx):
     finally:
         petCursor.close()
 
+#update pet name
+def newName(petId, petName, cnx):
+    petQuery = 'UPDATE pet set pet_name = %s WHERE pet_id = %s'
+    try:
+        petCursor = cnx.cursor()
+        petCursor.execute(petQuery, (petName, petId))
+        cnx.commit()
+        return '1'
+    except mysql.connector.Error as err:
+        print('Something went wrong: {}'.format(err))
+        cnx.rollback()
+        return '0'
+    finally:
+        petCursor.close()
+
+#delete relative of one pet
+#return 0 for error
+#return 1 for success
+def deleteRelative(petId, cnx):
+    delQuery = 'UPDATE pet SET relative_id = %s WHERE pet_id = %s'
+    try:
+        delCursor = cnx.cursor()
+        delCursor.execute(delQuery, (None, petId))
+        cnx.commit()
+        return '1'
+    except mysql.connector.Error as err:
+        cnx.rollback()
+        print('Something went wrong: {}'.format(err))
+        #return 0 for error
+        return '0'
+    finally:
+        delCursor.close()
+
 #get one pet's owner and relative id
 #return 0 for error
 def getBelong(petId, cnx):

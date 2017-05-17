@@ -51,6 +51,9 @@ def watchHome():
 def reactHome():
     return render_template('react.html')
 
+@app.route('/about')
+def paulHome():
+    return render_template('about.html')
 
 @app.errorhandler(404)
 def page_not_found(e):
