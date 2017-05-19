@@ -90,6 +90,23 @@ def deleteRelative(petId, cnx):
     finally:
         delCursor.close()
 
+#add one user to one pet's relative
+#return row affected
+def addRelative(relativeId, petId, cnx):
+    addQuery = 'UPDATE pet SET relative_id = %s WHERE pet_id = %s AND relative_id is %s'
+    try:
+        addCursor = cnx.cursor()
+        addCursor.execute(addQuery, (relativeId, petId, None))
+        cnx.commit()
+        return str(addCursor.rowcount)
+    except mysql.connector.Error as err:
+        cnx.rollback()
+        print('Something went wrong: {}'.format(err))
+        #return 0 for error
+        return '0'
+    finally:
+        addCursor.close()
+
 #get one pet's owner and relative id
 #return 0 for error
 def getBelong(petId, cnx):

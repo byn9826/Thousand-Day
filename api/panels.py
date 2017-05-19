@@ -5,16 +5,81 @@ import mysql.connector
 import secret
 from handlers.file import petAvatar, momentImage, userAvatar
 from handlers.token import findUser
-from handlers.pet import addPet, getBelong, onePet, newName, deleteRelative, transferPet, petsName
+from handlers.pet import addPet, getBelong, onePet, newName, deleteRelative, transferPet, petsName, addRelative
 from handlers.moment import addMoment
 from handlers.user import setName, readUser, usersName
-from handlers.request import sendRequest, userRequest
+from handlers.request import sendRequest, userRequest, checkRequest, removeRequest
 from handlers.watch import userWatch
 
 panels_routes = Blueprint('panels_routes', __name__, template_folder = 'templates')
 config = secret.mysql()
 
+#accept one request to be relative
+#return 0 for error
+#return 2 for no privilege
+#return 3 for can't be relative
+@panels_routes.route('/panels/acceptRequest', methods = ['GET', 'POST'])
+def acceptRequest():
+    if request.method == 'POST':
+        pet = request.json['petId']
+        id = request.json['userId']
+        token = request.json['userToken']
+        cnx = mysql.connector.connect(**config)
+        try:
+            #check user statues
+            user = findUser(token, cnx)
+            if user == '0':
+                return '0'
+            elif user is None:
+                return '2'
+            else:
+                userId = user[0]
+            if userId != id:
+                return '2'
+            #check if request exist
+            check = checkRequest(pet, id, cnx)
+            if len(check) is 0 or check[0] is None:
+                return '2'
+            #update pet relative
+            add = addRelative(id, pet, cnx)
+            if add == '0':
+                return '3'
+            #remove request
+            return removeRequest(pet, id, cnx)
+        finally:
+            cnx.close()
+    else:
+        abort(404)
+
+#delelte one request to be relative
+@panels_routes.route('/panels/deleteRequest', methods = ['GET', 'POST'])
+def deleteRequest():
+    if request.method == 'POST':
+        pet = request.json['petId']
+        id = request.json['userId']
+        token = request.json['userToken']
+        cnx = mysql.connector.connect(**config)
+        try:
+            #check user statues
+            user = findUser(token, cnx)
+            if user == '0':
+                return '0'
+            elif user is None:
+                return '2'
+            else:
+                userId = user[0]
+            if userId != id:
+                return '2'
+            #remove request
+            return removeRequest(pet, id, cnx)
+        finally:
+            cnx.close()
+    else:
+        abort(404)
+
 #init request message page
+#return 20 most recent request
+#return 0 for error
 @panels_routes.route('/panels/requestMessage', methods = ['GET', 'POST'])
 def requestMessage():
     if request.method == 'POST':
