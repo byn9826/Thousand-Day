@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 import mysql.connector
 
-
 #Create watch relation between user and pet
 #return 0 for error
 #return 1 for success
@@ -32,6 +31,24 @@ def deleteWatch(userId, petId, cnx):
         return '1'
     except mysql.connector.Error as err:
         cnx.rollback()
+        print('Something went wrong: {}'.format(err))
+        return '0'
+    finally:
+        watchCursor.close()
+
+#search all pet ids of one user
+#return 0 for error
+#return pet id list for success
+def userWatch(userId, pin, cnx):
+    watchQuery = 'SELECT pet_id FROM pet_watch WHERE user_id = %s LIMIT %s, 20'
+    try:
+        watchCursor = cnx.cursor()
+        watchCursor.execute(watchQuery, (userId, pin ))
+        watchRaw = watchCursor.fetchall()
+        #get array store all watcher id
+        return [x[0] for x in watchRaw]
+    #return 0 for db error
+    except mysql.connector.Error as err:
         print('Something went wrong: {}'.format(err))
         return '0'
     finally:

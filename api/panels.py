@@ -5,13 +5,56 @@ import mysql.connector
 import secret
 from handlers.file import petAvatar, momentImage, userAvatar
 from handlers.token import findUser
-from handlers.pet import addPet, getBelong, onePet, newName, deleteRelative, transferPet
+from handlers.pet import addPet, getBelong, onePet, newName, deleteRelative, transferPet, petsName
 from handlers.moment import addMoment
-from handlers.user import setName, readUser
-from handlers.request import sendRequest
+from handlers.user import setName, readUser, usersName
+from handlers.request import sendRequest, userRequest
+from handlers.watch import userWatch
 
 panels_routes = Blueprint('panels_routes', __name__, template_folder = 'templates')
 config = secret.mysql()
+
+#init request message page
+@panels_routes.route('/panels/requestMessage', methods = ['GET', 'POST'])
+def requestMessage():
+    if request.method == 'POST':
+        id = request.json['id']
+        pin = request.json['pin']
+        cnx = mysql.connector.connect(**config)
+        try:
+            #read 20 recent request
+            result = userRequest(id, pin, cnx)
+        finally:
+            cnx.close()
+        if result == '0':
+            return '0'
+        return jsonify(result)
+    else:
+        abort(404)
+
+#init watch list page
+#return 0 for error
+#return watch list data if success
+@panels_routes.route('/panels/watchList', methods = ['GET', 'POST'])
+def watchList():
+    if request.method == 'POST':
+        id = request.json['id']
+        pin = request.json['pin']
+        cnx = mysql.connector.connect(**config)
+        try:
+            #read 20 watched pets
+            watch = userWatch(id, pin, cnx)
+            if watch == '0':
+                return '0'
+            lists = petsName(watch, cnx)
+        finally:
+            cnx.close()
+        if lists == '0':
+            return '0'
+        else:
+            return jsonify(lists)
+    else:
+        abort(404)
 
 #search user name by if
 #return 0 for error

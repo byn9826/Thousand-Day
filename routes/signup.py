@@ -20,10 +20,10 @@ def signUp(name):
         return render_template('signup.html', facebook = session['facebook'])
     else:
         abort(404)
-        
+
 #display terms and privacy
 @signup_routes.route('/terms&privacy')
-def termsPrivacy():  
+def termsPrivacy():
     return render_template('terms&privacy.html')
 
 #create new account for user
@@ -48,7 +48,10 @@ def createAccount(name):
         facebook = session['facebook'] if session['facebook'] else None
         google = session['google'] if session['google'] else None
         cnx = mysql.connector.connect(**config)
-        result = addAccount(facebook, google, name, cnx)
+        try:
+            result = addAccount(facebook, google, name, cnx)
+        finally:
+            cnx.close()
         if result is None:
             return str(3)
         upload = initUser(file, result)

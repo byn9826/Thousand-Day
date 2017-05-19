@@ -2,6 +2,41 @@
 # -*- coding: utf-8 -*-
 import mysql.connector
 
+#get list of user name from user id
+#return 0 for error
+def usersName(usersId, cnx):
+    listQuery = 'SELECT user_id, user_name FROM user WHERE user_id IN (%s)'
+    listHolder = ', '.join(list(map(lambda x: '%s', usersId)))
+    try:
+        #Get all pet info
+        listQuery = listQuery % (listHolder)
+        listCursor = cnx.cursor(dictionary=True)
+        listCursor.execute(listQuery, usersId)
+        return listCursor.fetchall()
+    except mysql.connector.Error as err:
+        print('Something went wrong: {}'.format(err))
+        return '0'
+    finally:
+        listCursor.close()
+
+#create new user
+#return new id for success
+#return 0 for error
+def addUser(facebook, google, name, cnx):
+    addQuery = 'INSERT INTO user (google_id, facebook_id, user_name, user_term) VALUES (%s, %s, %s, 1)'
+    try:
+        addCursor = cnx.cursor()
+        addCursor.execute(addQuery, (google, facebook, name))
+        cnx.commit()
+        newId = addCursor.lastrowid
+        return str(newId)
+    except mysql.connector.Error as err:
+        print('Something went wrong: {}'.format(err))
+        cnx.rollback()
+        return '0'
+    finally:
+        addCursor.close()
+
 #use user id find username
 #return name if success
 #return 0 for fail

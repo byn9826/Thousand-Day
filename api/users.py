@@ -35,21 +35,22 @@ def read():
             relative = findRelative(pageId, cnx)
             #return 0 for db error
             if relative == '0':
-                return '0'
+                return '3'
             #get all pets info belong to this user
             pets = searchPets(pageId, cnx)
             #return 0 for db error
             if pets == "0":
-                return '0'
-            if pets is not None:
+                return '4'
+            if len(pets) is not 0:
                 #Get all pets id in list
                 petIds = [x['pet_id'] for x in pets]
                 moments = userMoments(petIds, 0, cnx)
                 #return 0 for db error
                 if moments == '0':
-                    return '0'
+                    return '5'
             #if not pets, no moments
             else:
+                petIds = []
                 moments = []
         finally:
             cnx.close()
@@ -67,7 +68,6 @@ def loadMoments():
         petsList = request.json['petsList']
         loadTimes = request.json['loadTimes']
         startPin = loadTimes * 20
-        print(1)
         cnx = mysql.connector.connect(**config)
         try:
             moments = userMoments(petsList, 0, cnx)

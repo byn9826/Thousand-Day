@@ -147,7 +147,6 @@ def findRelative(userId, cnx):
     finally:
         relativeCursor.close()
 
-
 #filter pets based on type and nature
 #return 0 for error
 def filterPets(type, nature, cnx):
@@ -162,3 +161,21 @@ def filterPets(type, nature, cnx):
         return '0'
     finally:
         filterCursor.close()
+
+#get list of pets name from list of pets id
+#return list of pet name and id
+#return 0 for error
+def petsName(petsId, cnx):
+    listQuery = 'SELECT pet_id, pet_name FROM pet WHERE pet_id IN (%s)'
+    listHolder = ', '.join(list(map(lambda x: '%s', petsId)))
+    try:
+        #Get all pet info
+        listQuery = listQuery % (listHolder)
+        listCursor = cnx.cursor(dictionary=True)
+        listCursor.execute(listQuery, petsId)
+        return listCursor.fetchall()
+    except mysql.connector.Error as err:
+        print('Something went wrong: {}'.format(err))
+        return '0'
+    finally:
+        listCursor.close()

@@ -55,13 +55,17 @@ def updateWatch():
     #only response to post request
     if request.method == 'POST':
         token = request.json['userToken']
+        id = request.json['userId']
         cnx = mysql.connector.connect(**config)
         try:
             user = findUser(token, cnx)
             if user == '0':
                 return '0'
-            userId = user[0]
-            if userId is None:
+            elif user is None:
+                return '2'
+            else:
+                userId = user[0]
+            if userId != id:
                 return '2'
             action = request.json['action']
             #unwatch when action is exist
