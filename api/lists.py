@@ -15,7 +15,6 @@ def readPublic():
     #only response to post request
     if request.method == 'POST':
         cnx = mysql.connector.connect(**config)
-
         try:
             #get 20 newest moments
             new = publicMoments(0, cnx)

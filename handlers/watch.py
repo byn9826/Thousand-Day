@@ -43,7 +43,7 @@ def userWatch(userId, pin, cnx):
     watchQuery = 'SELECT pet_id FROM pet_watch WHERE user_id = %s LIMIT %s, 20'
     try:
         watchCursor = cnx.cursor()
-        watchCursor.execute(watchQuery, (userId, pin ))
+        watchCursor.execute(watchQuery, (userId, pin))
         watchRaw = watchCursor.fetchall()
         #get array store all watcher id
         return [x[0] for x in watchRaw]

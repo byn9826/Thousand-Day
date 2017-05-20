@@ -104,7 +104,7 @@ def requestMessage():
 def watchList():
     if request.method == 'POST':
         id = request.json['id']
-        pin = request.json['pin']
+        pin = request.json['pin'] * 20
         cnx = mysql.connector.connect(**config)
         try:
             #read 20 watched pets

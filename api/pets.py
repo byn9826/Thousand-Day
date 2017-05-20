@@ -33,7 +33,7 @@ def petView():
             moments = petMoments(petId, 0, cnx)
             #return 0 for db error
             if moments == "0":
-                return str(0)
+                return '0'
             #get all watch ids of one pet
             watch = searchWatch(petId, cnx)
             #return 0 for db error
@@ -43,6 +43,24 @@ def petView():
             cnx.close()
         #return data
         return jsonify([pet, moments, watch])
+    else:
+        abort(404)
+
+#load more moment for one pet
+@pets_routes.route('/pets/loadMoments', methods = ['GET', 'POST'])
+def petLoad():
+    if request.method == 'POST':
+        id = request.json['id']
+        pin = request.json['load'] * 20
+        cnx = mysql.connector.connect(**config)
+        try:
+            moments = petMoments(id, pin, cnx)
+        finally:
+            cnx.close()
+        if moments == "0":
+            return '0'
+        else:
+            return jsonify(moments)
     else:
         abort(404)
 

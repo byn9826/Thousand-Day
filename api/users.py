@@ -70,7 +70,7 @@ def loadMoments():
         startPin = loadTimes * 20
         cnx = mysql.connector.connect(**config)
         try:
-            moments = userMoments(petsList, 0, cnx)
+            moments = userMoments(petsList, startPin, cnx)
         finally:
             cnx.close()
         #return 0 for db error
