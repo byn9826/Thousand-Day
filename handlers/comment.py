@@ -39,3 +39,17 @@ def createComment(userId, momentId, content, cnx):
         return '0'
     finally:
         insertCursor.close()
+
+#search 20 moment id where user leave a comment
+def userComments(userId, pin, cnx):
+    likeQuery = 'SELECT DISTINCT(moment_id) FROM moment_comment WHERE user_id = %s ORDER by moment_id DESC LIMIT %s, 20'
+    try:
+        likeCursor = cnx.cursor()
+        likeCursor.execute(likeQuery, (userId, pin))
+        return likeCursor.fetchall()
+    #return 0 for db error
+    except mysql.connector.Error as err:
+        print('Something went wrong: {}'.format(err))
+        return '0'
+    finally:
+        likeCursor.close()

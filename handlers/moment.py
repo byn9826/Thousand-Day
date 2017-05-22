@@ -87,3 +87,21 @@ def userMoments(petsId, startPoint, cnx):
         return '0'
     finally:
         momentCursor.close()
+
+#from a list of moment id return moment info
+def listMoments(momentList, cnx):
+    momentQuery = 'SELECT moment_id, pet_id, image_name FROM moment WHERE moment_id in (%s) ORDER BY moment_id DESC'
+    #prepare for in clause
+    momentsList = ', '.join(list(map(lambda x: '%s', momentList)))
+    momentQuery = momentQuery % (momentsList)
+    try:
+        #return all moments info
+        momentCursor = cnx.cursor(dictionary=True)
+        momentCursor.execute(momentQuery, momentList)
+        return momentCursor.fetchall()
+    #return 0 for db error
+    except mysql.connector.Error as err:
+        print('Something went wrong: {}'.format(err))
+        return '0'
+    finally:
+        momentCursor.close()

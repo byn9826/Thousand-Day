@@ -48,3 +48,17 @@ def deleteLike(momentId, userId, cnx):
         return '0'
     finally:
         delCursor.close()
+
+#search all moment for one user likes
+def userLike(userId, pin, cnx):
+    likeQuery = 'SELECT moment_id FROM moment_like WHERE user_id = %s ORDER by moment_id DESC LIMIT %s, 20'
+    try:
+        likeCursor = cnx.cursor()
+        likeCursor.execute(likeQuery, (userId, pin))
+        return likeCursor.fetchall()
+    #return 0 for db error
+    except mysql.connector.Error as err:
+        print('Something went wrong: {}'.format(err))
+        return '0'
+    finally:
+        likeCursor.close()

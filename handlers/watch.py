@@ -36,7 +36,24 @@ def deleteWatch(userId, petId, cnx):
     finally:
         watchCursor.close()
 
-#search all pet ids of one user
+#get all pet ids on one users watch list
+#return 0 for error
+def allWatch(userId, cnx):
+    watchQuery = 'SELECT pet_id FROM pet_watch WHERE user_id = %s'
+    try:
+        watchCursor = cnx.cursor()
+        watchCursor.execute(watchQuery, (userId, ))
+        watchRaw = watchCursor.fetchall()
+        #get array store all watcher id
+        return [x[0] for x in watchRaw]
+    #return 0 for db error
+    except mysql.connector.Error as err:
+        print('Something went wrong: {}'.format(err))
+        return '0'
+    finally:
+        watchCursor.close()
+
+#search 20 pet ids of one user
 #return 0 for error
 #return pet id list for success
 def userWatch(userId, pin, cnx):
