@@ -6,7 +6,7 @@ class About extends Component {
     constructor(props) {
         super(props);
 		this.state = {
-			label: "thousanday"
+			label: "begin"
 		};
 	}
     changeProject(label) {
@@ -183,6 +183,22 @@ class About extends Component {
                                 <a href="https://drive.google.com/file/d/0B2TZtAwSzB3CWXp3RHo3SV9pbDg/view?usp=sharing" target="_blank"><h6>See More</h6></a>
                             </div>
                         </div>
+                    </aside>
+                )
+                break;
+            case "begin":
+                aside = (
+                    <aside id="aside">
+                        <aside id="aside-begin">
+                            <h3>
+                                I'm a web developer who loves web development<br/>
+                            </h3>
+                            <div id="aside-skill">
+                                <img src="/about/img/js.jpg" alt="JavaScript" />
+                                <img src="/about/img/php.png" alt="Php" />
+                                <img src="/about/img/python.png" alt="Python" />
+                            </div>
+                        </aside>
                     </aside>
                 )
                 break;

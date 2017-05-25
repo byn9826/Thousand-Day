@@ -147,3 +147,31 @@
     vertical-align: middle;
     margin-left: 15px;
 }
+
+#aside-begin{
+    display: block;
+    background-color: #f7f9fc;
+    height: 500px;
+    border-radius: 8px;
+    padding-top: 200px;
+}
+
+#aside-begin h3{
+    text-align: center;
+    display: block;
+    font-style: italic;
+}
+
+#aside-skill{
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+}
+
+#aside-skill img{
+    display: inline-block;
+    max-height: 50px;
+    max-width: 80px;
+    margin: 0 10px;
+    vertical-align: middle;
+}
