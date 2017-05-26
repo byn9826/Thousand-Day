@@ -3,8 +3,9 @@ An image sharing social website for your pets and you. <br/>
 
 [Live Site](https://thousanday.com)<br/>
 
-Mobile version:<br/>
+Mobile App:<br/>
 [Repo](https://github.com/byn9826/Thousanday-Mobile)<br/>
+<img src="https://github.com/byn9826/Thousanday-Mobile/blob/master/example.gif?raw=true" width="200px" /><br/>
 
 Stacks
 --
@@ -29,7 +30,7 @@ Pages
 
 Pack
 --
-[REACT Components](https://github.com/byn9826/Thousanday-React)
+[A list of reusable React UI components](https://github.com/byn9826/Thousanday-React)
 
 Author
 --

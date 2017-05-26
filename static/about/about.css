@@ -175,3 +175,9 @@
     margin: 0 10px;
     vertical-align: middle;
 }
+
+#aside-mobile{
+    display: block;
+    margin-top: 20px;
+    margin-left: 15%;
+}

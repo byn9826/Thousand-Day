@@ -13,6 +13,9 @@ class About extends Component {
         this.setState({label: label});
     }
     render() {
+        let thouStyle = {
+            display: "inline-block"
+        }
         let aside;
         switch (this.state.label) {
             case "thousanday":
@@ -69,6 +72,9 @@ class About extends Component {
                                 </div>
                             </div>
                             <img src="/about/img/phalcon.png" alt="Phalcon" />
+                        </div>
+                        <div id="aside-mobile">
+                            <iframe src="https://appetize.io/embed/93pf51ej9yae3g7rpz38uyxzu8?device=nexus5&scale=50&autoplay=false&orientation=portrait&deviceColor=black" width="200px" height="398px" frameBorder="0" scrolling="no"></iframe>
                         </div>
                     </aside>
                 )
