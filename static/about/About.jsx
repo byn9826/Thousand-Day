@@ -43,6 +43,7 @@ class About extends Component {
                                     It's also an image sharing mobile app for your pets
                                 </h5>
                                 <div className="aside-project-left-link">
+                                    <a href="https://play.google.com/store/apps/details?id=com.thousanday" target="_blank"><h6>Google Play</h6></a>
                                     <a href="https://github.com/byn9826/Thousanday-Mobile" target="_blank"><h6>Source Code</h6></a>
                                 </div>
                             </div>
@@ -61,20 +62,6 @@ class About extends Component {
                                 </div>
                             </div>
                             <img src="/about/img/react.png" alt="React" />
-                        </div>
-                        <div className="aside-project">
-                            <div className="aside-project-left">
-                                <h5>
-                                    It about high-performance backend server development
-                                </h5>
-                                <div className="aside-project-left-link">
-                                    <a><h6>Under Development</h6></a>
-                                </div>
-                            </div>
-                            <img src="/about/img/phalcon.png" alt="Phalcon" />
-                        </div>
-                        <div id="aside-mobile">
-                            <iframe src="https://appetize.io/embed/93pf51ej9yae3g7rpz38uyxzu8?device=nexus5&scale=50&autoplay=false&orientation=portrait&deviceColor=black" width="200px" height="398px" frameBorder="0" scrolling="no"></iframe>
                         </div>
                     </aside>
                 )

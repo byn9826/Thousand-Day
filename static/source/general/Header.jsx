@@ -181,7 +181,7 @@ class Header extends Component {
 				<a href="/">
 					<img id="header-logo" src="/img/logo.png" alt="logo" />
 				</a>
-				<h5 id="header-desc">Your pets and you</h5>
+				<h5 id="header-desc">Homepage for pets</h5>
 				{user}
 				<a className="header-navi" href="/explore">
 					<h5>Explore</h5>

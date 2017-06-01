@@ -254,13 +254,13 @@ reqwest({
 		//get default data
 		switch (result) {
 			case "0":
-				console.log("Can't connet to server, try later");
+				alert("Can't connet to server, try later");
 				break;
 			default:
 				ReactDOM.render(<Watch recentTen={result[0]} visitorName={result[1]} visitorId={result[2]} unread={result[3]} />, document.getElementById("root"));
 		}
 	},
 	error: function (err) {
-		console.log("Can't connect to the server");
+		alert("Can't connet to server, try later");
 	}
 });
